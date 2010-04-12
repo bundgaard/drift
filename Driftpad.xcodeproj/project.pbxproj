@@ -11,7 +11,8 @@
 		0305550611730951000D3AF2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0305550511730951000D3AF2 /* main.m */; };
 		0305550811730992000D3AF2 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0305550711730992000D3AF2 /* MainWindow.xib */; };
 		03055515117309B6000D3AF2 /* Driftpad.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 03055513117309B6000D3AF2 /* Driftpad.xcdatamodeld */; };
-		03055517117309BF000D3AF2 /* Driftpad-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03055516117309BF000D3AF2 /* Driftpad-Info.plist */; };
+		030555FF11731F66000D3AF2 /* Inconsolata.otf in Resources */ = {isa = PBXBuildFile; fileRef = 030555FE11731F66000D3AF2 /* Inconsolata.otf */; };
+		0305560511731F8B000D3AF2 /* CHumanDateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C187DE117283A000B975D1 /* CHumanDateFormatter.m */; };
 		03C18E191172840700B975D1 /* CCompletionTicket.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C18861117283A000B975D1 /* CCompletionTicket.m */; };
 		03C18E1A1172840900B975D1 /* CManagedURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C18865117283A000B975D1 /* CManagedURLConnection.m */; };
 		03C18E1B1172840A00B975D1 /* CURLConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C18867117283A000B975D1 /* CURLConnectionManager.m */; };
@@ -269,6 +270,7 @@
 		0305550711730992000D3AF2 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = SOURCE_ROOT; };
 		03055514117309B6000D3AF2 /* Driftpad.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Driftpad.xcdatamodel; sourceTree = "<group>"; };
 		03055516117309BF000D3AF2 /* Driftpad-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Driftpad-Info.plist"; sourceTree = SOURCE_ROOT; };
+		030555FE11731F66000D3AF2 /* Inconsolata.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inconsolata.otf; sourceTree = "<group>"; };
 		03C172C1117281A400B975D1 /* GEGistService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEGistService.h; sourceTree = "<group>"; };
 		03C172C2117281A400B975D1 /* GEGistService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GEGistService.m; sourceTree = "<group>"; };
 		03C172C91172823100B975D1 /* GEGist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEGist.h; sourceTree = "<group>"; };
@@ -7023,6 +7025,7 @@
 				03055513117309B6000D3AF2 /* Driftpad.xcdatamodeld */,
 				03055516117309BF000D3AF2 /* Driftpad-Info.plist */,
 				03C197871172E60F00B975D1 /* welcome.txt */,
+				030555FE11731F66000D3AF2 /* Inconsolata.otf */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -7389,7 +7392,7 @@
 				03C197151172D39500B975D1 /* GELoginViewController.xib in Resources */,
 				03C197881172E60F00B975D1 /* welcome.txt in Resources */,
 				0305550811730992000D3AF2 /* MainWindow.xib in Resources */,
-				03055517117309BF000D3AF2 /* Driftpad-Info.plist in Resources */,
+				030555FF11731F66000D3AF2 /* Inconsolata.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7436,6 +7439,7 @@
 				030554F2117307F2000D3AF2 /* NSDateFormatter_GithubDateFormatting.m in Sources */,
 				0305550611730951000D3AF2 /* main.m in Sources */,
 				03055515117309B6000D3AF2 /* Driftpad.xcdatamodeld in Sources */,
+				0305560511731F8B000D3AF2 /* CHumanDateFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
