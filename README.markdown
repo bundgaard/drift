@@ -1,4 +1,6 @@
-Drift
+Drift for iPad
+==============
+
 Always-already versioned cloud-backed text editor for gists,
 forked from [atduskgreg's MacRuby version](http://github.com/atduskgreg/drift) and reimplemented
 in Objective-C for the iPad.
