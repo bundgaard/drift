@@ -10,14 +10,14 @@ in Objective-C for the iPad.
 BUILDING
 --------
 
-Relies on the TouchCode library:
-http://code.google.com/p/touchcode/
-Check out TouchCode to the same root directory as this repo.
+Relies on the [TouchCode](http://code.google.com/p/touchcode/) library. Check out TouchCode to the same root directory as this repo.
 
 I.e.:
-  mkdir driftpad && cd driftpad
-  git clone git://github.com/qwzybug/drift.git DriftPad
-  hg clone https://touchcode.googlecode.com/hg/ touchcode
+
+    mkdir driftpad && cd driftpad
+    git clone git://github.com/qwzybug/drift.git DriftPad
+    hg clone https://touchcode.googlecode.com/hg/ touchcode
+
 Then everything should be copacetic.
 
 NOTES
