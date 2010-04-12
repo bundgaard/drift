@@ -76,7 +76,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
-	textView.font = [UIFont fontWithName:@"Courier New" size:17.0];
+	textView.font = [UIFont fontWithName:@"Inconsolata" size:17.0];
 	
 	[self.titleView addSubview:titleButton];
 	
