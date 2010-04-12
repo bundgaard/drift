@@ -12,7 +12,7 @@ BUILDING
 
 Relies on the [TouchCode](http://code.google.com/p/touchcode/) library. Check out TouchCode to the same root directory as this repo.
 
-I.e.:
+i.e.:
 
     mkdir driftpad && cd driftpad
     git clone git://github.com/qwzybug/drift.git DriftPad
