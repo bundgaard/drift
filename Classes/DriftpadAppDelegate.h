@@ -20,6 +20,8 @@
 	
 	GEGistTableViewController *rootViewController;
 	GEGistViewController *detailViewController;
+	
+	BOOL firstLaunch;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -31,5 +33,9 @@
 
 - (void)showGistPopoverFromBarButtonItem:(UIBarButtonItem *)barButtonItem;
 - (void)showApplication;
+
+- (IBAction)switchUserAction:(id)sender;
+
+- (void)beginLogin;
 
 @end

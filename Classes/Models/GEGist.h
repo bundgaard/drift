@@ -15,6 +15,12 @@
 @interface GEGist : NSManagedObject {
 }
 
++ (void)clearUserGists;
+
++ (GEGist *)blankGist;
++ (GEGist *)welcomeGist;
++ (GEGist *)firstGist;
+
 + (void)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
 
 - (void)updateWithAttributes:(NSDictionary *)attributes;

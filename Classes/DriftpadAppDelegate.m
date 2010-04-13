@@ -54,38 +54,10 @@
 		[self showApplication];
 	}
 	else {
-		// show login
-		GELoginViewController *viewController = [[GELoginViewController alloc] initWithNibName:nil bundle:nil];
-		viewController.modalPresentationStyle = UIModalPresentationFormSheet;
-		viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-		[detailViewController presentModalViewController:viewController animated:YES];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSucceeded:) name:kDriftNotificationLoginSucceeded object:nil];
+		firstLaunch = YES;
+		[self beginLogin];
 	}
 	return YES;
-}
-
-- (void)loginSucceeded:(NSNotification *)notification;
-{
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:kDriftNotificationLoginSucceeded object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchedFirstGists:) name:kDriftNotificationUpdatedGists object:nil];
-	[[GEGistService sharedService] listGistsForCurrentUser];
-}
-
-- (void)fetchedFirstGists:(NSNotification *)notification;
-{
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:kDriftNotificationUpdatedGists object:nil];
-	[detailViewController dismissModalViewControllerAnimated:YES];
-	
-	// show welcome gist
-	GEGist *newGist = [NSEntityDescription insertNewObjectForEntityForName:[GEGist entityName] inManagedObjectContext:[[GEGistStore sharedStore] managedObjectContext]];
-	newGist.name = @"welcome.txt";
-	newGist.body = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"welcome" ofType:@"txt"] encoding:NSUTF8StringEncoding error:nil];
-	newGist.createdAt = [NSDate date];
-	newGist.dirty = YES;
-	[[GEGistStore sharedStore] save];
-	
-	detailViewController.gist = newGist;
-	[self showApplication];
 }
 
 - (void)showApplication;
@@ -132,6 +104,46 @@
 		popoverController = [[UIPopoverController alloc] initWithContentViewController:nav];
 	}
 	[popoverController presentPopoverFromBarButtonItem:barButtonItem permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+}
+
+- (IBAction)switchUserAction:(id)sender;
+{
+	[popoverController dismissPopoverAnimated:YES];
+	[self beginLogin];
+}
+
+#pragma mark -
+#pragma mark Login flow
+
+- (void)beginLogin;
+{
+	GELoginViewController *viewController = [[GELoginViewController alloc] initWithNibName:nil bundle:nil];
+	viewController.modalPresentationStyle = UIModalPresentationFormSheet;
+	viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+	[detailViewController presentModalViewController:viewController animated:YES];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSucceeded:) name:kDriftNotificationLoginSucceeded object:nil];
+}
+
+- (void)loginSucceeded:(NSNotification *)notification;
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kDriftNotificationLoginSucceeded object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchedFirstGists:) name:kDriftNotificationUpdatedGists object:nil];
+	[GEGist clearUserGists];
+	[[GEGistService sharedService] listGistsForCurrentUser];
+}
+
+- (void)fetchedFirstGists:(NSNotification *)notification;
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kDriftNotificationUpdatedGists object:nil];
+	[detailViewController dismissModalViewControllerAnimated:YES];
+	
+	if (firstLaunch) {
+		detailViewController.gist = [GEGist welcomeGist];
+	}
+	else {
+		detailViewController.gist = [GEGist firstGist];
+	}
+	[self showApplication];
 }
 
 @end

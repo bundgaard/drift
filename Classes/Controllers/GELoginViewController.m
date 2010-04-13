@@ -16,6 +16,7 @@
 @synthesize tokenField;
 @synthesize overlayView;
 @synthesize signInButton;
+@synthesize cancelButton;
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -24,6 +25,7 @@
 	[tokenField release], tokenField = nil;
 	[overlayView release], overlayView = nil;
 	[signInButton release], signInButton = nil;
+	[cancelButton release], cancelButton = nil;
 	
     [super dealloc];
 }
@@ -37,6 +39,13 @@
 - (void)viewDidLoad;
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:kDriftNotificationLoginFailed object:nil];
+	if ([[GEGistService sharedService] hasCredentials]) {
+		loginField.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"username"];
+		tokenField.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"token"];
+	}
+	else {
+		[cancelButton removeFromSuperview];
+	}
 }
 
 - (void)viewDidUnload;
@@ -80,6 +89,11 @@
 {
 	NSURL *url = [NSURL URLWithString:@"http://github.com/account"];
 	[[UIApplication sharedApplication] openURL:url];
+}
+
+- (IBAction)cancelAction:(id)sender;
+{
+	[self dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark Service callbacks

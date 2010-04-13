@@ -28,9 +28,6 @@ static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
 
 
 @interface GEGistService ()
-
-- (void)updateGistsWithResult:(id)result;
-
 @end
 
 
@@ -122,28 +119,21 @@ static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
 	[connection start];
 }
 
-#pragma mark Processing
-
-- (void)updateGistsWithResult:(id)result;
-{
-	NSError *err = nil;
-	NSDictionary *res = [[CJSONDeserializer deserializer] deserializeAsDictionary:result error:&err];
-	if (!res) {
-		NSLog(@"Error parsing gists: %@", [err localizedDescription]);
-		return;
-	}
-	for (NSDictionary *gist in [res valueForKey:@"gists"]) {
-		[GEGist insertOrUpdateGistWithAttributes:gist];
-	}
-}
-
 #pragma mark Completion ticket delegate
 
 - (void)completionTicket:(CCompletionTicket *)inCompletionTicket didCompleteForTarget:(id)inTarget result:(id)inResult;
 {
 	if ([inCompletionTicket identifier] == kDriftServiceCallListGists)
 	{
-		[self updateGistsWithResult:inResult];
+		NSError *err = nil;
+		NSDictionary *res = [[CJSONDeserializer deserializer] deserializeAsDictionary:inResult error:&err];
+		if (!res) {
+			NSLog(@"Error parsing gists: %@", [err localizedDescription]);
+		} else {
+			for (NSDictionary *gist in [res valueForKey:@"gists"]) {
+				[GEGist insertOrUpdateGistWithAttributes:gist];
+			}
+		}
 		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdatedGists object:self];
 	}
 	

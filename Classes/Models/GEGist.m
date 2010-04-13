@@ -20,6 +20,60 @@
 
 @implementation GEGist
 
++ (void)clearUserGists;
+{
+	NSManagedObjectContext *ctx = [GEGistStore sharedStore].managedObjectContext;
+	NSArray *gists = [ctx fetchObjectsOfEntityForName:[self entityName] predicate:nil error:nil];
+	for (GEGist *gist in gists) {
+		[ctx deleteObject:gist];
+	}
+	[[GEGistStore sharedStore] save];
+}
+
++ (GEGist *)blankGist;
+{
+	GEGist *newGist = [NSEntityDescription insertNewObjectForEntityForName:[GEGist entityName] inManagedObjectContext:[[GEGistStore sharedStore] managedObjectContext]];
+	newGist.name = @"New Gist";
+	newGist.createdAt = [NSDate date];
+	newGist.dirty = YES;
+	[[GEGistStore sharedStore] save];
+	return newGist;
+}
+
++ (GEGist *)welcomeGist;
+{
+	GEGist *newGist = [NSEntityDescription insertNewObjectForEntityForName:[GEGist entityName] inManagedObjectContext:[[GEGistStore sharedStore] managedObjectContext]];
+	newGist.name = @"welcome.txt";
+	newGist.body = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"welcome" ofType:@"txt"] encoding:NSUTF8StringEncoding error:nil];
+	newGist.createdAt = [NSDate date];
+	newGist.dirty = YES;
+	[[GEGistStore sharedStore] save];
+	return newGist;
+}
+
++ (GEGist *)firstGist;
+{
+	NSManagedObjectContext *ctx = [GEGistStore sharedStore].managedObjectContext;
+	NSEntityDescription *entity = [NSEntityDescription entityForName:[self entityName] inManagedObjectContext:ctx];
+	NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+	fetchRequest.entity = entity;
+	fetchRequest.predicate = nil;
+	NSSortDescriptor *desc = [[[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO] autorelease];
+	fetchRequest.sortDescriptors = [NSArray arrayWithObject:desc];
+	fetchRequest.fetchLimit = 1;
+	NSArray *gists = [ctx executeFetchRequest:fetchRequest error:nil];
+	
+	GEGist *firstGist;
+	if (gists.count > 0) {
+		firstGist = [gists objectAtIndex:0];
+	}
+	else {
+		firstGist = [self blankGist];
+	}
+	
+	return firstGist;
+}
+
 + (void)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
 {
 	NSNumber *gistID = [attributes valueForKey:@"repo"];
