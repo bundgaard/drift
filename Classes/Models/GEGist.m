@@ -96,6 +96,7 @@
 	self.gistID = [attributes valueForKey:@"repo"];
 	self.desc = [[attributes valueForKey:@"description"] objectOrNil];
 	self.createdAt = [[NSDateFormatter githubDateFormatter] dateFromString:[attributes valueForKey:@"created_at"]];
+	self.name = [[attributes valueForKey:@"files"] componentsJoinedByString:@", "];
 }
 
 #pragma mark begin emogenerator accessors
