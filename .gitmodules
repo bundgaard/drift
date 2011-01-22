@@ -1,0 +1,12 @@
+[submodule "Externals/TouchJSON"]
+	path = Externals/TouchJSON
+	url = git@github.com:qwzybug/TouchJSON.git
+[submodule "Externals/TouchFoundation"]
+	path = Externals/TouchFoundation
+	url = git@github.com:qwzybug/TouchFoundation.git
+[submodule "Externals/TouchUI"]
+	path = Externals/TouchUI
+	url = git@github.com:qwzybug/TouchUI.git
+[submodule "Externals/TouchRSS"]
+	path = Externals/TouchRSS
+	url = git@github.com:qwzybug/TouchRSS.git
