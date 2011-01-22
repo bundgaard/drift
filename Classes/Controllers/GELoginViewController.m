@@ -112,7 +112,15 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
 {
-	signInButton.enabled = (loginField.text.length > 0 && tokenField.text.length > 0);
+	UITextField *otherTextField = (textField ==  loginField) ? tokenField : loginField;
+	NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+	signInButton.enabled = (newString.length > 0 && otherTextField.text.length > 0);
+	return YES;
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField;
+{
+	signInButton.enabled = NO;
 	return YES;
 }
 
