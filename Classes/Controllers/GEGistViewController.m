@@ -22,7 +22,6 @@
 @implementation GEGistViewController
 
 @synthesize textView;
-@synthesize userButton;
 @synthesize pushButton;
 @synthesize actionButton;
 
@@ -37,7 +36,6 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	[textView release], textView = nil;
-	[userButton release], userButton = nil;
 	[pushButton release], pushButton = nil;
 	[actionButton release], actionButton = nil;
 	
@@ -96,7 +94,6 @@
 
 - (void)updateDisplay;
 {
-	userButton.title = [[NSUserDefaults standardUserDefaults] valueForKey:@"username"];
 	if (self.gist.name) {
 		editTitleTextField.text = self.gist.name;
 		[titleButton setTitle:self.gist.name forState:UIControlStateNormal];

@@ -91,6 +91,8 @@
 - (void)viewWillAppear:(BOOL)animated;
 {
 	[super viewWillAppear:animated];
+
+	self.navigationItem.title = [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
 	
 	// TODO: better selection logic
 	int selectedIndex = [self.fetchedResultsController.fetchedObjects indexOfObject:gistViewController.gist];

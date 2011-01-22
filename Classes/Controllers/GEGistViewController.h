@@ -12,7 +12,7 @@
 
 @interface GEGistViewController : UIViewController <UITextViewDelegate, UITextFieldDelegate, UIActionSheetDelegate> {
 	IBOutlet UITextView *textView;
-	IBOutlet UIBarButtonItem *userButton;
+	
 	IBOutlet UIBarButtonItem *pushButton;
 	IBOutlet UIBarButtonItem *actionButton;
 	
@@ -25,7 +25,6 @@
 
 @property (nonatomic, retain) IBOutlet UITextView *textView;
 
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *userButton;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *pushButton;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *actionButton;
 
