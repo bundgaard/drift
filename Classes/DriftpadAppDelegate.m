@@ -119,7 +119,6 @@
 {
 	GELoginViewController *viewController = [[GELoginViewController alloc] initWithNibName:nil bundle:nil];
 	viewController.modalPresentationStyle = UIModalPresentationFormSheet;
-//	viewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	[detailViewController presentModalViewController:viewController animated:YES];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSucceeded:) name:kDriftNotificationLoginSucceeded object:nil];
 }
