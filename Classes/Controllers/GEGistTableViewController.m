@@ -67,7 +67,6 @@
 	GEGist *gist = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	cell.textLabel.text = gist.name ? gist.name : [NSString stringWithFormat:@"#%@", gist.gistID];
 	cell.detailTextLabel.text = [CHumanDateFormatter formatDate:gist.createdAt singleLine:NO];
-	NSLog(@"%@", [CHumanDateFormatter formatDate:gist.createdAt singleLine:NO]);
 	
 	if (gist.dirty)
 		cell.textLabel.font = [UIFont fontWithName:@"Helvetica-BoldOblique" size:19.0];
