@@ -53,6 +53,9 @@
 	if (gist == newGist)
 		return;
 	
+	// TODO: encapsulation. maybe GEGist -save?
+	[[GEGistService sharedService] pushGist:gist];
+	
 	[gist release];
 	gist = [newGist retain];
 	

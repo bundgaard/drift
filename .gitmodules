@@ -10,3 +10,6 @@
 [submodule "Externals/TouchRSS"]
 	path = Externals/TouchRSS
 	url = git@github.com:qwzybug/TouchRSS.git
+[submodule "Externals/asi-http-request"]
+	path = Externals/asi-http-request
+	url = git@github.com:qwzybug/asi-http-request.git

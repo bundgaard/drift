@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "CCompletionTicket.h"
-
 extern NSString *kDriftNotificationUpdatedGists;
 extern NSString *kDriftNotificationUpdatedGist;
 extern NSString *kDriftNotificationLoginSucceeded;
@@ -17,7 +15,7 @@ extern NSString *kDriftNotificationLoginFailed;
 
 @class GEGist;
 
-@interface GEGistService : NSObject <CCompletionTicketDelegate> {
+@interface GEGistService : NSObject {
 
 }
 

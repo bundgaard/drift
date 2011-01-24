@@ -94,6 +94,18 @@
 	[[NSUserDefaults standardUserDefaults] setObject:[currentGistURL absoluteString] forKey:@"currentGistURL"];
 }
 
+- (void)applicationDidEnterBackground:(UIApplication *)application;
+{
+	// save state
+	[[GEGistStore sharedStore] save];
+	GEGist *currentGist = detailViewController.gist;
+	NSURL *currentGistURL = [[currentGist objectID] URIRepresentation];
+	[[NSUserDefaults standardUserDefaults] setObject:[currentGistURL absoluteString] forKey:@"currentGistURL"];
+	
+	// push current gist
+	[[GEGistService sharedService] pushGist:currentGist];
+}
+
 #pragma mark -
 #pragma mark Interface actions
 

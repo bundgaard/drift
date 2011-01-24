@@ -9,10 +9,12 @@
 #import "GEGistService.h"
 
 #import "CJSONDeserializer.h"
-#import "CManagedURLConnection.h"
 #import "GEGist.h"
 #import "GEGistStore.h"
 #import "NSManagedObjectContext_Extensions.h"
+
+#import "ASIHTTPRequest.h"
+#import "ASIFormDataRequest.h"
 
 
 NSString *kDriftNotificationUpdatedGists = @"kDriftNotificationUpdatedGists";
@@ -28,6 +30,7 @@ static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
 
 
 @interface GEGistService ()
+- (void)startRequest:(ASIHTTPRequest *)request;
 @end
 
 
@@ -50,83 +53,42 @@ static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
 
 #pragma mark Service actions
 
+- (void)startRequest:(ASIHTTPRequest *)request;
+{
+	[request setFailedBlock:^{
+		NSLog(@"Request %@ failed: %d", request, request.responseStatusCode);
+	}];
+	[request start];
+}
+
 - (void)loginUserWithUsername:(NSString *)username token:(NSString *)token;
 {
-	NSString *urlString = [NSString stringWithFormat:@"http://github.com/api/v2/json/user/show/%@?login=%@&token=%@", username, username, token];
-	NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
-	NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-								username, @"username",
-								token, @"token", nil];
-	CCompletionTicket *ticket = [[[CCompletionTicket alloc] initWithIdentifier:kDriftServiceCallLogin delegate:self userInfo:userInfo subTicket:nil] autorelease];
-	CManagedURLConnection *connection = [[[CManagedURLConnection alloc] initWithRequest:req completionTicket:ticket] autorelease];
-	[connection start];
+	NSString *urlString = [NSString stringWithFormat:@"https://github.com/api/v2/json/user/show/%@?login=%@&token=%@", username, username, token];
+	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
+	
+	[req setCompletionBlock:^{
+		id res = [[CJSONDeserializer deserializer] deserialize:[req rawResponseData] error:nil];
+		if (!res) {
+			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationLoginFailed object:self];
+			return;
+		}
+		[[NSUserDefaults standardUserDefaults] setObject:username forKey:@"username"];
+		[[NSUserDefaults standardUserDefaults] setObject:token forKey:@"token"];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationLoginSucceeded object:self];
+	}];
+	
+	[self startRequest:req];
 }
 
 - (void)listGistsForCurrentUser;
 {
 	NSString *username = [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
-	NSString *url = [NSString stringWithFormat:@"http://gist.github.com/api/v1/json/gists/%@", username];
+	NSString *urlString = [NSString stringWithFormat:@"https://gist.github.com/api/v1/json/gists/%@", username];
+	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	
-	NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-	CCompletionTicket *ticket = [[[CCompletionTicket alloc] initWithIdentifier:kDriftServiceCallListGists delegate:self userInfo:nil subTicket:nil] autorelease];
-	CManagedURLConnection *connection = [[[CManagedURLConnection alloc] initWithRequest:req completionTicket:ticket] autorelease];
-	[connection start];
-}
-
-- (void)fetchGist:(GEGist *)gist;
-{
-	NSString *url = [NSString stringWithFormat:@"http://gist.github.com/%@.txt", gist.gistID];
-	
-	NSURLRequest *req = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
-	CCompletionTicket *ticket = [[[CCompletionTicket alloc] initWithIdentifier:kDriftServiceCallFetchGist delegate:self userInfo:userInfo subTicket:nil] autorelease];
-	CManagedURLConnection *connection = [[[CManagedURLConnection alloc] initWithRequest:req completionTicket:ticket] autorelease];
-	[connection start];
-}
-
-- (void)pushGist:(GEGist *)gist;
-{
-	NSString *username = [[NSUserDefaults standardUserDefaults] valueForKey:@"username"];
-	NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:@"token"];
-	NSString *post;
-	NSString *urlString;
-	
-	if (gist.gistID) {
-		// gist already exists
-		NSString *extension = [gist.name componentsSeparatedByString:@"."].lastObject;
-		post = [NSString stringWithFormat:@"_method=put&file_contents[%@]=%@&file_ext[%@]=.%@&file_name[%@]=%@&login=%@&token=%@",
-												gist.name, gist.body, gist.name, extension, gist.name, gist.name, username, token];
-		
-		urlString = [NSString stringWithFormat:@"http://gist.github.com/gists/%@", gist.gistID];
-	}
-	else {
-		post = [NSString stringWithFormat:@"files[%@]=%@&login=%@&token=%@",
-											gist.name, gist.body, username, token];
-		urlString = @"http://gist.github.com/api/v1/json/new";
-	}
-	NSData *data = [post dataUsingEncoding:NSUTF8StringEncoding];
-	
-	NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlString]];
-	
-	[req setHTTPMethod:@"POST"];
-	[req setValue:[NSString stringWithFormat:@"%d", [data length]] forHTTPHeaderField:@"Content-Length"];
-	[req setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-	[req setHTTPBody:data];
-	
-	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
-	CCompletionTicket *ticket = [[[CCompletionTicket alloc] initWithIdentifier:kDriftServiceCallPushGist delegate:self userInfo:userInfo subTicket:nil] autorelease];
-	CManagedURLConnection *connection = [[[CManagedURLConnection alloc] initWithRequest:req completionTicket:ticket] autorelease];
-	[connection start];
-}
-
-#pragma mark Completion ticket delegate
-
-- (void)completionTicket:(CCompletionTicket *)inCompletionTicket didCompleteForTarget:(id)inTarget result:(id)inResult;
-{
-	if ([inCompletionTicket identifier] == kDriftServiceCallListGists)
-	{
+	[req setCompletionBlock:^{
 		NSError *err = nil;
-		NSDictionary *res = [[CJSONDeserializer deserializer] deserializeAsDictionary:inResult error:&err];
+		NSDictionary *res = [[CJSONDeserializer deserializer] deserializeAsDictionary:[req rawResponseData] error:&err];
 		if (!res) {
 			NSLog(@"Error parsing gists: %@", [err localizedDescription]);
 		} else {
@@ -135,57 +97,86 @@ static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
 			}
 		}
 		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdatedGists object:self];
-	}
+	}];
 	
-	else if ([inCompletionTicket identifier] == kDriftServiceCallFetchGist)
-	{
-		GEGist *gist = [[inCompletionTicket userInfo] valueForKey:@"gist"];
-		NSString *bodyString = [[[NSString alloc] initWithData:inResult encoding:NSUTF8StringEncoding] autorelease];
+	[self startRequest:req];
+}
+
+- (void)fetchGist:(GEGist *)gist;
+{
+	NSString *urlString = [NSString stringWithFormat:@"https://gist.github.com/%@.txt", gist.gistID];
+	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
+	
+	[req setCompletionBlock:^{
+		NSString *bodyString = [[[NSString alloc] initWithData:[req rawResponseData] encoding:NSUTF8StringEncoding] autorelease];
 		gist.body = bodyString;
 		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdatedGist object:self userInfo:userInfo];
+	}];
+	
+	[self startRequest:req];
+}
+
+- (void)pushGist:(GEGist *)gist;
+{
+	if (!gist.dirty)
+		return;
+	
+	NSLog(@"Pushing gist");
+	
+	NSString *username = [[NSUserDefaults standardUserDefaults] valueForKey:@"username"];
+	NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:@"token"];
+	NSString *urlString;
+	NSDictionary *postDictionary;
+	
+	if (gist.gistID) {
+		// gist already exists: update with a faked form post
+		urlString = [NSString stringWithFormat:@"https://gist.github.com/gists/%@", gist.gistID];
+		
+		NSString *extension = [gist.name componentsSeparatedByString:@"."].lastObject;
+		postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+							@"put", @"_method",
+							gist.body, [NSString stringWithFormat:@"file_contents[%@]", gist.name],
+							extension, [NSString stringWithFormat:@"file_ext[%@]", gist.name],
+							gist.name, [NSString stringWithFormat:@"file_name[%@]", gist.name],
+							username, @"login",
+							token, @"token",
+							nil];
+	}
+	else {
+		// new gist: use the API
+		urlString = @"https://gist.github.com/api/v1/json/new";
+		postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+							gist.name, [NSString stringWithFormat:@"files[%@]", gist.name],
+							username, @"login",
+							token, @"token",
+							nil];
 	}
 	
-	else if ([inCompletionTicket identifier] == kDriftServiceCallPushGist)
-	{
-		GEGist *gist = [[inCompletionTicket userInfo] valueForKey:@"gist"];
-		NSArray *gists = [[[CJSONDeserializer deserializer] deserializeAsDictionary:inResult error:nil] objectForKey:@"gists"];
+	ASIFormDataRequest *req = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:urlString]];
+	for (NSString *key in [postDictionary allKeys]) {
+		[req setPostValue:[postDictionary objectForKey:key] forKey:key];
+	}
+	
+	req.shouldContinueWhenAppEntersBackground = YES;
+	
+	[req setCompletionBlock:^{
+		NSError *err = nil;
+		NSArray *gists = [[[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] error:&err] objectForKey:@"gists"];
 		if (gists && [gists count] > 0) {
 			NSDictionary *attributes = [gists objectAtIndex:0];
 			[gist updateWithAttributes:attributes];
 		}
+		else {
+			// JSON parse failure is okay: for updates we get a web page back, because there is no API yet.
+		}
 		gist.dirty = NO;
+		
 		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdatedGist object:self userInfo:userInfo];
-	}
+	}];
 	
-	else if ([inCompletionTicket identifier] == kDriftServiceCallLogin)
-	{
-		id res = [[CJSONDeserializer deserializer] deserialize:inResult error:nil];
-		if (!res) {
-			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationLoginFailed object:self];
-			return;
-		}
-		NSDictionary *userInfo = [inCompletionTicket userInfo];
-		NSString *username = [userInfo objectForKey:@"username"];
-		NSString *token = [userInfo objectForKey:@"token"];
-		[[NSUserDefaults standardUserDefaults] setObject:username forKey:@"username"];
-		[[NSUserDefaults standardUserDefaults] setObject:token forKey:@"token"];
-		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationLoginSucceeded object:self];
-	}
-}
-
-- (void)completionTicket:(CCompletionTicket *)inCompletionTicket didBeginForTarget:(id)inTarget;
-{
-}
-
-- (void)completionTicket:(CCompletionTicket *)inCompletionTicket didFailForTarget:(id)inTarget error:(NSError *)inError;
-{
-	NSLog(@"Service call %@ failed with error %@", [inCompletionTicket identifier], [inError localizedDescription]);
-}
-
-- (void)completionTicket:(CCompletionTicket *)inCompletionTicket didCancelForTarget:(id)inTarget;
-{
+	[self startRequest:req];
 }
 
 @end
