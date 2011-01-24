@@ -18,6 +18,7 @@
 @interface GEGistViewController ()
 - (void)save;
 - (void)updateDisplay;
+@property (nonatomic, retain) UIActionSheet *actionSheet;
 @property (nonatomic, assign) BOOL interactionDisabled;
 @end
 
@@ -36,6 +37,8 @@
 
 @synthesize gist;
 
+@synthesize actionSheet;
+
 @synthesize interactionDisabled;
 
 - (void)dealloc;
@@ -53,6 +56,8 @@
 	[editTitleTextField release], editTitleTextField = nil;
 	
 	[gist release], gist = nil;
+	
+	[actionSheet release], actionSheet = nil;
 	
     [super dealloc];
 }
@@ -159,8 +164,8 @@
 - (IBAction)actionAction:(id)sender;
 {
 	// TODO: keep this from being multiply displayed, or displayed at the same time as gist popover
-	UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"View in Safari", @"Copy URL", nil];
-	[sheet showFromBarButtonItem:actionButton animated:YES];
+	if (!self.actionSheet) self.actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"View in Safari", @"Copy URL", nil];
+	[self.actionSheet showFromBarButtonItem:actionButton animated:YES];
 }
 
 - (IBAction)titleAction:(id)sender;
