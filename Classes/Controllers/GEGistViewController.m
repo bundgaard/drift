@@ -217,12 +217,6 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-	NSString *newName = textField.text;
-	if (![newName isEqual:self.gist.name]) {
-		[titleButton setTitle:newName forState:UIControlStateNormal];
-		self.gist.name = newName;
-		self.gist.dirty = YES;
-	}
 	[editTitleTextField removeFromSuperview];
 	[titleView addSubview:titleButton];
 	[self updateDisplay];
@@ -230,8 +224,14 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
 {
-	self.gist.name = textField.text;
+	NSString *newName = [textField.text stringByReplacingCharactersInRange:range withString:string];
+	if (![newName isEqual:self.gist.name]) {
+		[titleButton setTitle:newName forState:UIControlStateNormal];
+		self.gist.name = newName;
+		self.gist.dirty = YES;
+	}
 	self.gist.dirty = YES;
+	
 	return YES;
 }
 
