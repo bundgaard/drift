@@ -22,8 +22,10 @@
 @implementation GEGistViewController
 
 @synthesize textView;
-@synthesize pushButton;
+
 @synthesize actionButton;
+
+@synthesize activitySpinner;
 
 @synthesize titleView;
 @synthesize titleButton;
@@ -36,8 +38,10 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	[textView release], textView = nil;
-	[pushButton release], pushButton = nil;
+	
 	[actionButton release], actionButton = nil;
+	
+	[activitySpinner release], activitySpinner = nil;
 	
 	[titleView release], titleView = nil;
 	[titleButton release], titleButton = nil;
@@ -53,16 +57,15 @@
 	if (gist == newGist)
 		return;
 	
+	// save current gist
 	// TODO: encapsulation. maybe GEGist -save?
 	[[GEGistService sharedService] pushGist:gist];
 	
 	[gist release];
 	gist = [newGist retain];
 	
-	// TODO: better fetch logic
-	if (!gist.body && gist.gistID) {
-		[[GEGistService sharedService] fetchGist:gist];
-	}
+	// update gist contents
+	[[GEGistService sharedService] fetchGist:gist];
 	
 	[self updateDisplay];
 }
@@ -101,18 +104,28 @@
 		editTitleTextField.text = self.gist.name;
 		[titleButton setTitle:self.gist.name forState:UIControlStateNormal];
 	} else {
-		editTitleTextField.text = @"";
+		editTitleTextField.text = @"(untitled)";
 		[titleButton setTitle:self.gist.gistID forState:UIControlStateNormal];
 	}
 	
 	BOOL isEditing = [textView isFirstResponder];
 	if (isEditing) [textView resignFirstResponder];
 	
-	textView.text = self.gist.body;
-	pushButton.enabled = self.gist.dirty;
+	if (!self.gist.dirty) textView.text = self.gist.body;
 	actionButton.enabled = (!!self.gist.gistID);
 	
 	if (isEditing) [textView becomeFirstResponder];
+	
+	// check for undownloaded gist
+	if (!self.gist.body && gist.gistID) {
+		[self.textView resignFirstResponder];
+		self.textView.editable = NO;
+		[self.activitySpinner startAnimating];
+	}
+	else {
+		self.textView.editable = YES;
+		[self.activitySpinner stopAnimating];
+	}
 }
 
 #pragma mark -
@@ -121,7 +134,7 @@
 - (void)gistUpdated:(NSNotification *)notification;
 {
 	GEGist *updatedGist = [[notification userInfo] valueForKey:@"gist"];
-	if (updatedGist == self.gist) {
+	if (updatedGist == self.gist && !self.gist.dirty) {
 		[self updateDisplay];
 	}
 }
@@ -208,7 +221,6 @@
 {
 	self.gist.name = textField.text;
 	self.gist.dirty = YES;
-	pushButton.enabled = YES;
 	return YES;
 }
 
@@ -225,7 +237,6 @@
 {
 	self.gist.body = textView.text;
 	self.gist.dirty = YES;
-	pushButton.enabled = YES;
 }
 
 #pragma mark -

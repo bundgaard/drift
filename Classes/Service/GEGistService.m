@@ -108,9 +108,12 @@ static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
 	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	
 	[req setCompletionBlock:^{
-		gist.body = [req responseString];
-		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
-		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdatedGist object:self userInfo:userInfo];
+		if (!gist.dirty) {
+			// only update undirtied gists
+			gist.body = [req responseString];
+			NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
+			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdatedGist object:self userInfo:userInfo];
+		}
 	}];
 	
 	[self startRequest:req];

@@ -25,8 +25,9 @@
 
 @property (nonatomic, retain) IBOutlet UITextView *textView;
 
-@property (nonatomic, retain) IBOutlet UIBarButtonItem *pushButton;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *actionButton;
+
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activitySpinner;
 
 @property (nonatomic, retain) IBOutlet UIView *titleView;
 @property (nonatomic, retain) IBOutlet UIButton *titleButton;
