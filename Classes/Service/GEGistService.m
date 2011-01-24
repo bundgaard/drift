@@ -152,7 +152,7 @@ static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
 		// new gist: use the API
 		urlString = @"https://gist.github.com/api/v1/json/new";
 		postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-							gist.name, [NSString stringWithFormat:@"files[%@]", gist.name],
+							gist.body, [NSString stringWithFormat:@"files[%@]", gist.name],
 							username, @"login",
 							token, @"token",
 							nil];
