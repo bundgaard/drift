@@ -199,12 +199,12 @@
 #pragma mark -
 #pragma mark Action sheet delegate
 
-- (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex;
+- (void)actionSheet:(UIActionSheet *)theActionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex;
 {
 	if (buttonIndex < 0)
 		return;
 	
-	NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
+	NSString *title = [theActionSheet buttonTitleAtIndex:buttonIndex];
 	
 	NSString *urlString = [NSString stringWithFormat:@"http://gist.github.com/%@", self.gist.gistID];
 	if ([title isEqual:@"View in Safari"]) {
