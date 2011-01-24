@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="63"/>
+			<integer value="37"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -124,7 +124,7 @@
 										</object>
 									</object>
 								</object>
-								<string key="NSFrame">{{200, 0}, {420, 44}}</string>
+								<string key="NSFrame">{{188, 0}, {420, 44}}</string>
 								<reference key="NSSuperview" ref="569888160"/>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">3</int>
@@ -153,13 +153,7 @@
 							</object>
 							<object class="IBUIBarButtonItem" id="998843362">
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<float key="IBUIWidth">42</float>
-								<reference key="IBUIToolbar" ref="569888160"/>
-								<int key="IBUISystemItemIdentifier">6</int>
-							</object>
-							<object class="IBUIBarButtonItem" id="32013438">
-								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<float key="IBUIWidth">42</float>
+								<float key="IBUIWidth">60</float>
 								<reference key="IBUIToolbar" ref="569888160"/>
 								<int key="IBUISystemItemIdentifier">6</int>
 							</object>
@@ -193,7 +187,7 @@
 							</object>
 						</object>
 					</object>
-					<object class="IBUIActivityIndicatorView" id="955996570">
+					<object class="IBUIActivityIndicatorView" id="779826619">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">-2147483347</int>
 						<string key="NSFrame">{{375, 360}, {20, 20}}</string>
@@ -343,7 +337,7 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">activitySpinner</string>
 						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="955996570"/>
+						<reference key="destination" ref="779826619"/>
 					</object>
 					<int key="connectionID">64</int>
 				</object>
@@ -376,7 +370,7 @@
 							<reference ref="960109077"/>
 							<reference ref="569888160"/>
 							<reference ref="445646657"/>
-							<reference ref="955996570"/>
+							<reference ref="779826619"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -397,7 +391,6 @@
 							<reference ref="459197772"/>
 							<reference ref="788155503"/>
 							<reference ref="998843362"/>
-							<reference ref="32013438"/>
 						</object>
 						<reference key="parent" ref="766721923"/>
 					</object>
@@ -465,13 +458,8 @@
 						<reference key="parent" ref="569888160"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">60</int>
-						<reference key="object" ref="32013438"/>
-						<reference key="parent" ref="569888160"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">63</int>
-						<reference key="object" ref="955996570"/>
+						<reference key="object" ref="779826619"/>
 						<reference key="parent" ref="766721923"/>
 					</object>
 				</object>
@@ -496,7 +484,6 @@
 					<string>48.IBPluginDependency</string>
 					<string>51.IBPluginDependency</string>
 					<string>58.IBPluginDependency</string>
-					<string>60.IBPluginDependency</string>
 					<string>63.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
@@ -504,7 +491,6 @@
 					<string>GEGistViewController</string>
 					<string>UIResponder</string>
 					<string>{{244, 4}, {783, 720}}</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
