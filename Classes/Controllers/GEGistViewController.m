@@ -117,7 +117,7 @@
 	BOOL isEditing = [textView isFirstResponder];
 	if (isEditing) [textView resignFirstResponder];
 	
-	if (!self.gist.dirty) textView.text = self.gist.body;
+	textView.text = self.gist.body;
 	actionButton.enabled = (!!self.gist.gistID);
 	
 	if (isEditing) [textView becomeFirstResponder];
@@ -180,13 +180,16 @@
 
 - (IBAction)newGistAction:(id)sender;
 {
+	// TODO: move into gist class
 	NSManagedObjectContext *ctx = [[GEGistStore sharedStore] managedObjectContext];
 	GEGist *newGist = [NSEntityDescription insertNewObjectForEntityForName:[GEGist entityName] inManagedObjectContext:ctx];
-	newGist.name = @"New gist";
+	newGist.name = @"untitled.txt";
 	newGist.createdAt = [NSDate date];
 	newGist.dirty = YES;
 	[[GEGistStore sharedStore] save];
 	self.gist = newGist;
+	
+	[self.textView becomeFirstResponder];
 }
 
 #pragma mark -
