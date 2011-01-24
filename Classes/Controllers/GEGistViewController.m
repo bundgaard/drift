@@ -14,8 +14,10 @@
 
 #import "DriftpadAppDelegate.h"
 
+
 @interface GEGistViewController ()
 - (void)updateDisplay;
+@property (nonatomic, assign) BOOL interactionDisabled;
 @end
 
 
@@ -32,6 +34,8 @@
 @synthesize editTitleTextField;
 
 @synthesize gist;
+
+@synthesize interactionDisabled;
 
 - (void)dealloc;
 {
@@ -100,6 +104,8 @@
 
 - (void)updateDisplay;
 {
+	self.interactionDisabled = YES;
+	
 	if (self.gist.name) {
 		editTitleTextField.text = self.gist.name;
 		[titleButton setTitle:self.gist.name forState:UIControlStateNormal];
@@ -126,6 +132,8 @@
 		self.textView.editable = YES;
 		[self.activitySpinner stopAnimating];
 	}
+	
+	self.interactionDisabled = NO;
 }
 
 #pragma mark -
@@ -244,6 +252,9 @@
 
 - (void)keyboardWillShow:(NSNotification *)notification;
 {
+	if (self.interactionDisabled)
+		return;
+	
 	NSDictionary *userInfo = [notification userInfo];
 	CGRect kbFrame = [[userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	kbFrame = [self.view convertRect:kbFrame fromView:self.view.window];
@@ -265,6 +276,9 @@
 
 - (void)keyboardWillHide:(NSNotification *)notification;
 {
+	if (self.interactionDisabled)
+		return;
+	
 	NSDictionary *userInfo = [notification userInfo];
 	CGRect kbFrame = [[userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 	kbFrame = [self.view convertRect:kbFrame fromView:self.view.window];
@@ -282,6 +296,9 @@
 	textView.frame = textViewFrame;
 	
 	[UIView commitAnimations];
+	
+	// save every time we put away the keyboard
+	if (self.gist.dirty) [[GEGistService sharedService] pushGist:self.gist];
 }
 
 @end
