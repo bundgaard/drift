@@ -104,9 +104,15 @@
 		editTitleTextField.text = @"";
 		[titleButton setTitle:self.gist.gistID forState:UIControlStateNormal];
 	}
+	
+	BOOL isEditing = [textView isFirstResponder];
+	if (isEditing) [textView resignFirstResponder];
+	
 	textView.text = self.gist.body;
 	pushButton.enabled = self.gist.dirty;
 	actionButton.enabled = (!!self.gist.gistID);
+	
+	if (isEditing) [textView becomeFirstResponder];
 }
 
 #pragma mark -

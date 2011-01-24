@@ -67,7 +67,7 @@ static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
 	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	
 	[req setCompletionBlock:^{
-		id res = [[CJSONDeserializer deserializer] deserialize:[req rawResponseData] error:nil];
+		id res = [[CJSONDeserializer deserializer] deserialize:[req responseData] error:nil];
 		if (!res) {
 			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationLoginFailed object:self];
 			return;
@@ -88,7 +88,7 @@ static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
 	
 	[req setCompletionBlock:^{
 		NSError *err = nil;
-		NSDictionary *res = [[CJSONDeserializer deserializer] deserializeAsDictionary:[req rawResponseData] error:&err];
+		NSDictionary *res = [[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] error:&err];
 		if (!res) {
 			NSLog(@"Error parsing gists: %@", [err localizedDescription]);
 		} else {
@@ -108,8 +108,7 @@ static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
 	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	
 	[req setCompletionBlock:^{
-		NSString *bodyString = [[[NSString alloc] initWithData:[req rawResponseData] encoding:NSUTF8StringEncoding] autorelease];
-		gist.body = bodyString;
+		gist.body = [req responseString];
 		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdatedGist object:self userInfo:userInfo];
 	}];
