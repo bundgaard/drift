@@ -8,6 +8,8 @@
 
 #import "GEGistTableViewController.h"
 
+#import "DriftpadAppDelegate.h"
+
 #import "GEGist.h"
 #import "GEGistStore.h"
 #import "GEGistViewController.h"
@@ -83,6 +85,9 @@
 {
 	GEGist *gist = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	gistViewController.gist = gist;
+	
+	DriftpadAppDelegate *delegate = (DriftpadAppDelegate *)[[UIApplication sharedApplication] delegate];
+	[delegate hideGistPopover];
 }
 
 #pragma mark -

@@ -106,6 +106,13 @@
 	[[GEGistService sharedService] pushGist:currentGist];
 }
 
+- (void)applicationWillResignActive:(UIApplication *)application;
+{
+	// TODO DRY
+	[[GEGistStore sharedStore] save];
+	[[GEGistService sharedService] pushGist:detailViewController.gist];
+}
+
 #pragma mark -
 #pragma mark Interface actions
 
@@ -116,6 +123,11 @@
 		popoverController = [[UIPopoverController alloc] initWithContentViewController:nav];
 	}
 	[popoverController presentPopoverFromBarButtonItem:barButtonItem permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+}
+
+- (void)hideGistPopover;
+{
+	[popoverController dismissPopoverAnimated:YES];
 }
 
 - (IBAction)switchUserAction:(id)sender;

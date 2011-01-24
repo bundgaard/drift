@@ -32,6 +32,7 @@
 @property (nonatomic, retain) UIPopoverController *popoverController;
 
 - (void)showGistPopoverFromBarButtonItem:(UIBarButtonItem *)barButtonItem;
+- (void)hideGistPopover;
 - (void)showApplication;
 
 - (IBAction)switchUserAction:(id)sender;
