@@ -135,7 +135,10 @@ static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
 		// gist already exists: update with a faked form post
 		urlString = [NSString stringWithFormat:@"https://gist.github.com/gists/%@", gist.gistID];
 		
-		NSString *extension = [gist.name componentsSeparatedByString:@"."].lastObject;
+		NSString *extension = @"";
+		NSArray *nameComponents = [gist.name componentsSeparatedByString:@"."];
+		if (nameComponents.count > 1) extension = [nameComponents lastObject];
+		
 		postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
 							@"put", @"_method",
 							gist.body, [NSString stringWithFormat:@"file_contents[%@]", gist.name],
