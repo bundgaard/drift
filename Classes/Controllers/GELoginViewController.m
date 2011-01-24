@@ -17,6 +17,7 @@
 @synthesize overlayView;
 @synthesize signInButton;
 @synthesize cancelButton;
+@synthesize aboutLabel;
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -26,6 +27,7 @@
 	[overlayView release], overlayView = nil;
 	[signInButton release], signInButton = nil;
 	[cancelButton release], cancelButton = nil;
+	[aboutLabel release], aboutLabel = nil;
 	
     [super dealloc];
 }
@@ -46,6 +48,9 @@
 	else {
 		[cancelButton removeFromSuperview];
 	}
+	
+	NSString *version = [[[NSBundle mainBundle] infoDictionary] valueForKey:(id)kCFBundleVersionKey];
+	aboutLabel.text = [NSString stringWithFormat:@"Drift %@ in Permanent Maintenance since 2010", version];
 }
 
 - (void)viewDidUnload;

@@ -22,6 +22,7 @@
 @property (nonatomic, retain) IBOutlet UIView *overlayView;
 @property (nonatomic, retain) IBOutlet UIButton *signInButton;
 @property (nonatomic, retain) IBOutlet UIButton *cancelButton;
+@property (nonatomic, retain) IBOutlet UILabel *aboutLabel;
 
 - (IBAction)signInAction:(id)sender;
 - (IBAction)signUpAction:(id)sender;
