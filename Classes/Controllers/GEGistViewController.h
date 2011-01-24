@@ -35,7 +35,6 @@
 
 @property (nonatomic, retain) GEGist *gist;
 
-- (IBAction)pushAction:(id)sender;
 - (IBAction)actionAction:(id)sender;
 - (IBAction)titleAction:(id)sender;
 

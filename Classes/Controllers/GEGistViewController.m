@@ -16,6 +16,7 @@
 
 
 @interface GEGistViewController ()
+- (void)save;
 - (void)updateDisplay;
 @property (nonatomic, assign) BOOL interactionDisabled;
 @end
@@ -62,8 +63,7 @@
 		return;
 	
 	// save current gist
-	// TODO: encapsulation. maybe GEGist -save?
-	[[GEGistService sharedService] pushGist:gist];
+	[self save];
 	
 	[gist release];
 	gist = [newGist retain];
@@ -101,6 +101,12 @@
 
 #pragma mark -
 #pragma mark Gist display
+
+- (void)save;
+{
+	[[GEGistStore sharedStore] save];
+	[[GEGistService sharedService] pushGist:self.gist];
+}
 
 - (void)updateDisplay;
 {
@@ -149,13 +155,6 @@
 
 #pragma mark -
 #pragma mark Interface actions
-
-- (IBAction)pushAction:(id)sender;
-{
-	[editTitleTextField resignFirstResponder];
-	[textView resignFirstResponder];
-	[[GEGistService sharedService] pushGist:self.gist];
-}
 
 - (IBAction)actionAction:(id)sender;
 {
@@ -301,7 +300,7 @@
 	[UIView commitAnimations];
 	
 	// save every time we put away the keyboard
-	if (self.gist.dirty) [[GEGistService sharedService] pushGist:self.gist];
+	[self save];
 }
 
 @end
