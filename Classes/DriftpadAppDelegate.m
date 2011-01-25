@@ -63,17 +63,25 @@
 - (void)showApplication;
 {
 	// restore last-shown gist
-	NSString *currentGistURLString = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentGistURL"];
-	if (!detailViewController.gist && currentGistURLString) {
-		NSURL *currentGistURL = [NSURL URLWithString:currentGistURLString];
-		NSManagedObjectID *objectID = [[GEGistStore sharedStore].persistentStoreCoordinator managedObjectIDForURIRepresentation:currentGistURL];
+	if (!detailViewController.gist) {
+		GEGist *currentGist = nil;
+		NSString *currentGistURLString = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentGistURL"];
 		NSError *err = nil;
-		GEGist *currentGist = (GEGist *)[[GEGistStore sharedStore].managedObjectContext existingObjectWithID:objectID error:&err];
-		if (!currentGist) {
-			NSLog(@"Error restoring current gist: %@", [err localizedDescription]);
-		} else {
-			detailViewController.gist = currentGist;
+		
+		// try to fetch last-shown gist
+		if (currentGistURLString) {
+			NSURL *currentGistURL = [NSURL URLWithString:currentGistURLString];
+			NSManagedObjectID *objectID = [[GEGistStore sharedStore].persistentStoreCoordinator managedObjectIDForURIRepresentation:currentGistURL];
+			currentGist = (GEGist *)[[GEGistStore sharedStore].managedObjectContext existingObjectWithID:objectID error:&err];
 		}
+		
+		// if that fails, just show the first gist
+		if (!currentGist) {
+			if (err) NSLog(@"Error restoring current gist: %@", [err localizedDescription]);
+			currentGist = [GEGist firstGist]; // should always return a gist
+		}
+		
+		detailViewController.gist = currentGist;
 	}
 	
 	// show drift UI
