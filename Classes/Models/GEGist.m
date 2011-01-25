@@ -59,6 +59,13 @@
 	return currentGist;
 }
 
++ (GEGist *)gistWithID:(NSString *)gistID;
+{
+	NSManagedObjectContext *ctx = [GEGistStore sharedStore].managedObjectContext;
+	GEGist *gist = [ctx fetchObjectOfEntityForName:[self entityName] predicate:[NSPredicate predicateWithFormat:@"gistID == %@", gistID] error:nil];
+	return gist;
+}
+
 + (GEGist *)blankGist;
 {
 	GEGist *newGist = [NSEntityDescription insertNewObjectForEntityForName:[GEGist entityName] inManagedObjectContext:[[GEGistStore sharedStore] managedObjectContext]];

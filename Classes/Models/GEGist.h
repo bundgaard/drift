@@ -20,6 +20,8 @@
 + (void)markCurrentGist:(GEGist *)gist;
 + (GEGist *)currentGist;
 
++ (GEGist *)gistWithID:(NSString *)gistID;
+
 + (GEGist *)blankGist;
 + (GEGist *)welcomeGist;
 + (GEGist *)firstGist;
