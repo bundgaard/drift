@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="37"/>
+			<integer value="2"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -65,6 +65,7 @@
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<bool key="IBUIAlwaysBounceVertical">YES</bool>
 						<bool key="IBUIShowsHorizontalScrollIndicator">NO</bool>
 						<bool key="IBUIDelaysContentTouches">NO</bool>
 						<bool key="IBUICanCancelContentTouches">NO</bool>
@@ -593,7 +594,6 @@
 							<string>activitySpinner</string>
 							<string>editTitleTextField</string>
 							<string>gistsButton</string>
-							<string>pushButton</string>
 							<string>textView</string>
 							<string>titleButton</string>
 							<string>titleView</string>
@@ -603,7 +603,6 @@
 							<string>UIBarButtonItem</string>
 							<string>UIActivityIndicatorView</string>
 							<string>UITextField</string>
-							<string>UIBarButtonItem</string>
 							<string>UIBarButtonItem</string>
 							<string>UITextView</string>
 							<string>UIButton</string>
@@ -618,7 +617,6 @@
 							<string>activitySpinner</string>
 							<string>editTitleTextField</string>
 							<string>gistsButton</string>
-							<string>pushButton</string>
 							<string>textView</string>
 							<string>titleButton</string>
 							<string>titleView</string>
@@ -639,10 +637,6 @@
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">gistsButton</string>
-								<string key="candidateClassName">UIBarButtonItem</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">pushButton</string>
 								<string key="candidateClassName">UIBarButtonItem</string>
 							</object>
 							<object class="IBToOneOutletInfo">
