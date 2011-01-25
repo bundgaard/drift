@@ -102,12 +102,13 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		NSDictionary *res = [[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] error:&err];
 		if (!res) {
 			NSLog(@"Error parsing gists: %@", [err localizedDescription]);
+			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistsFailed object:self];
 		} else {
 			for (NSDictionary *gist in [res valueForKey:@"gists"]) {
 				[GEGist insertOrUpdateGistWithAttributes:gist];
 			}
+			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistsSucceeded object:self];
 		}
-		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistsSucceeded object:self];
 	}];
 	
 	[self startRequest:req];
@@ -177,9 +178,9 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	req.shouldContinueWhenAppEntersBackground = YES;
 	
 	// avoid losing the managed object while the request goes through: crasher
-	NSString *gistID = gist.gistID;
+	NSManagedObjectID *objectID = [gist objectID];
 	[req setCompletionBlock:^{
-		GEGist *gist = [GEGist gistWithID:gistID];
+		GEGist *gist = [[GEGistStore sharedStore].managedObjectContext existingObjectWithID:objectID error:nil];
 		if (!gist)
 			return;
 		
