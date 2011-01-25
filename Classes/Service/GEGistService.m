@@ -23,11 +23,6 @@ NSString *kDriftNotificationLoginSucceeded = @"kDriftNotificationLoginSucceeded"
 NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 
 
-static NSString *kDriftServiceCallLogin = @"kDriftServiceCallLogin";
-static NSString *kDriftServiceCallListGists = @"kDriftServiceCallListGists";
-static NSString *kDriftServiceCallFetchGist = @"kDriftServiceCallFetchGist";
-static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
-
 
 @interface GEGistService ()
 - (void)startRequest:(ASIHTTPRequest *)request;
@@ -56,7 +51,8 @@ static NSString *kDriftServiceCallPushGist = @"kDriftServiceCallPushGist";
 - (void)startRequest:(ASIHTTPRequest *)request;
 {
 	[request setFailedBlock:^{
-		NSLog(@"Request %@ failed: %d", request, request.responseStatusCode);
+		NSLog(@"FAILED: %@ %@ failed", [request requestMethod], [request url]);
+		if ([request responseString]) NSLog(@"%d: %@", request.responseStatusCode, [request responseString]);
 	}];
 	[request start];
 }
