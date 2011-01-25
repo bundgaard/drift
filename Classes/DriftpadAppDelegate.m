@@ -73,20 +73,10 @@
 	
 	// restore last-shown gist
 	if (!detailViewController.gist) {
-		GEGist *currentGist = nil;
-		NSString *currentGistURLString = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentGistURL"];
-		NSError *err = nil;
+		GEGist *currentGist = [GEGist currentGist];
 		
-		// try to fetch last-shown gist
-		if (currentGistURLString) {
-			NSURL *currentGistURL = [NSURL URLWithString:currentGistURLString];
-			NSManagedObjectID *objectID = [[GEGistStore sharedStore].persistentStoreCoordinator managedObjectIDForURIRepresentation:currentGistURL];
-			currentGist = (GEGist *)[[GEGistStore sharedStore].managedObjectContext existingObjectWithID:objectID error:&err];
-		}
-		
-		// if that fails, just show the first gist
+		// if there's no current gist, just show a blank gist
 		if (!currentGist) {
-			if (err) NSLog(@"Error restoring current gist: %@", [err localizedDescription]);
 			currentGist = [GEGist firstGist]; // should always return a gist
 			shouldShowGistList = YES; // this is probably not what the user was expecting, so show the list and let them get reacquainted
 		}
@@ -188,6 +178,7 @@
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:kDriftNotificationLoginSucceeded object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchedFirstGists:) name:kDriftNotificationUpdatedGists object:nil];
+	detailViewController.gist = nil;
 	[GEGist clearUserGists];
 	[[GEGistService sharedService] listGistsForCurrentUser];
 }

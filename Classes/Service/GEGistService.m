@@ -22,7 +22,7 @@ NSString *kDriftNotificationUpdatedGist = @"kDriftNotificationUpdatedGist";
 NSString *kDriftNotificationLoginSucceeded = @"kDriftNotificationLoginSucceeded";
 NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 
-
+#define kFailureNotificationNameKey @"kFailureNotificationNameKey"
 
 @interface GEGistService ()
 - (void)startRequest:(ASIHTTPRequest *)request;
@@ -53,6 +53,9 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	[request setFailedBlock:^{
 		NSLog(@"FAILED: %@ %@ failed", [request requestMethod], [request url]);
 		if ([request responseString]) NSLog(@"%d: %@", request.responseStatusCode, [request responseString]);
+		
+		NSString *notificationName = [request.userInfo objectForKey:kFailureNotificationNameKey];
+		if (notificationName) [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
 	}];
 	[request start];
 }
@@ -61,6 +64,8 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 {
 	NSString *urlString = [NSString stringWithFormat:@"https://github.com/api/v2/json/user/show/%@?login=%@&token=%@", username, username, token];
 	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
+	
+	req.userInfo = [NSDictionary dictionaryWithObject:kDriftNotificationLoginFailed forKey:kFailureNotificationNameKey];
 	
 	[req setCompletionBlock:^{
 		id res = [[CJSONDeserializer deserializer] deserialize:[req responseData] error:nil];
