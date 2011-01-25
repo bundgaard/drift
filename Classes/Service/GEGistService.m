@@ -20,7 +20,9 @@
 NSString *kDriftNotificationUpdateGistsSucceeded = @"kDriftNotificationUpdateGistsSucceeded";
 NSString *kDriftNotificationUpdateGistsFailed = @"kDriftNotificationUpdateGistsFailed";
 
-NSString *kDriftNotificationUpdatedGist = @"kDriftNotificationUpdatedGist";
+NSString *kDriftNotificationUpdateGistSucceeded = @"kDriftNotificationUpdateGistSucceeded";
+NSString *kDriftNotificationUpdateGistFailed = @"kDriftNotificationUpdateGistFailed";
+
 NSString *kDriftNotificationLoginSucceeded = @"kDriftNotificationLoginSucceeded";
 NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 
@@ -119,12 +121,14 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	NSString *urlString = [NSString stringWithFormat:@"https://gist.github.com/%@.txt", gist.gistID];
 	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	
+	req.userInfo = [NSDictionary dictionaryWithObject:kDriftNotificationUpdateGistFailed forKey:kFailureNotificationNameKey];
+	
 	[req setCompletionBlock:^{
 		if (!gist.dirty) {
 			// only update undirtied gists
 			gist.body = [req responseString];
 			NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
-			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdatedGist object:self userInfo:userInfo];
+			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistSucceeded object:self userInfo:userInfo];
 		}
 	}];
 	
@@ -196,7 +200,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		gist.dirty = NO;
 		
 		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
-		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdatedGist object:self userInfo:userInfo];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistSucceeded object:self userInfo:userInfo];
 	}];
 	
 	[self startRequest:req];

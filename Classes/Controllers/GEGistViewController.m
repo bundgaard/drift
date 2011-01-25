@@ -96,7 +96,8 @@
 	
 	[self.titleView addSubview:titleButton];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gistUpdated:) name:kDriftNotificationUpdatedGist object:[GEGistService sharedService]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gistUpdated:) name:kDriftNotificationUpdateGistSucceeded object:[GEGistService sharedService]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gistUpdateFailed:) name:kDriftNotificationUpdateGistFailed object:[GEGistService sharedService]];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -159,6 +160,11 @@
 	if (updatedGist == self.gist && !self.gist.dirty) {
 		[self updateDisplay];
 	}
+}
+
+- (void)gistUpdateFailed:(NSNotification *)notification;
+{
+	NSLog(@"Couldn't update gist!");
 }
 
 #pragma mark -

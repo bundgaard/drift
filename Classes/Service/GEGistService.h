@@ -11,7 +11,8 @@
 extern NSString *kDriftNotificationUpdateGistsSucceeded;
 extern NSString *kDriftNotificationUpdateGistsFailed;
 
-extern NSString *kDriftNotificationUpdatedGist;
+extern NSString *kDriftNotificationUpdateGistSucceeded;
+extern NSString *kDriftNotificationUpdateGistFailed;
 
 extern NSString *kDriftNotificationLoginSucceeded;
 extern NSString *kDriftNotificationLoginFailed;
