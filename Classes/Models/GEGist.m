@@ -110,6 +110,12 @@
 	return firstGist;
 }
 
++ (NSInteger)count;
+{
+	NSManagedObjectContext *ctx = [GEGistStore sharedStore].managedObjectContext;
+	return [ctx countOfObjectsOfEntityForName:[self entityName] predicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] error:nil];
+}
+
 + (void)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
 {
 	NSNumber *gistID = [attributes valueForKey:@"repo"];

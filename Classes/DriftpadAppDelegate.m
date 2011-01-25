@@ -69,22 +69,27 @@
 
 - (void)showApplication;
 {
-	BOOL shouldShowGistList = NO;
+	// if we're already showing a gist, leave it alone
+	GEGist *currentGist = detailViewController.gist;
 	
-	// restore last-shown gist
-	if (!detailViewController.gist) {
-		GEGist *currentGist = [GEGist currentGist];
-		
-		// if there's no current gist, just show a blank gist
-		if (!currentGist) {
-			currentGist = [GEGist firstGist]; // should always return a gist
-			shouldShowGistList = YES; // this is probably not what the user was expecting, so show the list and let them get reacquainted
-		}
-		
-		detailViewController.gist = currentGist;
-	}
+	// otherwise, restore last-shown gist
+	if (!currentGist) currentGist = [GEGist currentGist];
 	
+	BOOL shouldShowGistList = !currentGist;
+	
+	// for first-launch or no gists, show the welcome gist
+	if (!currentGist && (firstLaunch || [GEGist count] < 1)) currentGist = [GEGist welcomeGist];
+	
+	// if there's no current gist, just show a blank gist
+	if (!currentGist) currentGist = [GEGist firstGist];
+		
+	detailViewController.gist = currentGist;
+	
+	// always show the list if our context is stale
 	shouldShowGistList = shouldShowGistList || [self isContextStale];
+	
+	// never show the list if there's fewer than two gists
+	shouldShowGistList = shouldShowGistList && ([GEGist count] > 1);
 	
 	// show drift UI
 	[UIView beginAnimations:nil context:nil];
@@ -193,15 +198,7 @@
 	
 	[detailViewController dismissModalViewControllerAnimated:YES];
 	
-	if (firstLaunch) {
-		detailViewController.gist = [GEGist welcomeGist];
-	}
-	else {
-		detailViewController.gist = [GEGist firstGist];
-	}
 	[self showApplication];
-	
-	[self showGistPopoverFromBarButtonItem:self.detailViewController.gistsButton];
 }
 
 - (void)fetchFirstGistsFailed:(NSNotification *)notification;

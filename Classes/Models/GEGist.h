@@ -26,6 +26,8 @@
 + (GEGist *)welcomeGist;
 + (GEGist *)firstGist;
 
++ (NSInteger)count;
+
 + (void)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
 
 - (void)updateWithAttributes:(NSDictionary *)attributes;
