@@ -177,7 +177,10 @@
 - (void)loginSucceeded:(NSNotification *)notification;
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:kDriftNotificationLoginSucceeded object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchedFirstGists:) name:kDriftNotificationUpdatedGists object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchedFirstGists:) name:kDriftNotificationUpdateGistsSucceeded object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchFirstGistsFailed:) name:kDriftNotificationUpdateGistsFailed object:nil];
+	
 	detailViewController.gist = nil;
 	[GEGist clearUserGists];
 	[[GEGistService sharedService] listGistsForCurrentUser];
@@ -185,7 +188,9 @@
 
 - (void)fetchedFirstGists:(NSNotification *)notification;
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:kDriftNotificationUpdatedGists object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kDriftNotificationUpdateGistsSucceeded object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kDriftNotificationUpdateGistsFailed object:nil];
+	
 	[detailViewController dismissModalViewControllerAnimated:YES];
 	
 	if (firstLaunch) {
@@ -195,6 +200,14 @@
 		detailViewController.gist = [GEGist firstGist];
 	}
 	[self showApplication];
+}
+
+- (void)fetchFirstGistsFailed:(NSNotification *)notification;
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kDriftNotificationUpdateGistsSucceeded object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kDriftNotificationUpdateGistsFailed object:nil];
+	
+	[[GEGistService sharedService] clearCredentials];
 }
 
 @end

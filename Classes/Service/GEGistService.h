@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString *kDriftNotificationUpdatedGists;
+extern NSString *kDriftNotificationUpdateGistsSucceeded;
+extern NSString *kDriftNotificationUpdateGistsFailed;
+
 extern NSString *kDriftNotificationUpdatedGist;
+
 extern NSString *kDriftNotificationLoginSucceeded;
 extern NSString *kDriftNotificationLoginFailed;
 
@@ -21,6 +24,7 @@ extern NSString *kDriftNotificationLoginFailed;
 
 + (GEGistService *)sharedService;
 
+- (void)clearCredentials;
 - (BOOL)hasCredentials;
 
 - (void)loginUserWithUsername:(NSString *)username token:(NSString *)token;

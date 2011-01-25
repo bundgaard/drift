@@ -17,7 +17,9 @@
 #import "ASIFormDataRequest.h"
 
 
-NSString *kDriftNotificationUpdatedGists = @"kDriftNotificationUpdatedGists";
+NSString *kDriftNotificationUpdateGistsSucceeded = @"kDriftNotificationUpdateGistsSucceeded";
+NSString *kDriftNotificationUpdateGistsFailed = @"kDriftNotificationUpdateGistsFailed";
+
 NSString *kDriftNotificationUpdatedGist = @"kDriftNotificationUpdatedGist";
 NSString *kDriftNotificationLoginSucceeded = @"kDriftNotificationLoginSucceeded";
 NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
@@ -39,6 +41,12 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		gService = [[GEGistService alloc] init];
 	}
 	return gService;
+}
+
+- (void)clearCredentials;
+{
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"username"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"token"];
 }
 
 - (BOOL)hasCredentials;
@@ -87,6 +95,8 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	NSString *urlString = [NSString stringWithFormat:@"https://gist.github.com/api/v1/json/gists/%@", username];
 	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	
+	req.userInfo = [NSDictionary dictionaryWithObject:kDriftNotificationUpdateGistsFailed forKey:kFailureNotificationNameKey];
+	
 	[req setCompletionBlock:^{
 		NSError *err = nil;
 		NSDictionary *res = [[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] error:&err];
@@ -97,7 +107,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 				[GEGist insertOrUpdateGistWithAttributes:gist];
 			}
 		}
-		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdatedGists object:self];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistsSucceeded object:self];
 	}];
 	
 	[self startRequest:req];
@@ -166,7 +176,13 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	
 	req.shouldContinueWhenAppEntersBackground = YES;
 	
+	// avoid losing the managed object while the request goes through: crasher
+	NSString *gistID = gist.gistID;
 	[req setCompletionBlock:^{
+		GEGist *gist = [GEGist gistWithID:gistID];
+		if (!gist)
+			return;
+		
 		NSError *err = nil;
 		NSArray *gists = [[[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] error:&err] objectForKey:@"gists"];
 		if (gists && [gists count] > 0) {

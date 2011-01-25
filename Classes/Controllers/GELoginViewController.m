@@ -41,6 +41,7 @@
 - (void)viewDidLoad;
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:kDriftNotificationLoginFailed object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:kDriftNotificationUpdateGistsFailed object:nil];
 	
 	if ([[GEGistService sharedService] hasCredentials]) {
 		loginField.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"username"];
