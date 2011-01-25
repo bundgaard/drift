@@ -341,6 +341,14 @@
 					</object>
 					<int key="connectionID">64</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">gistsButton</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="978485827"/>
+					</object>
+					<int key="connectionID">65</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -490,7 +498,7 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>GEGistViewController</string>
 					<string>UIResponder</string>
-					<string>{{244, 4}, {783, 720}}</string>
+					<string>{{89, 89}, {768, 1024}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -523,7 +531,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">64</int>
+			<int key="maxID">65</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -538,12 +546,10 @@
 							<string>actionAction:</string>
 							<string>gistListAction:</string>
 							<string>newGistAction:</string>
-							<string>pushAction:</string>
 							<string>titleAction:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -557,7 +563,6 @@
 							<string>actionAction:</string>
 							<string>gistListAction:</string>
 							<string>newGistAction:</string>
-							<string>pushAction:</string>
 							<string>titleAction:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -575,10 +580,6 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">pushAction:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
 								<string key="name">titleAction:</string>
 								<string key="candidateClassName">id</string>
 							</object>
@@ -591,6 +592,7 @@
 							<string>actionButton</string>
 							<string>activitySpinner</string>
 							<string>editTitleTextField</string>
+							<string>gistsButton</string>
 							<string>pushButton</string>
 							<string>textView</string>
 							<string>titleButton</string>
@@ -601,6 +603,7 @@
 							<string>UIBarButtonItem</string>
 							<string>UIActivityIndicatorView</string>
 							<string>UITextField</string>
+							<string>UIBarButtonItem</string>
 							<string>UIBarButtonItem</string>
 							<string>UITextView</string>
 							<string>UIButton</string>
@@ -614,6 +617,7 @@
 							<string>actionButton</string>
 							<string>activitySpinner</string>
 							<string>editTitleTextField</string>
+							<string>gistsButton</string>
 							<string>pushButton</string>
 							<string>textView</string>
 							<string>titleButton</string>
@@ -632,6 +636,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">editTitleTextField</string>
 								<string key="candidateClassName">UITextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">gistsButton</string>
+								<string key="candidateClassName">UIBarButtonItem</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">pushButton</string>

@@ -16,11 +16,18 @@
 
 #import "GEGistService.h"
 
+
+#define CONTEXT_THRESHOLD_MINUTES 30
+
+
 @interface DriftpadAppDelegate (CoreDataPrivate)
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 - (NSString *)applicationDocumentsDirectory;
+
+- (void)recordLastUseDate;
+- (BOOL)isContextStale;
 @end
 
 
@@ -62,6 +69,8 @@
 
 - (void)showApplication;
 {
+	BOOL shouldShowGistList = NO;
+	
 	// restore last-shown gist
 	if (!detailViewController.gist) {
 		GEGist *currentGist = nil;
@@ -79,10 +88,13 @@
 		if (!currentGist) {
 			if (err) NSLog(@"Error restoring current gist: %@", [err localizedDescription]);
 			currentGist = [GEGist firstGist]; // should always return a gist
+			shouldShowGistList = YES; // this is probably not what the user was expecting, so show the list and let them get reacquainted
 		}
 		
 		detailViewController.gist = currentGist;
 	}
+	
+	shouldShowGistList = shouldShowGistList || [self isContextStale];
 	
 	// show drift UI
 	[UIView beginAnimations:nil context:nil];
@@ -91,34 +103,51 @@
 	
 	// fetch current gists
 	[[GEGistService sharedService] listGistsForCurrentUser];
+	
+	if (shouldShowGistList) [self showGistPopoverFromBarButtonItem:self.detailViewController.gistsButton];
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application;
+{
+	if ([self isContextStale]) [self showGistPopoverFromBarButtonItem:self.detailViewController.gistsButton];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application;
 {
-	// save current gist
-	[[GEGistStore sharedStore] save];
-	GEGist *currentGist = detailViewController.gist;
-	NSURL *currentGistURL = [[currentGist objectID] URIRepresentation];
-	[[NSUserDefaults standardUserDefaults] setObject:[currentGistURL absoluteString] forKey:@"currentGistURL"];
+	[self.detailViewController save];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application;
 {
-	// save state
-	[[GEGistStore sharedStore] save];
-	GEGist *currentGist = detailViewController.gist;
-	NSURL *currentGistURL = [[currentGist objectID] URIRepresentation];
-	[[NSUserDefaults standardUserDefaults] setObject:[currentGistURL absoluteString] forKey:@"currentGistURL"];
-	
-	// push current gist
-	[[GEGistService sharedService] pushGist:currentGist];
+	[self recordLastUseDate];
+	[self.detailViewController save];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application;
 {
-	// TODO DRY
-	[[GEGistStore sharedStore] save];
-	[[GEGistService sharedService] pushGist:detailViewController.gist];
+	[self recordLastUseDate];
+	[self.detailViewController save];
+}
+
+#pragma mark -
+#pragma mark State
+
+- (void)recordLastUseDate;
+{
+	NSInteger now = [[NSDate date] timeIntervalSinceReferenceDate];
+	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:now] forKey:@"lastUseDate"];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (BOOL)isContextStale;
+{
+	NSNumber *lastUsage = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastUseDate"];
+	if (!lastUsage) return YES;
+	
+	NSInteger now = [[NSDate date] timeIntervalSinceReferenceDate];
+	NSInteger then = [lastUsage integerValue];
+	
+	return ((now - then) / 60.0 > CONTEXT_THRESHOLD_MINUTES);
 }
 
 #pragma mark -

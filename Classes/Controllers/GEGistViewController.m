@@ -16,7 +16,6 @@
 
 
 @interface GEGistViewController ()
-- (void)save;
 - (void)updateDisplay;
 @property (nonatomic, retain) UIActionSheet *actionSheet;
 @property (nonatomic, assign) BOOL interactionDisabled;
@@ -27,6 +26,7 @@
 
 @synthesize textView;
 
+@synthesize gistsButton;
 @synthesize actionButton;
 
 @synthesize activitySpinner;
@@ -47,6 +47,7 @@
 	
 	[textView release], textView = nil;
 	
+	[gistsButton release], gistsButton = nil;
 	[actionButton release], actionButton = nil;
 	
 	[activitySpinner release], activitySpinner = nil;
@@ -73,8 +74,15 @@
 	[gist release];
 	gist = [newGist retain];
 	
-	// update gist contents
-	[[GEGistService sharedService] fetchGist:gist];
+	if (gist) {
+		// update gist contents
+		[[GEGistService sharedService] fetchGist:gist];
+		
+		// record current gist
+		NSURL *currentGistURL = [[self.gist objectID] URIRepresentation];
+		[[NSUserDefaults standardUserDefaults] setObject:[currentGistURL absoluteString] forKey:@"currentGistURL"];
+		[[NSUserDefaults standardUserDefaults] synchronize];
+	}
 	
 	[self updateDisplay];
 }
@@ -110,7 +118,7 @@
 - (void)save;
 {
 	[[GEGistStore sharedStore] save];
-	[[GEGistService sharedService] pushGist:self.gist];
+	if (self.gist) [[GEGistService sharedService] pushGist:self.gist];
 }
 
 - (void)updateDisplay;

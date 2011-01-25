@@ -11,20 +11,11 @@
 @class GEGist;
 
 @interface GEGistViewController : UIViewController <UITextViewDelegate, UITextFieldDelegate, UIActionSheetDelegate> {
-	IBOutlet UITextView *textView;
-	
-	IBOutlet UIBarButtonItem *pushButton;
-	IBOutlet UIBarButtonItem *actionButton;
-	
-	IBOutlet UIView *titleView;
-	IBOutlet UIButton *titleButton;
-	IBOutlet UITextField *editTitleTextField;
-	
-	GEGist *gist;
 }
 
 @property (nonatomic, retain) IBOutlet UITextView *textView;
 
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *gistsButton;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *actionButton;
 
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView *activitySpinner;
@@ -34,6 +25,8 @@
 @property (nonatomic, retain) IBOutlet UITextField *editTitleTextField;
 
 @property (nonatomic, retain) GEGist *gist;
+
+- (void)save;
 
 - (IBAction)actionAction:(id)sender;
 - (IBAction)titleAction:(id)sender;
