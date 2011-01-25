@@ -200,6 +200,8 @@
 		detailViewController.gist = [GEGist firstGist];
 	}
 	[self showApplication];
+	
+	[self showGistPopoverFromBarButtonItem:self.detailViewController.gistsButton];
 }
 
 - (void)fetchFirstGistsFailed:(NSNotification *)notification;
