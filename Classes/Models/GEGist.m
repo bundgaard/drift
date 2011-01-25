@@ -27,7 +27,36 @@
 	for (GEGist *gist in gists) {
 		[ctx deleteObject:gist];
 	}
+	[self markCurrentGist:nil];
 	[[GEGistStore sharedStore] save];
+}
+
++ (void)markCurrentGist:(GEGist *)gist;
+{
+	if (gist) {
+		NSURL *currentGistURL = [[gist objectID] URIRepresentation];
+		[[NSUserDefaults standardUserDefaults] setObject:[currentGistURL absoluteString] forKey:@"currentGistURL"];
+	}
+	else {
+		[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"currentGistURL"];
+	}
+	[[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (GEGist *)currentGist;
+{
+	GEGist *currentGist = nil;
+	NSString *currentGistURLString = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentGistURL"];
+	NSError *err = nil;
+	
+	// try to fetch last-shown gist
+	if (currentGistURLString) {
+		NSURL *currentGistURL = [NSURL URLWithString:currentGistURLString];
+		NSManagedObjectID *objectID = [[GEGistStore sharedStore].persistentStoreCoordinator managedObjectIDForURIRepresentation:currentGistURL];
+		currentGist = (GEGist *)[[GEGistStore sharedStore].managedObjectContext existingObjectWithID:objectID error:&err];
+	}
+	
+	return currentGist;
 }
 
 + (GEGist *)blankGist;

@@ -17,6 +17,9 @@
 
 + (void)clearUserGists;
 
++ (void)markCurrentGist:(GEGist *)gist;
++ (GEGist *)currentGist;
+
 + (GEGist *)blankGist;
 + (GEGist *)welcomeGist;
 + (GEGist *)firstGist;

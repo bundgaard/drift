@@ -75,13 +75,8 @@
 	gist = [newGist retain];
 	
 	if (gist) {
-		// update gist contents
 		[[GEGistService sharedService] fetchGist:gist];
-		
-		// record current gist
-		NSURL *currentGistURL = [[self.gist objectID] URIRepresentation];
-		[[NSUserDefaults standardUserDefaults] setObject:[currentGistURL absoluteString] forKey:@"currentGistURL"];
-		[[NSUserDefaults standardUserDefaults] synchronize];
+		[GEGist markCurrentGist:gist];
 	}
 	
 	[self updateDisplay];
