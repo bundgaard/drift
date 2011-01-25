@@ -99,8 +99,8 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gistUpdated:) name:kDriftNotificationUpdateGistSucceeded object:[GEGistService sharedService]];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gistUpdateFailed:) name:kDriftNotificationUpdateGistFailed object:[GEGistService sharedService]];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardDidShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewDidUnload;
@@ -266,7 +266,7 @@
 #pragma mark -
 #pragma mark Keyboard
 
-- (void)keyboardWillShow:(NSNotification *)notification;
+- (void)keyboardShow:(NSNotification *)notification;
 {
 	if (self.interactionDisabled)
 		return;
@@ -283,21 +283,18 @@
 	[UIView setAnimationCurve:curve];
 	[UIView setAnimationDuration:duration];
 	
-	CGRect textViewFrame = textView.frame;
-	textViewFrame.size.height -= kbFrame.size.height;
-	textView.frame = textViewFrame;
+	self.textView.contentInset = UIEdgeInsetsMake(0, 0, kbFrame.size.height, 0);
+	self.textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, kbFrame.size.height, 0);
 	
 	[UIView commitAnimations];
 }
 
-- (void)keyboardWillHide:(NSNotification *)notification;
+- (void)keyboardHide:(NSNotification *)notification;
 {
 	if (self.interactionDisabled)
 		return;
 	
 	NSDictionary *userInfo = [notification userInfo];
-	CGRect kbFrame = [[userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-	kbFrame = [self.view convertRect:kbFrame fromView:self.view.window];
 	
 	double duration = [[userInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
 	UIViewAnimationCurve curve = [[userInfo	valueForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
@@ -307,9 +304,8 @@
 	[UIView setAnimationCurve:curve];
 	[UIView setAnimationDuration:duration];
 	
-	CGRect textViewFrame = textView.frame;
-	textViewFrame.size.height += kbFrame.size.height;
-	textView.frame = textViewFrame;
+	self.textView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+	self.textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0);
 	
 	[UIView commitAnimations];
 	
