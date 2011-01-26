@@ -58,6 +58,7 @@
 		03C197141172D39500B975D1 /* GELoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C197121172D39500B975D1 /* GELoginViewController.m */; };
 		03C197151172D39500B975D1 /* GELoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03C197131172D39500B975D1 /* GELoginViewController.xib */; };
 		03C197881172E60F00B975D1 /* welcome.txt in Resources */ = {isa = PBXBuildFile; fileRef = 03C197871172E60F00B975D1 /* welcome.txt */; };
+		03E340DB12F0E11B00C655CA /* NSString_Scraping.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E340DA12F0E11B00C655CA /* NSString_Scraping.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		280420C1108EA07E000629CD /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 280420C0108EA07E000629CD /* CoreData.framework */; };
@@ -160,6 +161,8 @@
 		03C197121172D39500B975D1 /* GELoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GELoginViewController.m; sourceTree = "<group>"; };
 		03C197131172D39500B975D1 /* GELoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GELoginViewController.xib; sourceTree = "<group>"; };
 		03C197871172E60F00B975D1 /* welcome.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = welcome.txt; sourceTree = "<group>"; };
+		03E340D912F0E11B00C655CA /* NSString_Scraping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSString_Scraping.h; sourceTree = "<group>"; };
+		03E340DA12F0E11B00C655CA /* NSString_Scraping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSString_Scraping.m; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* DriftpadAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DriftpadAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* DriftpadAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DriftpadAppDelegate.m; sourceTree = "<group>"; };
@@ -413,9 +416,19 @@
 			name = Externals;
 			sourceTree = "<group>";
 		};
+		03E340D712F0E10200C655CA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				03E340D912F0E11B00C655CA /* NSString_Scraping.h */,
+				03E340DA12F0E11B00C655CA /* NSString_Scraping.m */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				03E340D712F0E10200C655CA /* Extensions */,
 				1D3623240D0F684500981E51 /* DriftpadAppDelegate.h */,
 				1D3623250D0F684500981E51 /* DriftpadAppDelegate.m */,
 				03C172BD1172817300B975D1 /* Controllers */,
@@ -595,6 +608,7 @@
 				03A6649412EB81B400080F7F /* ASIInputStream.m in Sources */,
 				03A6649512EB81B400080F7F /* ASINetworkQueue.m in Sources */,
 				03A664CC12EB831600080F7F /* Reachability.m in Sources */,
+				03E340DB12F0E11B00C655CA /* NSString_Scraping.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

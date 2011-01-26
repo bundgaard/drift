@@ -41,15 +41,11 @@
 - (void)viewDidLoad;
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:kDriftNotificationLoginFailed object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:kDriftNotificationUpdateGistsFailed object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gotAPIKey:) name:kDriftNotificationGetAPIKeySucceeded object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:kDriftNotificationGetAPIKeyFailed object:nil];
 	
-	if ([[GEGistService sharedService] hasCredentials]) {
-		loginField.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"username"];
-		tokenField.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"token"];
-	}
-	else {
+	if (![[GEGistService sharedService] hasCredentials])
 		[cancelButton removeFromSuperview];
-	}
 	
 	NSString *version = [[[NSBundle mainBundle] infoDictionary] valueForKey:(id)kCFBundleVersionKey];
 	aboutLabel.text = [NSString stringWithFormat:@"Drift %@ in Permanent Maintenance since 2010", version];
@@ -71,19 +67,19 @@
 {
 	[loginField resignFirstResponder];
 	[tokenField resignFirstResponder];
-	
+
 	self.overlayView.alpha = 0.0;
 	self.overlayView.frame = self.view.bounds;
 	[self.view addSubview:self.overlayView];
-	
+
 	[UIView beginAnimations:nil context:nil];
 	self.overlayView.alpha = 1.0;
 	[UIView commitAnimations];
-
-	NSString *username = loginField.text;
-	NSString *token = tokenField.text;
 	
-	[[GEGistService sharedService] loginUserWithUsername:username token:token];
+	NSString *username = loginField.text;
+	NSString *password = tokenField.text;
+
+	[[GEGistService sharedService] obtainAPIKeyFromUsername:username password:password];
 }
 
 - (IBAction)signUpAction:(id)sender;
@@ -104,6 +100,12 @@
 }
 
 #pragma mark Service callbacks
+
+- (void)gotAPIKey:(NSNotification *)notification;
+{
+	NSString *apiToken = [[notification userInfo] objectForKey:@"APIToken"];
+	[[GEGistService sharedService] loginUserWithUsername:self.loginField.text token:apiToken];
+}
 
 - (void)loginFailed:(NSNotification *)notification;
 {

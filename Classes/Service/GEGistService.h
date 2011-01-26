@@ -14,6 +14,9 @@ extern NSString *kDriftNotificationUpdateGistsFailed;
 extern NSString *kDriftNotificationUpdateGistSucceeded;
 extern NSString *kDriftNotificationUpdateGistFailed;
 
+extern NSString *kDriftNotificationGetAPIKeySucceeded;
+extern NSString *kDriftNotificationGetAPIKeyFailed;
+
 extern NSString *kDriftNotificationLoginSucceeded;
 extern NSString *kDriftNotificationLoginFailed;
 
@@ -28,6 +31,7 @@ extern NSString *kDriftNotificationLoginFailed;
 - (void)clearCredentials;
 - (BOOL)hasCredentials;
 
+- (void)obtainAPIKeyFromUsername:(NSString *)username password:(NSString *)password;
 - (void)loginUserWithUsername:(NSString *)username token:(NSString *)token;
 - (void)listGistsForCurrentUser;
 - (void)fetchGist:(GEGist *)gist;

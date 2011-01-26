@@ -12,6 +12,7 @@
 #import "GEGist.h"
 #import "GEGistStore.h"
 #import "NSManagedObjectContext_Extensions.h"
+#import "NSString_Scraping.h"
 
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
@@ -22,6 +23,9 @@ NSString *kDriftNotificationUpdateGistsFailed = @"kDriftNotificationUpdateGistsF
 
 NSString *kDriftNotificationUpdateGistSucceeded = @"kDriftNotificationUpdateGistSucceeded";
 NSString *kDriftNotificationUpdateGistFailed = @"kDriftNotificationUpdateGistFailed";
+
+NSString *kDriftNotificationGetAPIKeySucceeded = @"kDriftNotificationGetAPIKeySucceeded";
+NSString *kDriftNotificationGetAPIKeyFailed = @"kDriftNotificationGetAPIKeyFailed";
 
 NSString *kDriftNotificationLoginSucceeded = @"kDriftNotificationLoginSucceeded";
 NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
@@ -89,6 +93,50 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	}];
 	
 	[self startRequest:req];
+}
+
+- (void)obtainAPIKeyFromUsername:(NSString *)username password:(NSString *)password;
+{
+	// TODO: this will leak (retain cycle)
+	// actually, all the service requests will leak.
+	
+	ASIHTTPRequest		*fetchLoginPageRequest;
+	ASIFormDataRequest	*loginRequest;
+	ASIHTTPRequest		*fetchAPIKeyRequest;
+	
+	void (^failBlock)(void) = ^{
+		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationGetAPIKeyFailed object:nil];
+	};
+	
+	fetchLoginPageRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:@"https://github.com/login"]];
+	loginRequest = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://github.com/session"]];
+	fetchAPIKeyRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:@"https://github.com/account"]];
+	
+	[fetchLoginPageRequest setFailedBlock:failBlock];
+	[loginRequest setFailedBlock:failBlock];
+	[fetchAPIKeyRequest setFailedBlock:failBlock];
+	
+	[fetchLoginPageRequest setCompletionBlock:^{
+		NSString *authToken = [[fetchLoginPageRequest responseString] scrapeStringAnchoredBy:@"window._auth_token = " offset:1 length:40];
+		NSLog(@"Form authenticity token: %@", authToken);
+		[loginRequest addPostValue:authToken forKey:@"authenticity_token"];
+		[loginRequest start];
+	}];
+	
+	[loginRequest addPostValue:username forKey:@"login"];
+	[loginRequest addPostValue:password forKey:@"password"];
+	[loginRequest setCompletionBlock:^{
+		[fetchAPIKeyRequest start];
+	}];
+	
+	[fetchAPIKeyRequest setCompletionBlock:^{
+		NSString *apiToken = [[fetchAPIKeyRequest responseString] scrapeStringAnchoredBy:@"Your API token is <code>" offset:0 length:32];
+		NSLog(@"API token: %@", apiToken);
+		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:apiToken forKey:@"APIToken"];
+		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationGetAPIKeySucceeded object:nil userInfo:userInfo];
+	}];
+	
+	[fetchLoginPageRequest start];
 }
 
 - (void)listGistsForCurrentUser;
