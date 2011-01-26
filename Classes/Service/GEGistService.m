@@ -184,7 +184,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	// avoid losing the managed object while the request goes through: crasher
 	NSManagedObjectID *objectID = [gist objectID];
 	[req setCompletionBlock:^{
-		GEGist *gist = [[GEGistStore sharedStore].managedObjectContext existingObjectWithID:objectID error:nil];
+		GEGist *gist = (GEGist *)[[GEGistStore sharedStore].managedObjectContext existingObjectWithID:objectID error:nil];
 		if (!gist)
 			return;
 		
