@@ -119,15 +119,11 @@
 + (void)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
 {
 	NSNumber *gistID = [attributes valueForKey:@"repo"];
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"gistID = %@", gistID];
-	NSManagedObjectContext *ctx = [[GEGistStore sharedStore] managedObjectContext];
-	NSError *err = nil;
-	GEGist *gist = [ctx fetchObjectOfEntityForName:@"Gist" predicate:predicate error:&err];
-	if (!gist) {
-		gist = [NSEntityDescription insertNewObjectForEntityForName:@"Gist" inManagedObjectContext:ctx];
-		gist.user = [[NSUserDefaults standardUserDefaults] valueForKey:@"username"];
-	}
 	
+	NSManagedObjectContext *ctx = [GEGistStore sharedStore].managedObjectContext;
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"gistID = %@", gistID];
+	
+	GEGist *gist = [ctx fetchObjectOfEntityForName:@"Gist" predicate:predicate createIfNotFound:YES wasCreated:nil error:nil];
 	[gist updateWithAttributes:attributes];
 	
 	[[GEGistStore sharedStore] save];
@@ -139,6 +135,7 @@
 	self.desc = [[attributes valueForKey:@"description"] objectOrNil];
 	self.createdAt = [[NSDateFormatter githubDateFormatter] dateFromString:[attributes valueForKey:@"created_at"]];
 	self.name = [[attributes valueForKey:@"files"] componentsJoinedByString:@", "];
+	self.user = [attributes valueForKey:@"owner"];
 }
 
 #pragma mark begin emogenerator accessors
