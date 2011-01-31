@@ -34,13 +34,15 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 
 @interface GEGistService ()
 - (void)startRequest:(ASIHTTPRequest *)request;
+@property (readonly) NSDictionary *anonymousUser;
 @end
 
 
 
 @implementation GEGistService
 
-@synthesize anonymous;
+@dynamic anonymous;
+@dynamic anonymousUser;
 
 @dynamic username;
 @dynamic apiKey;
@@ -64,10 +66,20 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	return [[NSUserDefaults standardUserDefaults] boolForKey:@"anonymous"];
 }
 
+- (NSDictionary *)anonymousUser;
+{
+	static NSDictionary *sAnonymousUser = nil;
+	@synchronized (self) {
+		if (!sAnonymousUser)
+			sAnonymousUser = [[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"AnonymousUser" ofType:@"plist"]] retain];
+	}
+	return sAnonymousUser;
+}
+
 - (NSString *)username;
 {
 	if (self.anonymous) {
-		return @""; // TODO: plist
+		return [self.anonymousUser objectForKey:@"Username"];
 	}
 	else {
 		return [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
@@ -77,7 +89,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 - (NSString *)apiKey;
 {
 	if (self.anonymous) {
-		return @""; // TODO: plist
+		return [self.anonymousUser objectForKey:@"APIKey"];
 	}
 	else {
 		return [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
