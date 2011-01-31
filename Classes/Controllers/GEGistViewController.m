@@ -166,7 +166,7 @@
 		return;
 	
 	NSRange searchRange = NSMakeRange(firstCharacterIndex, self.gist.body.length - firstCharacterIndex);
-	NSInteger lineEndIndex = [self.gist.body rangeOfString:@"\n" options:0 range:range].location;
+	NSInteger lineEndIndex = [self.gist.body rangeOfString:@"\n" options:0 range:searchRange].location;
 	if (lineEndIndex == NSNotFound) lineEndIndex = self.gist.body.length;
 	
 	BOOL truncated = NO;
