@@ -40,6 +40,11 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 
 @implementation GEGistService
 
+@synthesize anonymous;
+
+@dynamic username;
+@dynamic apiKey;
+
 + (GEGistService *)sharedService;
 {
 	static GEGistService *gService;
@@ -49,15 +54,52 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	return gService;
 }
 
+- (void)setAnonymous:(BOOL)isAnonymous;
+{
+	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:isAnonymous] forKey:@"anonymous"];
+}
+
+- (BOOL)anonymous;
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey:@"anonymous"];
+}
+
+- (NSString *)username;
+{
+	if (self.anonymous) {
+		return @""; // TODO: plist
+	}
+	else {
+		return [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
+	}
+}
+
+- (NSString *)apiKey;
+{
+	if (self.anonymous) {
+		return @""; // TODO: plist
+	}
+	else {
+		return [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
+	}
+}
+
 - (void)clearCredentials;
 {
+	// github session cookies can mess up our API calls
+	for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:@"https://github.com"]])
+		[[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
+	
+	for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:@"https://gist.github.com"]])
+		[[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
+	
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"username"];
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"token"];
 }
 
 - (BOOL)hasCredentials;
 {
-	return (!![[NSUserDefaults standardUserDefaults] valueForKey:@"username"]);
+	return (!!self.username);
 }
 
 #pragma mark Service actions
@@ -87,12 +129,21 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationLoginFailed object:self];
 			return;
 		}
+		self.anonymous = NO;
 		[[NSUserDefaults standardUserDefaults] setObject:username forKey:@"username"];
 		[[NSUserDefaults standardUserDefaults] setObject:token forKey:@"token"];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationLoginSucceeded object:self];
 	}];
 	
 	[self startRequest:req];
+}
+
+- (void)loginAnonymously;
+{
+	self.anonymous = YES;
+	[self clearCredentials];
+	[GEGist markCurrentGist:nil];
+	[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationLoginSucceeded object:self];
 }
 
 - (void)obtainAPIKeyFromUsername:(NSString *)username password:(NSString *)password;
@@ -141,8 +192,13 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 
 - (void)listGistsForCurrentUser;
 {
-	NSString *username = [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
-	NSString *urlString = [NSString stringWithFormat:@"https://gist.github.com/api/v1/json/gists/%@", username];
+	if (self.anonymous) {
+		// don't perform an API call to list the anonymous user's gists—they're all local
+		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistsSucceeded object:self];
+		return;
+	}
+	
+	NSString *urlString = [NSString stringWithFormat:@"https://gist.github.com/api/v1/json/gists/%@", self.username];
 	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	
 	req.userInfo = [NSDictionary dictionaryWithObject:kDriftNotificationUpdateGistsFailed forKey:kFailureNotificationNameKey];
@@ -188,10 +244,11 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	if (!gist.dirty)
 		return;
 	
+	if (![gist.user isEqual:self.username])
+		return;
+	
 	NSLog(@"Pushing gist");
 	
-	NSString *username = [[NSUserDefaults standardUserDefaults] valueForKey:@"username"];
-	NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:@"token"];
 	NSString *urlString;
 	NSDictionary *postDictionary;
 	
@@ -208,8 +265,8 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 							gist.body, [NSString stringWithFormat:@"file_contents[%@]", gist.name],
 							extension, [NSString stringWithFormat:@"file_ext[%@]", gist.name],
 							gist.name, [NSString stringWithFormat:@"file_name[%@]", gist.name],
-							username, @"login",
-							token, @"token",
+							self.username, @"login",
+							self.apiKey, @"token",
 							nil];
 	}
 	else {
@@ -217,8 +274,8 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		urlString = @"https://gist.github.com/api/v1/json/new";
 		postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
 							gist.body, [NSString stringWithFormat:@"files[%@]", gist.name],
-							username, @"login",
-							token, @"token",
+							self.username, @"login",
+							self.apiKey, @"token",
 							nil];
 	}
 	

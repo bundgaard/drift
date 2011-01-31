@@ -74,10 +74,9 @@
 	[gist release];
 	gist = [newGist retain];
 	
-	if (gist) {
-		[[GEGistService sharedService] fetchGist:gist];
-		[GEGist markCurrentGist:gist];
-	}
+	if (gist) [[GEGistService sharedService] fetchGist:gist];
+	
+	[GEGist markCurrentGist:gist];
 	
 	[self updateDisplay];
 }
@@ -193,15 +192,7 @@
 
 - (IBAction)newGistAction:(id)sender;
 {
-	// TODO: move into gist class
-	NSManagedObjectContext *ctx = [[GEGistStore sharedStore] managedObjectContext];
-	GEGist *newGist = [NSEntityDescription insertNewObjectForEntityForName:[GEGist entityName] inManagedObjectContext:ctx];
-	newGist.name = @"untitled.txt";
-	newGist.createdAt = [NSDate date];
-	newGist.dirty = YES;
-	[[GEGistStore sharedStore] save];
-	self.gist = newGist;
-	
+	self.gist = [GEGist blankGist];
 	[self.textView becomeFirstResponder];
 }
 

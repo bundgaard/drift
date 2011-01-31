@@ -12,6 +12,7 @@
 
 #import "GEGist.h"
 #import "GEGistStore.h"
+#import "GEGistService.h"
 #import "GEGistViewController.h"
 
 #import "CHumanDateFormatter.h"
@@ -46,14 +47,7 @@
 - (NSFetchRequest *)fetchRequest;
 {
 	if (!fetchRequest) {
-		fetchRequest = [[NSFetchRequest alloc] init];
-		
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"Gist" inManagedObjectContext:[self managedObjectContext]];
-		[fetchRequest setEntity:entity];
-		[fetchRequest setFetchBatchSize:20];
-		
-		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
-		[fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+		fetchRequest = [[GEGist fetchRequestForCurrentUserGists] retain];
 	}
 	return fetchRequest;
 }
@@ -96,8 +90,8 @@
 - (void)viewWillAppear:(BOOL)animated;
 {
 	[super viewWillAppear:animated];
-
-	self.navigationItem.title = [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
+	
+	self.navigationItem.title = [GEGistService sharedService].anonymous ? @"(anonymous)" : [GEGistService sharedService].username;
 	
 	// TODO: better selection logic
 	int selectedIndex = [self.fetchedResultsController.fetchedObjects indexOfObject:gistViewController.gist];

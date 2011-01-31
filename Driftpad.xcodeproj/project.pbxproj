@@ -12,6 +12,7 @@
 		0305550811730992000D3AF2 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0305550711730992000D3AF2 /* MainWindow.xib */; };
 		03055515117309B6000D3AF2 /* Driftpad.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 03055513117309B6000D3AF2 /* Driftpad.xcdatamodeld */; };
 		030555FF11731F66000D3AF2 /* Inconsolata.otf in Resources */ = {isa = PBXBuildFile; fileRef = 030555FE11731F66000D3AF2 /* Inconsolata.otf */; };
+		037A9C0612F6F9BB0083840F /* AnonymousUser.plist in Resources */ = {isa = PBXBuildFile; fileRef = 037A9C0512F6F9BB0083840F /* AnonymousUser.plist */; };
 		03A662DC12EB499700080F7F /* CBetterCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A662D512EB499700080F7F /* CBetterCoreDataManager.m */; };
 		03A662DD12EB499700080F7F /* CCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A662D712EB499700080F7F /* CCoreDataManager.m */; };
 		03A662DE12EB499700080F7F /* CEntityDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A662D912EB499700080F7F /* CEntityDataSource.m */; };
@@ -74,6 +75,7 @@
 		03055514117309B6000D3AF2 /* Driftpad.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Driftpad.xcdatamodel; sourceTree = "<group>"; };
 		03055516117309BF000D3AF2 /* Driftpad-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Driftpad-Info.plist"; sourceTree = SOURCE_ROOT; };
 		030555FE11731F66000D3AF2 /* Inconsolata.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inconsolata.otf; sourceTree = "<group>"; };
+		037A9C0512F6F9BB0083840F /* AnonymousUser.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AnonymousUser.plist; sourceTree = "<group>"; };
 		03A662D412EB499700080F7F /* CBetterCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBetterCoreDataManager.h; sourceTree = "<group>"; };
 		03A662D512EB499700080F7F /* CBetterCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBetterCoreDataManager.m; sourceTree = "<group>"; };
 		03A662D612EB499700080F7F /* CCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCoreDataManager.h; sourceTree = "<group>"; };
@@ -481,6 +483,7 @@
 				03055516117309BF000D3AF2 /* Driftpad-Info.plist */,
 				03C197871172E60F00B975D1 /* welcome.txt */,
 				030555FE11731F66000D3AF2 /* Inconsolata.otf */,
+				037A9C0512F6F9BB0083840F /* AnonymousUser.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -557,6 +560,7 @@
 				03C197881172E60F00B975D1 /* welcome.txt in Resources */,
 				0305550811730992000D3AF2 /* MainWindow.xib in Resources */,
 				030555FF11731F66000D3AF2 /* Inconsolata.otf in Resources */,
+				037A9C0612F6F9BB0083840F /* AnonymousUser.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -30,6 +30,8 @@
 
 + (void)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
 
++ (NSFetchRequest *)fetchRequestForCurrentUserGists;
+
 - (void)updateWithAttributes:(NSDictionary *)attributes;
 
 #pragma mark begin emogenerator accessors

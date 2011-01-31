@@ -173,7 +173,9 @@
 
 - (void)beginLogin;
 {
-	GELoginViewController *viewController = [[GELoginViewController alloc] initWithNibName:nil bundle:nil];
+	[self.detailViewController save];
+	
+	GELoginViewController *viewController = [[[GELoginViewController alloc] initWithNibName:nil bundle:nil] autorelease];
 	viewController.modalPresentationStyle = UIModalPresentationFormSheet;
 	[detailViewController presentModalViewController:viewController animated:YES];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSucceeded:) name:kDriftNotificationLoginSucceeded object:nil];
@@ -187,7 +189,11 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchFirstGistsFailed:) name:kDriftNotificationUpdateGistsFailed object:nil];
 	
 	detailViewController.gist = nil;
-	[GEGist clearUserGists];
+	rootViewController.fetchRequest = nil;
+	rootViewController.fetchedResultsController = nil;
+	// do we really need to do this now that we're keying off username?
+	// probably, just for cleanliness...
+//	[GEGist clearUserGists];
 	[[GEGistService sharedService] listGistsForCurrentUser];
 }
 

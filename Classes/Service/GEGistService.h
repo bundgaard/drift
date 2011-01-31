@@ -31,8 +31,14 @@ extern NSString *kDriftNotificationLoginFailed;
 - (void)clearCredentials;
 - (BOOL)hasCredentials;
 
+@property (nonatomic, assign) BOOL anonymous;
+
+@property (nonatomic, readonly) NSString *username;
+@property (nonatomic, readonly) NSString *apiKey;
+
 - (void)obtainAPIKeyFromUsername:(NSString *)username password:(NSString *)password;
 - (void)loginUserWithUsername:(NSString *)username token:(NSString *)token;
+- (void)loginAnonymously;
 - (void)listGistsForCurrentUser;
 - (void)fetchGist:(GEGist *)gist;
 - (void)pushGist:(GEGist *)gist;

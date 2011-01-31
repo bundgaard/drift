@@ -9,6 +9,7 @@
 #import "GEGist.h"
 
 #import "GEGistStore.h"
+#import "GEGistService.h"
 
 #import "NSManagedObjectContext_Extensions.h"
 #import "NSObject_FUNSNull.h"
@@ -69,10 +70,11 @@
 + (GEGist *)blankGist;
 {
 	GEGist *newGist = [NSEntityDescription insertNewObjectForEntityForName:[GEGist entityName] inManagedObjectContext:[[GEGistStore sharedStore] managedObjectContext]];
-	newGist.name = @"New Gist";
+	newGist.name = nil;
 	newGist.createdAt = [NSDate date];
 	newGist.dirty = YES;
 	[[GEGistStore sharedStore] save];
+	newGist.user = [GEGistService sharedService].username;
 	return newGist;
 }
 
@@ -83,6 +85,7 @@
 	newGist.body = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"welcome" ofType:@"txt"] encoding:NSUTF8StringEncoding error:nil];
 	newGist.createdAt = [NSDate date];
 	newGist.dirty = YES;
+	newGist.user = [GEGistService sharedService].username;
 	[[GEGistStore sharedStore] save];
 	return newGist;
 }
@@ -93,7 +96,7 @@
 	NSEntityDescription *entity = [NSEntityDescription entityForName:[self entityName] inManagedObjectContext:ctx];
 	NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
 	fetchRequest.entity = entity;
-	fetchRequest.predicate = nil;
+	fetchRequest.predicate = [NSPredicate predicateWithFormat:@"user == %@", [GEGistService sharedService].username];
 	NSSortDescriptor *desc = [[[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO] autorelease];
 	fetchRequest.sortDescriptors = [NSArray arrayWithObject:desc];
 	fetchRequest.fetchLimit = 1;
@@ -113,7 +116,7 @@
 + (NSInteger)count;
 {
 	NSManagedObjectContext *ctx = [GEGistStore sharedStore].managedObjectContext;
-	return [ctx countOfObjectsOfEntityForName:[self entityName] predicate:[NSPredicate predicateWithFormat:@"TRUEPREDICATE"] error:nil];
+	return [ctx countOfObjectsOfEntityForName:[self entityName] predicate:[NSPredicate predicateWithFormat:@"user == %@", [GEGistService sharedService].username] error:nil];
 }
 
 + (void)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
@@ -127,6 +130,25 @@
 	[gist updateWithAttributes:attributes];
 	
 	[[GEGistStore sharedStore] save];
+}
+
++ (NSFetchRequest *)fetchRequestForCurrentUserGists;
+{
+	NSManagedObjectContext *ctx = [GEGistStore sharedStore].managedObjectContext;
+	
+	NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+	
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Gist" inManagedObjectContext:ctx];
+	[fetchRequest setEntity:entity];
+	[fetchRequest setFetchBatchSize:20];
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@", [GEGistService sharedService].username];
+	[fetchRequest setPredicate:predicate];
+	
+	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
+	[fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+	
+	return fetchRequest;
 }
 
 - (void)updateWithAttributes:(NSDictionary *)attributes;

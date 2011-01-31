@@ -19,7 +19,8 @@
 @synthesize cancelButton;
 @synthesize aboutLabel;
 
-- (void)dealloc {
+- (void)dealloc;
+{
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	[loginField release], loginField = nil;
@@ -41,10 +42,10 @@
 - (void)viewDidLoad;
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:kDriftNotificationLoginFailed object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gotAPIKey:) name:kDriftNotificationGetAPIKeySucceeded object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:kDriftNotificationGetAPIKeyFailed object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gotAPIKey:) name:kDriftNotificationGetAPIKeySucceeded object:nil];
 	
-	if (![[GEGistService sharedService] hasCredentials])
+	if (!([[GEGistService sharedService] hasCredentials] || [GEGistService sharedService].anonymous))
 		[cancelButton removeFromSuperview];
 	
 	NSString *version = [[[NSBundle mainBundle] infoDictionary] valueForKey:(id)kCFBundleVersionKey];
@@ -62,6 +63,11 @@
 }
 
 #pragma mark Interface actions
+
+- (IBAction)useAnonymouslyAction:(id)sender;
+{
+	[[GEGistService sharedService] loginAnonymously];
+}
 
 - (IBAction)signInAction:(id)sender;
 {

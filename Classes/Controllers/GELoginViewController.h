@@ -24,6 +24,7 @@
 @property (nonatomic, retain) IBOutlet UIButton *cancelButton;
 @property (nonatomic, retain) IBOutlet UILabel *aboutLabel;
 
+- (IBAction)useAnonymouslyAction:(id)sender;
 - (IBAction)signInAction:(id)sender;
 - (IBAction)signUpAction:(id)sender;
 - (IBAction)accountPageAction:(id)sender;
