@@ -17,6 +17,7 @@
 
 @interface GEGistViewController ()
 - (void)updateDisplay;
+- (void)fillDefaultTitle;
 @property (nonatomic, retain) UIActionSheet *actionSheet;
 @property (nonatomic, assign) BOOL interactionDisabled;
 @end
@@ -112,6 +113,7 @@
 
 - (void)save;
 {
+	[self fillDefaultTitle];
 	[[GEGistStore sharedStore] save];
 	if (self.gist) [[GEGistService sharedService] pushGist:self.gist];
 }
@@ -148,6 +150,36 @@
 	}
 	
 	self.interactionDisabled = NO;
+}
+
+- (void)fillDefaultTitle;
+{
+	// use the first non-blank line as the default title, truncated to 37 characters.
+	// would be friendly to break on word boundaries.
+	
+	if (!self.gist || self.gist.name.length > 0)
+		return;
+	
+	NSCharacterSet *set = [[NSCharacterSet whitespaceAndNewlineCharacterSet] invertedSet];
+	NSInteger firstCharacterIndex = [self.gist.body rangeOfCharacterFromSet:set].location;
+	if (firstCharacterIndex == NSNotFound)
+		return;
+	
+	NSRange searchRange = NSMakeRange(firstCharacterIndex, self.gist.body.length - firstCharacterIndex);
+	NSInteger lineEndIndex = [self.gist.body rangeOfString:@"\n" options:0 range:range].location;
+	if (lineEndIndex == NSNotFound) lineEndIndex = self.gist.body.length;
+	
+	BOOL truncated = NO;
+	NSRange titleRange = NSMakeRange(firstCharacterIndex, lineEndIndex - firstCharacterIndex);
+	if (titleRange.length > 37) {
+		titleRange.length = 37;
+		truncated = YES;
+	}
+	
+	NSString *defaultTitle = [self.gist.body substringWithRange:titleRange];
+	if (truncated) defaultTitle = [defaultTitle stringByAppendingString:@"..."];
+	
+	self.gist.name = defaultTitle;
 }
 
 #pragma mark -
