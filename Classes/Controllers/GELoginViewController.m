@@ -119,7 +119,7 @@
 	self.overlayView.alpha = 0.0;
 	[UIView commitAnimations];
 	
-	UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Sign in failed" message:@"We couldn't sign you in. Double-check your login and API token." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+	UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Sign in failed" message:@"We couldn't sign you in. Double-check your login and password." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
 	[alertView show];
 }
 
