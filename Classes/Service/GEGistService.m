@@ -270,7 +270,13 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		
 		NSString *extension = @"";
 		NSArray *nameComponents = [gist.name componentsSeparatedByString:@"."];
-		if (nameComponents.count > 1) extension = [nameComponents lastObject];
+		if (nameComponents.count > 1) {
+			extension = [nameComponents lastObject];
+		}
+		else {
+			gist.name = [NSString stringWithFormat:@"%@.md", gist.name];
+			extension = @".md";
+		}
 		
 		postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
 							@"put", @"_method",
