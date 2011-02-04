@@ -126,7 +126,7 @@
 		editTitleTextField.text = self.gist.name;
 		[titleButton setTitle:self.gist.name forState:UIControlStateNormal];
 	} else {
-		editTitleTextField.text = @"(untitled)";
+		editTitleTextField.text = @"";
 		[titleButton setTitle:self.gist.gistID forState:UIControlStateNormal];
 	}
 	
@@ -284,6 +284,12 @@
 {
 	self.gist.body = textView.text;
 	self.gist.dirty = YES;
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView;
+{
+	if (!self.gist.name)
+		[self fillDefaultTitle];
 }
 
 #pragma mark -
