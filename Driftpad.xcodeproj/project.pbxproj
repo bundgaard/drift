@@ -49,6 +49,7 @@
 		03A664DC12EB835C00080F7F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A664DB12EB835C00080F7F /* MobileCoreServices.framework */; };
 		03BEEE8C12F8843000D58899 /* drift_72.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BEEE8A12F8843000D58899 /* drift_72.png */; };
 		03BEEE8D12F8843000D58899 /* drift_512.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BEEE8B12F8843000D58899 /* drift_512.png */; };
+		03BEEE9812F8871B00D58899 /* login_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BEEE9712F8871B00D58899 /* login_bg.png */; };
 		03C18EDA11728DB500B975D1 /* DriftpadAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DriftpadAppDelegate.m */; };
 		03C18EDD11728DB800B975D1 /* GEGist.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C172CA1172823100B975D1 /* GEGist.m */; };
 		03C18EDE11728DB800B975D1 /* GEGistStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C18E85117288C700B975D1 /* GEGistStore.m */; };
@@ -149,6 +150,7 @@
 		03A664DB12EB835C00080F7F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		03BEEE8A12F8843000D58899 /* drift_72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drift_72.png; sourceTree = "<group>"; };
 		03BEEE8B12F8843000D58899 /* drift_512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drift_512.png; sourceTree = "<group>"; };
+		03BEEE9712F8871B00D58899 /* login_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_bg.png; sourceTree = "<group>"; };
 		03C172C1117281A400B975D1 /* GEGistService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEGistService.h; sourceTree = "<group>"; };
 		03C172C2117281A400B975D1 /* GEGistService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GEGistService.m; sourceTree = "<group>"; };
 		03C172C91172823100B975D1 /* GEGist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEGist.h; sourceTree = "<group>"; };
@@ -482,6 +484,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				03BEEE9712F8871B00D58899 /* login_bg.png */,
 				03BEEE8A12F8843000D58899 /* drift_72.png */,
 				03BEEE8B12F8843000D58899 /* drift_512.png */,
 				0305550711730992000D3AF2 /* MainWindow.xib */,
@@ -569,6 +572,7 @@
 				037A9C0612F6F9BB0083840F /* AnonymousUser.plist in Resources */,
 				03BEEE8C12F8843000D58899 /* drift_72.png in Resources */,
 				03BEEE8D12F8843000D58899 /* drift_512.png in Resources */,
+				03BEEE9812F8871B00D58899 /* login_bg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
