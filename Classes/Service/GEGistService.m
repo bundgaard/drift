@@ -194,6 +194,11 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	
 	[fetchAPIKeyRequest setCompletionBlock:^{
 		NSString *apiToken = [[fetchAPIKeyRequest responseString] scrapeStringAnchoredBy:@"Your API token is <code>" offset:0 length:32];
+		if (!apiToken) {
+			[self clearCredentials];
+			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationGetAPIKeyFailed object:nil];
+			return;
+		}
 		NSLog(@"API token: %@", apiToken);
 		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:apiToken forKey:@"APIToken"];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationGetAPIKeySucceeded object:nil userInfo:userInfo];
