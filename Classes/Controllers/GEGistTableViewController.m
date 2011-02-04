@@ -20,12 +20,22 @@
 @implementation GEGistTableViewController
 
 @synthesize gistViewController;
+@synthesize anonymousHeaderView;
 
 - (void)dealloc;
 {
 	[gistViewController release], gistViewController = nil;
+	[anonymousHeaderView release], anonymousHeaderView = nil;
 	
     [super dealloc];
+}
+
+#pragma mark -
+#pragma mark Interface actions
+
+- (IBAction)loginAction:(id)sender;
+{
+	[(DriftpadAppDelegate *)[UIApplication sharedApplication].delegate switchUserAction:sender];
 }
 
 #pragma mark -
@@ -92,6 +102,7 @@
 	[super viewWillAppear:animated];
 	
 	self.navigationItem.title = [GEGistService sharedService].anonymous ? @"(anonymous)" : [GEGistService sharedService].username;
+	self.tableView.tableHeaderView = [GEGistService sharedService].anonymous ? self.anonymousHeaderView : nil;
 	
 	// TODO: better selection logic
 	int selectedIndex = [self.fetchedResultsController.fetchedObjects indexOfObject:gistViewController.gist];

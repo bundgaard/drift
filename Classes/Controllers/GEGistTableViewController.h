@@ -17,5 +17,8 @@
 }
 
 @property (nonatomic, retain) IBOutlet GEGistViewController *gistViewController;
+@property (nonatomic, retain) IBOutlet UIView *anonymousHeaderView;
+
+- (IBAction)loginAction:(id)sender;
 
 @end

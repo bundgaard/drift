@@ -86,6 +86,7 @@
 							<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						</object>
 						<reference key="IBUIParentViewController" ref="191738363"/>
+						<string key="IBUINibName">GEGistTableViewController</string>
 						<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
 							<int key="IBUIStatusBarStyle">2</int>
 						</object>
@@ -442,15 +443,47 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">GEGistTableViewController</string>
 					<string key="superclassName">CFetchedResultsTableViewController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">loginAction:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">loginAction:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">loginAction:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
 					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">gistViewController</string>
-						<string key="NS.object.0">GEGistViewController</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>anonymousHeaderView</string>
+							<string>gistViewController</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>UIView</string>
+							<string>GEGistViewController</string>
+						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">gistViewController</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">gistViewController</string>
-							<string key="candidateClassName">GEGistViewController</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>anonymousHeaderView</string>
+							<string>gistViewController</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">anonymousHeaderView</string>
+								<string key="candidateClassName">UIView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">gistViewController</string>
+								<string key="candidateClassName">GEGistViewController</string>
+							</object>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -468,12 +501,10 @@
 							<string>actionAction:</string>
 							<string>gistListAction:</string>
 							<string>newGistAction:</string>
-							<string>pushAction:</string>
 							<string>titleAction:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -487,7 +518,6 @@
 							<string>actionAction:</string>
 							<string>gistListAction:</string>
 							<string>newGistAction:</string>
-							<string>pushAction:</string>
 							<string>titleAction:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -505,10 +535,6 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">pushAction:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
 								<string key="name">titleAction:</string>
 								<string key="candidateClassName">id</string>
 							</object>
@@ -519,9 +545,9 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>actionButton</string>
+							<string>activitySpinner</string>
 							<string>editTitleTextField</string>
 							<string>gistsButton</string>
-							<string>pushButton</string>
 							<string>textView</string>
 							<string>titleButton</string>
 							<string>titleView</string>
@@ -529,8 +555,8 @@
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>UIBarButtonItem</string>
+							<string>UIActivityIndicatorView</string>
 							<string>UITextField</string>
-							<string>UIBarButtonItem</string>
 							<string>UIBarButtonItem</string>
 							<string>UITextView</string>
 							<string>UIButton</string>
@@ -542,9 +568,9 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>actionButton</string>
+							<string>activitySpinner</string>
 							<string>editTitleTextField</string>
 							<string>gistsButton</string>
-							<string>pushButton</string>
 							<string>textView</string>
 							<string>titleButton</string>
 							<string>titleView</string>
@@ -556,15 +582,15 @@
 								<string key="candidateClassName">UIBarButtonItem</string>
 							</object>
 							<object class="IBToOneOutletInfo">
+								<string key="name">activitySpinner</string>
+								<string key="candidateClassName">UIActivityIndicatorView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
 								<string key="name">editTitleTextField</string>
 								<string key="candidateClassName">UITextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">gistsButton</string>
-								<string key="candidateClassName">UIBarButtonItem</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">pushButton</string>
 								<string key="candidateClassName">UIBarButtonItem</string>
 							</object>
 							<object class="IBToOneOutletInfo">
@@ -685,6 +711,14 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier" id="786211723">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">UIKit.framework/Headers/UIResponder.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">UIActivityIndicatorView</string>
+					<string key="superclassName">UIView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">UIKit.framework/Headers/UIActivityIndicatorView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
