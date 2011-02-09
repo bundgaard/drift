@@ -267,7 +267,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	NSLog(@"Pushing gist");
 	
 	NSString *urlString;
-	NSDictionary *postDictionary;
+	NSMutableDictionary *postDictionary;
 	
 	if (gist.gistID) {
 		// gist already exists: update with a faked form post
@@ -283,7 +283,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 			extension = @".md";
 		}
 		
-		postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+		postDictionary = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 							@"put", @"_method",
 							gist.body, [NSString stringWithFormat:@"file_contents[%@]", gist.name],
 							extension, [NSString stringWithFormat:@"file_ext[%@]", gist.name],
@@ -295,11 +295,15 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	else {
 		// new gist: use the API
 		urlString = @"https://gist.github.com/api/v1/json/new";
-		postDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+		postDictionary = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 							gist.body, [NSString stringWithFormat:@"files[%@]", gist.name],
 							self.username, @"login",
 							self.apiKey, @"token",
 							nil];
+		
+		if (self.anonymous) {
+			[postDictionary setValue:[NSNumber numberWithBool:YES] forKey:@"private"];
+		}
 	}
 	
 	ASIFormDataRequest *req = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:urlString]];
