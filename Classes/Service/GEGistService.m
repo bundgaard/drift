@@ -13,6 +13,7 @@
 #import "GEGistStore.h"
 #import "NSManagedObjectContext_Extensions.h"
 #import "NSString_Scraping.h"
+#import "UIDevice_Extensions.h"
 
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
@@ -302,6 +303,9 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		
 		if (self.anonymous) {
 			[postDictionary setValue:[NSNumber numberWithBool:YES] forKey:@"private"];
+            
+            NSString *desc = [NSString stringWithFormat:@"via Drift for iPad - %@", [[UIDevice currentDevice] obfuscatedUniqueIdentifier]];
+            [postDictionary setValue:desc forKey:@"description"];
 		}
 	}
 	
