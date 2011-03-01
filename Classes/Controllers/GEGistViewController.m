@@ -312,8 +312,9 @@
 	[UIView setAnimationCurve:curve];
 	[UIView setAnimationDuration:duration];
 	
-	self.textView.contentInset = UIEdgeInsetsMake(0, 0, kbFrame.size.height, 0);
-	self.textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, kbFrame.size.height, 0);
+    CGRect frame = self.textView.frame;
+    frame.size.height = self.view.bounds.size.height - frame.origin.y - kbFrame.size.height;
+    self.textView.frame = frame;
 	
 	[UIView commitAnimations];
 }
@@ -333,8 +334,9 @@
 	[UIView setAnimationCurve:curve];
 	[UIView setAnimationDuration:duration];
 	
-	self.textView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-	self.textView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+    CGRect frame = self.textView.frame;
+    frame.size.height = self.view.bounds.size.height - frame.origin.y;
+    self.textView.frame = frame;
 	
 	[UIView commitAnimations];
 	
