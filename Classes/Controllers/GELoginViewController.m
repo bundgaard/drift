@@ -1,4 +1,4 @@
-    //
+//
 //  GELoginViewController.m
 //  Driftpad
 //
@@ -42,8 +42,6 @@
 - (void)viewDidLoad;
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:kDriftNotificationLoginFailed object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginFailed:) name:kDriftNotificationGetAPIKeyFailed object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(gotAPIKey:) name:kDriftNotificationGetAPIKeySucceeded object:nil];
 	
 	if (!([[GEGistService sharedService] hasCredentials] || [GEGistService sharedService].anonymous))
 		[cancelButton removeFromSuperview];
@@ -85,7 +83,7 @@
 	NSString *username = loginField.text;
 	NSString *password = tokenField.text;
 
-	[[GEGistService sharedService] obtainAPIKeyFromUsername:username password:password];
+    [[GEGistService sharedService] loginUserWithUsername:username password:password];
 }
 
 - (IBAction)signUpAction:(id)sender;
@@ -106,12 +104,6 @@
 }
 
 #pragma mark Service callbacks
-
-- (void)gotAPIKey:(NSNotification *)notification;
-{
-	NSString *apiToken = [[notification userInfo] objectForKey:@"APIToken"];
-	[[GEGistService sharedService] loginUserWithUsername:self.loginField.text token:apiToken];
-}
 
 - (void)loginFailed:(NSNotification *)notification;
 {

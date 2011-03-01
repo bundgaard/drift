@@ -157,7 +157,9 @@
 	self.desc = [[attributes valueForKey:@"description"] objectOrNil];
 	self.createdAt = [[NSDateFormatter githubDateFormatter] dateFromString:[attributes valueForKey:@"created_at"]];
 	self.name = [[attributes valueForKey:@"files"] componentsJoinedByString:@", "];
-	self.user = [attributes valueForKey:@"owner"];
+    
+    NSString *owner = [attributes valueForKey:@"owner"];
+    if (owner) self.user = owner;
 }
 
 #pragma mark begin emogenerator accessors

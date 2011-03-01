@@ -14,9 +14,6 @@ extern NSString *kDriftNotificationUpdateGistsFailed;
 extern NSString *kDriftNotificationUpdateGistSucceeded;
 extern NSString *kDriftNotificationUpdateGistFailed;
 
-extern NSString *kDriftNotificationGetAPIKeySucceeded;
-extern NSString *kDriftNotificationGetAPIKeyFailed;
-
 extern NSString *kDriftNotificationLoginSucceeded;
 extern NSString *kDriftNotificationLoginFailed;
 
@@ -34,14 +31,15 @@ extern NSString *kDriftNotificationLoginFailed;
 @property (nonatomic, assign) BOOL anonymous;
 
 @property (nonatomic, readonly) NSString *username;
-@property (nonatomic, readonly) NSString *apiKey;
+@property (nonatomic, readonly) NSString *password;
 
 @property (readonly) NSDictionary *anonymousUser;
 
-- (void)obtainAPIKeyFromUsername:(NSString *)username password:(NSString *)password;
-- (void)loginUserWithUsername:(NSString *)username token:(NSString *)token;
+- (void)loginUserWithUsername:(NSString *)username password:(NSString *)password;
 - (void)loginAnonymously;
+
 - (void)listGistsForCurrentUser;
+
 - (void)fetchGist:(GEGist *)gist;
 - (void)pushGist:(GEGist *)gist;
 

@@ -17,6 +17,7 @@
 
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
+#import "CKeychain.h"
 
 
 NSString *kDriftNotificationUpdateGistsSucceeded = @"kDriftNotificationUpdateGistsSucceeded";
@@ -24,9 +25,6 @@ NSString *kDriftNotificationUpdateGistsFailed = @"kDriftNotificationUpdateGistsF
 
 NSString *kDriftNotificationUpdateGistSucceeded = @"kDriftNotificationUpdateGistSucceeded";
 NSString *kDriftNotificationUpdateGistFailed = @"kDriftNotificationUpdateGistFailed";
-
-NSString *kDriftNotificationGetAPIKeySucceeded = @"kDriftNotificationGetAPIKeySucceeded";
-NSString *kDriftNotificationGetAPIKeyFailed = @"kDriftNotificationGetAPIKeyFailed";
 
 NSString *kDriftNotificationLoginSucceeded = @"kDriftNotificationLoginSucceeded";
 NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
@@ -45,7 +43,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 @dynamic anonymousUser;
 
 @dynamic username;
-@dynamic apiKey;
+@dynamic password;
 
 + (GEGistService *)sharedService;
 {
@@ -86,13 +84,13 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	}
 }
 
-- (NSString *)apiKey;
+- (NSString *)password;
 {
 	if (self.anonymous) {
-		return [self.anonymousUser objectForKey:@"APIKey"];
+		return [self.anonymousUser objectForKey:@"Password"];
 	}
 	else {
-		return [[NSUserDefaults standardUserDefaults] objectForKey:@"token"];
+		return [CKeychain passwordForKey:@"password"];
 	}
 }
 
@@ -106,7 +104,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		[[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:cookie];
 	
 	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"username"];
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"token"];
+    [CKeychain savePassword:@"" forKey:@"password"];
 }
 
 - (BOOL)hasCredentials;
@@ -128,22 +126,26 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	[request start];
 }
 
-- (void)loginUserWithUsername:(NSString *)username token:(NSString *)token;
+- (void)loginUserWithUsername:(NSString *)username password:(NSString *)password;
 {
-	NSString *urlString = [NSString stringWithFormat:@"https://github.com/api/v2/json/user/show/%@?login=%@&token=%@", username, username, token];
+    [self clearCredentials];
+    
+	NSString *urlString = @"https://github.com/account";
 	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	
+    [req addBasicAuthenticationHeaderWithUsername:username andPassword:password];
+    
 	req.userInfo = [NSDictionary dictionaryWithObject:kDriftNotificationLoginFailed forKey:kFailureNotificationNameKey];
 	
 	[req setCompletionBlock:^{
-		id res = [[CJSONDeserializer deserializer] deserialize:[req responseData] error:nil];
-		if (!res) {
+        NSRange range = [[req responseString] rangeOfString:@"logged_out"];
+        if (range.location != NSNotFound) {
 			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationLoginFailed object:self];
 			return;
-		}
+        }
 		self.anonymous = NO;
 		[[NSUserDefaults standardUserDefaults] setObject:username forKey:@"username"];
-		[[NSUserDefaults standardUserDefaults] setObject:token forKey:@"token"];
+        [CKeychain savePassword:password forKey:@"password"];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationLoginSucceeded object:self];
 	}];
 	
@@ -156,55 +158,6 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	[self clearCredentials];
 	[GEGist markCurrentGist:nil];
 	[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationLoginSucceeded object:self];
-}
-
-- (void)obtainAPIKeyFromUsername:(NSString *)username password:(NSString *)password;
-{
-	// TODO: this will leak (retain cycle)
-	// actually, all the service requests will leak.
-	
-	ASIHTTPRequest		*fetchLoginPageRequest;
-	ASIFormDataRequest	*loginRequest;
-	ASIHTTPRequest		*fetchAPIKeyRequest;
-	
-	void (^failBlock)(void) = ^{
-		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationGetAPIKeyFailed object:nil];
-	};
-	
-	fetchLoginPageRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:@"https://github.com/login"]];
-	loginRequest = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:@"https://github.com/session"]];
-	fetchAPIKeyRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:@"https://github.com/account"]];
-	
-	[fetchLoginPageRequest setFailedBlock:failBlock];
-	[loginRequest setFailedBlock:failBlock];
-	[fetchAPIKeyRequest setFailedBlock:failBlock];
-	
-	[fetchLoginPageRequest setCompletionBlock:^{
-		NSString *authToken = [[fetchLoginPageRequest responseString] scrapeStringAnchoredBy:@"window._auth_token = " offset:1 length:40];
-		NSLog(@"Form authenticity token: %@", authToken);
-		[loginRequest addPostValue:authToken forKey:@"authenticity_token"];
-		[loginRequest start];
-	}];
-	
-	[loginRequest addPostValue:username forKey:@"login"];
-	[loginRequest addPostValue:password forKey:@"password"];
-	[loginRequest setCompletionBlock:^{
-		[fetchAPIKeyRequest start];
-	}];
-	
-	[fetchAPIKeyRequest setCompletionBlock:^{
-		NSString *apiToken = [[fetchAPIKeyRequest responseString] scrapeStringAnchoredBy:@"Your API token is <code>" offset:0 length:32];
-		if (!apiToken) {
-			[self clearCredentials];
-			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationGetAPIKeyFailed object:nil];
-			return;
-		}
-		NSLog(@"API token: %@", apiToken);
-		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:apiToken forKey:@"APIToken"];
-		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationGetAPIKeySucceeded object:nil userInfo:userInfo];
-	}];
-	
-	[fetchLoginPageRequest start];
 }
 
 - (void)listGistsForCurrentUser;
@@ -266,6 +219,17 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	
 	NSLog(@"Pushing gist");
 	
+    NSString *oldName = gist.name;
+    NSString *extension = @"";
+    NSArray *nameComponents = [gist.name componentsSeparatedByString:@"."];
+    if (nameComponents.count > 1) {
+        extension = [nameComponents lastObject];
+    }
+    else {
+        gist.name = [NSString stringWithFormat:@"%@.md", gist.name];
+        extension = @"md";
+    }
+    
 	NSString *urlString;
 	NSMutableDictionary *postDictionary;
 	
@@ -273,23 +237,11 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		// gist already exists: update with a faked form post
 		urlString = [NSString stringWithFormat:@"https://gist.github.com/gists/%@", gist.gistID];
 		
-		NSString *extension = @"";
-		NSArray *nameComponents = [gist.name componentsSeparatedByString:@"."];
-		if (nameComponents.count > 1) {
-			extension = [nameComponents lastObject];
-		}
-		else {
-			gist.name = [NSString stringWithFormat:@"%@.md", gist.name];
-			extension = @".md";
-		}
-		
 		postDictionary = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 							@"put", @"_method",
 							gist.body, [NSString stringWithFormat:@"file_contents[%@]", gist.name],
-							extension, [NSString stringWithFormat:@"file_ext[%@]", gist.name],
-							gist.name, [NSString stringWithFormat:@"file_name[%@]", gist.name],
-							self.username, @"login",
-							self.apiKey, @"token",
+							extension, [NSString stringWithFormat:@"file_ext[%@]", oldName],
+							gist.name, [NSString stringWithFormat:@"file_name[%@]", oldName],
 							nil];
 	}
 	else {
@@ -297,8 +249,6 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		urlString = @"https://gist.github.com/api/v1/json/new";
 		postDictionary = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 							gist.body, [NSString stringWithFormat:@"files[%@]", gist.name],
-							self.username, @"login",
-							self.apiKey, @"token",
 							nil];
 		
 		if (self.anonymous) {
@@ -313,7 +263,9 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	for (NSString *key in [postDictionary allKeys]) {
 		[req setPostValue:[postDictionary objectForKey:key] forKey:key];
 	}
-	
+    
+    [req addBasicAuthenticationHeaderWithUsername:self.username andPassword:self.password];
+    
 	req.shouldContinueWhenAppEntersBackground = YES;
 	
 	// avoid losing the managed object while the request goes through: crasher

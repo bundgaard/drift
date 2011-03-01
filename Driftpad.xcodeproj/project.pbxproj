@@ -65,6 +65,8 @@
 		03C759AE131CCF3B00C7BDF8 /* CPointerArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C759AD131CCF3B00C7BDF8 /* CPointerArray.m */; };
 		03C759B5131CCFC700C7BDF8 /* NSData_DigestExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C759B2131CCFC700C7BDF8 /* NSData_DigestExtensions.m */; };
 		03C759B6131CCFC700C7BDF8 /* NSData_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C759B4131CCFC700C7BDF8 /* NSData_Extensions.m */; };
+		03C759BA131CE7A100C7BDF8 /* CKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C759B9131CE7A100C7BDF8 /* CKeychain.m */; };
+		03C759BC131CEB8800C7BDF8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03C759BB131CEB8800C7BDF8 /* Security.framework */; };
 		03E340DB12F0E11B00C655CA /* NSString_Scraping.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E340DA12F0E11B00C655CA /* NSString_Scraping.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -178,6 +180,9 @@
 		03C759B2131CCFC700C7BDF8 /* NSData_DigestExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSData_DigestExtensions.m; sourceTree = "<group>"; };
 		03C759B3131CCFC700C7BDF8 /* NSData_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSData_Extensions.h; sourceTree = "<group>"; };
 		03C759B4131CCFC700C7BDF8 /* NSData_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSData_Extensions.m; sourceTree = "<group>"; };
+		03C759B8131CE7A100C7BDF8 /* CKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CKeychain.h; sourceTree = "<group>"; };
+		03C759B9131CE7A100C7BDF8 /* CKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKeychain.m; sourceTree = "<group>"; };
+		03C759BB131CEB8800C7BDF8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		03E340D912F0E11B00C655CA /* NSString_Scraping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSString_Scraping.h; sourceTree = "<group>"; };
 		03E340DA12F0E11B00C655CA /* NSString_Scraping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSString_Scraping.m; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -194,6 +199,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03C759BC131CEB8800C7BDF8 /* Security.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
@@ -452,6 +458,8 @@
 			children = (
 				03E340D912F0E11B00C655CA /* NSString_Scraping.h */,
 				03E340DA12F0E11B00C655CA /* NSString_Scraping.m */,
+				03C759B8131CE7A100C7BDF8 /* CKeychain.h */,
+				03C759B9131CE7A100C7BDF8 /* CKeychain.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -481,6 +489,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				03C759BB131CEB8800C7BDF8 /* Security.framework */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				03C172CD1172827100B975D1 /* Externals */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -651,6 +660,7 @@
 				03C759AE131CCF3B00C7BDF8 /* CPointerArray.m in Sources */,
 				03C759B5131CCFC700C7BDF8 /* NSData_DigestExtensions.m in Sources */,
 				03C759B6131CCFC700C7BDF8 /* NSData_Extensions.m in Sources */,
+				03C759BA131CE7A100C7BDF8 /* CKeychain.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
