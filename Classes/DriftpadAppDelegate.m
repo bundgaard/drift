@@ -28,6 +28,7 @@
 
 - (void)recordLastUseDate;
 - (BOOL)isContextStale;
+- (void)checkForAnonymousGists;
 @end
 
 
