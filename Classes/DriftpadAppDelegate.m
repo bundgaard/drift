@@ -15,7 +15,7 @@
 #import "GEGistViewController.h"
 
 #import "GEGistService.h"
-
+#import "NSManagedObjectContext_Extensions.h"
 
 #define CONTEXT_THRESHOLD_MINUTES 30
 
@@ -191,9 +191,8 @@
 	detailViewController.gist = nil;
 	rootViewController.fetchRequest = nil;
 	rootViewController.fetchedResultsController = nil;
-	// do we really need to do this now that we're keying off username?
-	// probably, just for cleanliness...
-//	[GEGist clearUserGists];
+	
+	[self checkForAnonymousGists];
 	[[GEGistService sharedService] listGistsForCurrentUser];
 }
 
@@ -213,6 +212,42 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:kDriftNotificationUpdateGistsFailed object:nil];
 	
 	[[GEGistService sharedService] clearCredentials];
+}
+
+#pragma mark -
+#pragma mark Claiming gists
+
+- (void)checkForAnonymousGists;
+{
+	if ([GEGistService sharedService].anonymous)
+		return;
+	
+	NSManagedObjectContext *ctx = [GEGistStore sharedStore].managedObjectContext;
+	NSString *anonymousUser = [[GEGistService sharedService].anonymousUser objectForKey:@"Username"];
+	NSArray *anonymousGists = [ctx fetchObjectsOfEntityForName:[GEGist entityName] predicate:[NSPredicate predicateWithFormat:@"user == %@", anonymousUser] error:nil];
+	
+	if (anonymousGists.count > 0) {
+		NSString *message = [NSString stringWithFormat:@"You have %d unclaimed anonymous gists. Do you want to copy them to the %@ account?", anonymousGists.count, [GEGistService sharedService].username];
+		UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Unclaimed Gists" message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil] autorelease];
+		[alert show];
+	}
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;
+{
+	if (buttonIndex == [alertView cancelButtonIndex])
+		return;
+	
+	NSManagedObjectContext *ctx = [GEGistStore sharedStore].managedObjectContext;
+	NSString *anonymousUser = [[GEGistService sharedService].anonymousUser objectForKey:@"Username"];
+	NSArray *anonymousGists = [ctx fetchObjectsOfEntityForName:[GEGist entityName] predicate:[NSPredicate predicateWithFormat:@"user == %@", anonymousUser] error:nil];
+	
+	for (GEGist *gist in anonymousGists) {
+		gist.user = [GEGistService sharedService].username;
+		gist.gistID = nil;
+		gist.dirty = YES;
+		[[GEGistService sharedService] pushGist:gist];
+	}
 }
 
 @end

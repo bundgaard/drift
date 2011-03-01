@@ -34,7 +34,6 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 
 @interface GEGistService ()
 - (void)startRequest:(ASIHTTPRequest *)request;
-@property (readonly) NSDictionary *anonymousUser;
 @end
 
 
