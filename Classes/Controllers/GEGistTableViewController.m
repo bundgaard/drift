@@ -6,6 +6,8 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "GEGistTableViewController.h"
 
 #import "DriftpadAppDelegate.h"
@@ -14,6 +16,7 @@
 #import "GEGistStore.h"
 #import "GEGistService.h"
 #import "GEGistViewController.h"
+#import "GEGistCell.h"
 
 #import "CHumanDateFormatter.h"
 
@@ -46,6 +49,14 @@
     return YES;
 }
 
+- (void)viewDidLoad;
+{
+	[super viewDidLoad];
+	
+	self.tableView.layer.backgroundColor = [UIColor colorWithWhite:0.92 alpha:1.0].CGColor;
+	self.tableView.separatorColor = [UIColor colorWithWhite:0.85 alpha:1.0];
+}
+
 #pragma mark -
 #pragma mark Fetched results table view controller
 
@@ -67,8 +78,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"GistCell"];
-	if (!cell) cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"GistCell"] autorelease];
+	GEGistCell *cell = (GEGistCell *)[tableView dequeueReusableCellWithIdentifier:@"GistCell"];
+	if (!cell) cell = (GEGistCell *)[[[GEGistCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"GistCell"] autorelease];
 	
 	GEGist *gist = [self.fetchedResultsController objectAtIndexPath:indexPath];
 	cell.textLabel.text = gist.name ? gist.name : [NSString stringWithFormat:@"#%@", gist.gistID];
@@ -92,6 +103,11 @@
 	
 	DriftpadAppDelegate *delegate = (DriftpadAppDelegate *)[[UIApplication sharedApplication] delegate];
 	[delegate hideGistPopover];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+	return 60.0;
 }
 
 #pragma mark -

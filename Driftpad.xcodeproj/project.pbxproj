@@ -14,6 +14,7 @@
 		030555FF11731F66000D3AF2 /* Inconsolata.otf in Resources */ = {isa = PBXBuildFile; fileRef = 030555FE11731F66000D3AF2 /* Inconsolata.otf */; };
 		0354494213263F2100D1F2F1 /* Octocat.png in Resources */ = {isa = PBXBuildFile; fileRef = 0354494113263F2100D1F2F1 /* Octocat.png */; };
 		0354494513263F9300D1F2F1 /* DriftLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0354494413263F9300D1F2F1 /* DriftLogo.png */; };
+		03544955132648F500D1F2F1 /* GEGistCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03544954132648F500D1F2F1 /* GEGistCell.m */; };
 		037A9C0612F6F9BB0083840F /* AnonymousUser.plist in Resources */ = {isa = PBXBuildFile; fileRef = 037A9C0512F6F9BB0083840F /* AnonymousUser.plist */; };
 		03A6633512EB4B0100080F7F /* CFetchedResultsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A6632212EB4B0100080F7F /* CFetchedResultsTableViewController.m */; };
 		03A6633612EB4B0100080F7F /* CTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A6632412EB4B0100080F7F /* CTableViewController.m */; };
@@ -87,6 +88,8 @@
 		030555FE11731F66000D3AF2 /* Inconsolata.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inconsolata.otf; sourceTree = "<group>"; };
 		0354494113263F2100D1F2F1 /* Octocat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Octocat.png; sourceTree = "<group>"; };
 		0354494413263F9300D1F2F1 /* DriftLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DriftLogo.png; sourceTree = "<group>"; };
+		03544953132648F500D1F2F1 /* GEGistCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEGistCell.h; sourceTree = "<group>"; };
+		03544954132648F500D1F2F1 /* GEGistCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GEGistCell.m; sourceTree = "<group>"; };
 		037A9C0512F6F9BB0083840F /* AnonymousUser.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AnonymousUser.plist; sourceTree = "<group>"; };
 		03A6632112EB4B0100080F7F /* CFetchedResultsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFetchedResultsTableViewController.h; sourceTree = "<group>"; };
 		03A6632212EB4B0100080F7F /* CFetchedResultsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFetchedResultsTableViewController.m; sourceTree = "<group>"; };
@@ -432,6 +435,8 @@
 		03C172C01172817300B975D1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				03544953132648F500D1F2F1 /* GEGistCell.h */,
+				03544954132648F500D1F2F1 /* GEGistCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -669,6 +674,7 @@
 				03C759B5131CCFC700C7BDF8 /* NSData_DigestExtensions.m in Sources */,
 				03C759B6131CCFC700C7BDF8 /* NSData_Extensions.m in Sources */,
 				03C759BA131CE7A100C7BDF8 /* CKeychain.m in Sources */,
+				03544955132648F500D1F2F1 /* GEGistCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
