@@ -9,6 +9,7 @@
 #import "GEGistViewController.h"
 
 #import "GEGist.h"
+#import "GEFile.h"
 #import "GEGistStore.h"
 #import "GEGistService.h"
 
@@ -122,9 +123,9 @@
 {
 	self.interactionDisabled = YES;
 	
-	if (self.gist.name) {
-		editTitleTextField.text = self.gist.name;
-		[titleButton setTitle:self.gist.name forState:UIControlStateNormal];
+	if (self.gist.file.filename) {
+		editTitleTextField.text = self.gist.file.filename;
+		[titleButton setTitle:self.gist.file.filename forState:UIControlStateNormal];
 	} else {
 		editTitleTextField.text = @"";
 		[titleButton setTitle:self.gist.gistID forState:UIControlStateNormal];
@@ -133,13 +134,13 @@
 	BOOL isEditing = [textView isFirstResponder];
 	if (isEditing) [textView resignFirstResponder];
 	
-	textView.text = self.gist.body;
+	textView.text = self.gist.file.content;
 	actionButton.enabled = (!!self.gist.gistID);
 	
 	if (isEditing) [textView becomeFirstResponder];
 	
 	// check for undownloaded gist
-	if (!self.gist.body && gist.gistID) {
+	if (!self.gist.file.content && gist.gistID) {
 		[self.textView resignFirstResponder];
 		self.textView.editable = NO;
 		[self.activitySpinner startAnimating];
@@ -157,17 +158,19 @@
 	// use the first non-blank line as the default title, truncated to 37 characters.
 	// would be friendly to break on word boundaries.
 	
-	if (!self.gist || self.gist.name.length > 0)
+	if (!self.gist || self.gist.file.filename.length > 0)
 		return;
 	
+    GEFile *file = self.gist.file;
+    
 	NSCharacterSet *set = [[NSCharacterSet whitespaceAndNewlineCharacterSet] invertedSet];
-	NSInteger firstCharacterIndex = [self.gist.body rangeOfCharacterFromSet:set].location;
+	NSInteger firstCharacterIndex = [file.content rangeOfCharacterFromSet:set].location;
 	if (firstCharacterIndex == NSNotFound)
 		return;
 	
-	NSRange searchRange = NSMakeRange(firstCharacterIndex, self.gist.body.length - firstCharacterIndex);
-	NSInteger lineEndIndex = [self.gist.body rangeOfString:@"\n" options:0 range:searchRange].location;
-	if (lineEndIndex == NSNotFound) lineEndIndex = self.gist.body.length;
+	NSRange searchRange = NSMakeRange(firstCharacterIndex, file.content.length - firstCharacterIndex);
+	NSInteger lineEndIndex = [file.content rangeOfString:@"\n" options:0 range:searchRange].location;
+	if (lineEndIndex == NSNotFound) lineEndIndex = file.content.length;
 	
 	BOOL truncated = NO;
 	NSRange titleRange = NSMakeRange(firstCharacterIndex, lineEndIndex - firstCharacterIndex);
@@ -176,10 +179,10 @@
 		truncated = YES;
 	}
 	
-	NSString *defaultTitle = [self.gist.body substringWithRange:titleRange];
+	NSString *defaultTitle = [file.content substringWithRange:titleRange];
 	if (truncated) defaultTitle = [defaultTitle stringByAppendingString:@"..."];
 	
-	self.gist.name = defaultTitle;
+	file.filename = defaultTitle;
 }
 
 #pragma mark -
@@ -260,10 +263,12 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;
 {
+    GEFile *file = self.gist.file;
+    
 	NSString *newName = [textField.text stringByReplacingCharactersInRange:range withString:string];
-	if (![newName isEqual:self.gist.name]) {
+	if (![newName isEqual:file.filename]) {
 		[titleButton setTitle:newName forState:UIControlStateNormal];
-		self.gist.name = newName;
+		file.filename = newName;
 		self.gist.dirty = YES;
 	}
 	self.gist.dirty = YES;
@@ -282,13 +287,13 @@
 
 - (void)textViewDidChange:(UITextView *)theTextView;
 {
-	self.gist.body = textView.text;
+	self.gist.file.content = textView.text;
 	self.gist.dirty = YES;
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView;
 {
-	if (!self.gist.name)
+	if (!self.gist.file.filename)
 		[self fillDefaultTitle];
 }
 

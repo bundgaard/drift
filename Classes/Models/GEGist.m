@@ -8,6 +8,8 @@
 
 #import "GEGist.h"
 
+#import "GEFile.h"
+
 #import "GEGistStore.h"
 #import "GEGistService.h"
 
@@ -16,10 +18,43 @@
 #import "NSDateFormatter_GithubDateFormatting.h"
 
 #pragma mark begin emogenerator forward declarations
+#import "GEFile.h"
 #pragma mark end emogenerator forward declarations
 
 
 @implementation GEGist
+
+@dynamic file;
+
+- (GEFile *)file;
+{
+    NSArray *sortedFiles = [[self.files allObjects] sortedArrayUsingComparator:^NSComparisonResult(GEFile *obj1, GEFile *obj2) {
+        return [obj1.filename caseInsensitiveCompare:obj2.filename];
+    }];
+    
+    if (sortedFiles.count < 1) {
+        GEFile *file = [NSEntityDescription insertNewObjectForEntityForName:[GEFile entityName] inManagedObjectContext:[GEGistStore sharedStore].managedObjectContext];
+        [self.files addObject:file];
+        [[GEGistStore sharedStore] save];
+        
+        return file;
+    }
+    
+    return [sortedFiles objectAtIndex:0];
+}
+
+- (NSDictionary *)filesByFilename;
+{
+    NSArray *sortedFiles = [[self.files allObjects] sortedArrayUsingComparator:^NSComparisonResult(GEFile *obj1, GEFile *obj2) {
+        return [obj1.filename caseInsensitiveCompare:obj2.filename];
+    }];
+    
+    NSMutableDictionary *filesByFilename = [NSMutableDictionary dictionary];
+    for (GEFile *file in sortedFiles)
+        [filesByFilename setObject:file forKey:file.filename];
+    
+    return filesByFilename;
+}
 
 + (void)clearUserGists;
 {
@@ -70,23 +105,27 @@
 + (GEGist *)blankGist;
 {
 	GEGist *newGist = [NSEntityDescription insertNewObjectForEntityForName:[GEGist entityName] inManagedObjectContext:[[GEGistStore sharedStore] managedObjectContext]];
-	newGist.name = nil;
 	newGist.createdAt = [NSDate date];
 	newGist.dirty = YES;
-	[[GEGistStore sharedStore] save];
 	newGist.user = [GEGistService sharedService].username;
+    
+    GEFile *newFile = [NSEntityDescription insertNewObjectForEntityForName:[GEFile entityName] inManagedObjectContext:[GEGistStore sharedStore].managedObjectContext];
+    [newGist.files addObject:newFile];
+    
+	[[GEGistStore sharedStore] save];
+    
 	return newGist;
 }
 
 + (GEGist *)welcomeGist;
 {
-	GEGist *newGist = [NSEntityDescription insertNewObjectForEntityForName:[GEGist entityName] inManagedObjectContext:[[GEGistStore sharedStore] managedObjectContext]];
-	newGist.name = @"welcome.txt";
-	newGist.body = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"welcome" ofType:@"txt"] encoding:NSUTF8StringEncoding error:nil];
-	newGist.createdAt = [NSDate date];
-	newGist.dirty = YES;
-	newGist.user = [GEGistService sharedService].username;
+    GEGist *newGist = [self blankGist];
+    
+    newGist.file.filename = newGist.file.oldFilename = @"welcome.md";
+    newGist.file.content = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"welcome" ofType:@"md"] encoding:NSUTF8StringEncoding error:nil];
+    
 	[[GEGistStore sharedStore] save];
+    
 	return newGist;
 }
 
@@ -121,12 +160,12 @@
 
 + (void)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
 {
-	NSNumber *gistID = [attributes valueForKey:@"repo"];
+	NSString *gistID = [attributes valueForKey:@"id"];
 	
 	NSManagedObjectContext *ctx = [GEGistStore sharedStore].managedObjectContext;
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"gistID = %@", gistID];
 	
-	GEGist *gist = [ctx fetchObjectOfEntityForName:@"Gist" predicate:predicate createIfNotFound:YES wasCreated:nil error:nil];
+	GEGist *gist = [ctx fetchObjectOfEntityForName:[self entityName] predicate:predicate createIfNotFound:YES wasCreated:nil error:nil];
 	[gist updateWithAttributes:attributes];
 	
 	[[GEGistStore sharedStore] save];
@@ -138,7 +177,7 @@
 	
 	NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
 	
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Gist" inManagedObjectContext:ctx];
+	NSEntityDescription *entity = [NSEntityDescription entityForName:[self entityName] inManagedObjectContext:ctx];
 	[fetchRequest setEntity:entity];
 	[fetchRequest setFetchBatchSize:20];
 	
@@ -153,12 +192,20 @@
 
 - (void)updateWithAttributes:(NSDictionary *)attributes;
 {
-	self.gistID = [attributes valueForKey:@"repo"];
+	self.gistID = [attributes valueForKey:@"id"];
 	self.desc = [[attributes valueForKey:@"description"] objectOrNil];
 	self.createdAt = [[NSDateFormatter githubDateFormatter] dateFromString:[attributes valueForKey:@"created_at"]];
-	self.name = [[attributes valueForKey:@"files"] componentsJoinedByString:@", "];
     
-    NSString *owner = [attributes valueForKey:@"owner"];
+    NSMutableDictionary *filesByFilename = self.filesByFilename;
+    [self.files removeAllObjects];
+    for (NSString *filename in [[attributes valueForKey:@"files"] allKeys]) {
+        GEFile *file = [filesByFilename objectForKey:filename];
+        if (!file) file = [GEFile blankFile];
+        [file updateWithAttributes:[[attributes valueForKey:@"files"] valueForKey:filename]];
+        [self.files addObject:file];
+    }
+    
+    NSString *owner = [attributes valueForKey:@"user.login"];
     if (owner) self.user = owner;
 }
 
@@ -173,15 +220,16 @@ return(@"Gist");
 
 @dynamic gistID;
 
-@dynamic body;
+@dynamic files;
 
-@dynamic desc;
+- (NSMutableSet *)files
+{
+return([self mutableSetValueForKey:@"files"]);
+}
 
-@dynamic user;
+@dynamic url;
 
 @dynamic updatedAt;
-
-@dynamic createdAt;
 
 @dynamic dirty;
 - (BOOL)dirty
@@ -211,9 +259,11 @@ return(theResult);
 [self didChangeValueForKey:@"dirty"];
 }
 
-@dynamic name;
+@dynamic createdAt;
 
-@dynamic url;
+@dynamic desc;
+
+@dynamic user;
 
 #pragma mark end emogenerator accessors
 

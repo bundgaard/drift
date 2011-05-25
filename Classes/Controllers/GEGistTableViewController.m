@@ -13,6 +13,7 @@
 #import "DriftpadAppDelegate.h"
 
 #import "GEGist.h"
+#import "GEFile.h"
 #import "GEGistStore.h"
 #import "GEGistService.h"
 #import "GEGistViewController.h"
@@ -82,7 +83,7 @@
 	if (!cell) cell = (GEGistCell *)[[[GEGistCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"GistCell"] autorelease];
 	
 	GEGist *gist = [self.fetchedResultsController objectAtIndexPath:indexPath];
-	cell.textLabel.text = gist.name ? gist.name : [NSString stringWithFormat:@"#%@", gist.gistID];
+	cell.textLabel.text = gist.file.filename ? gist.file.filename : [NSString stringWithFormat:@"#%@", gist.gistID];
 	cell.detailTextLabel.text = [CHumanDateFormatter formatDate:gist.createdAt singleLine:NO];
 	
 	if (gist.dirty)

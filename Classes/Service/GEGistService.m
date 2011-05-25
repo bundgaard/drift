@@ -9,7 +9,9 @@
 #import "GEGistService.h"
 
 #import "CJSONDeserializer.h"
+#import "CJSONSerializer.h"
 #import "GEGist.h"
+#import "GEFile.h"
 #import "GEGistStore.h"
 #import "NSManagedObjectContext_Extensions.h"
 #import "NSString_Scraping.h"
@@ -117,8 +119,9 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 - (void)startRequest:(ASIHTTPRequest *)request;
 {
 	[request setFailedBlock:^{
-		NSLog(@"FAILED: %@ %@ failed", [request requestMethod], [request url]);
-		if ([request responseString]) NSLog(@"%d: %@", request.responseStatusCode, [request responseString]);
+		NSLog(@"FAILED: %@ %@ failed (%d)", [request requestMethod], [request url], request.responseStatusCode);
+        NSLog(@"Error: %@", [request.error localizedDescription]);
+		if ([request responseString]) NSLog(@"%@", [request responseString]);
 		
 		NSString *notificationName = [request.userInfo objectForKey:kFailureNotificationNameKey];
 		if (notificationName) [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
@@ -168,7 +171,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		return;
 	}
 	
-	NSString *urlString = [NSString stringWithFormat:@"https://gist.github.com/api/v1/json/gists/%@", self.username];
+	NSString *urlString = [NSString stringWithFormat:@"https://api.github.com/users/%@/gists", self.username];
 	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	
 	req.userInfo = [NSDictionary dictionaryWithObject:kDriftNotificationUpdateGistsFailed forKey:kFailureNotificationNameKey];
@@ -192,7 +195,8 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 
 - (void)fetchGist:(GEGist *)gist;
 {
-	NSString *urlString = [NSString stringWithFormat:@"https://gist.github.com/%@.txt", gist.gistID];
+    NSString *urlString = [NSString stringWithFormat:@"https://gist.github.com/raw/%@/%@", gist.gistID, gist.file.filename];
+    urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	
 	req.userInfo = [NSDictionary dictionaryWithObject:kDriftNotificationUpdateGistFailed forKey:kFailureNotificationNameKey];
@@ -200,7 +204,9 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	[req setCompletionBlock:^{
 		if (!gist.dirty) {
 			// only update undirtied gists
-			gist.body = [req responseString];
+			gist.file.content = [req responseString];
+            [[GEGistStore sharedStore] save];
+            
 			NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
 			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistSucceeded object:self userInfo:userInfo];
 		}
@@ -219,53 +225,49 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	
 	NSLog(@"Pushing gist");
 	
-    NSString *oldName = gist.name;
-    NSString *extension = @"";
-    NSArray *nameComponents = [gist.name componentsSeparatedByString:@"."];
-    if (nameComponents.count > 1) {
-        extension = [nameComponents lastObject];
+    NSMutableDictionary *filesDictionary = [NSMutableDictionary dictionary];
+    for (GEFile *file in gist.files) {
+        NSArray *nameComponents = [file.filename componentsSeparatedByString:@"."];
+        if (nameComponents.count > 1) {
+            if ([[nameComponents lastObject] isEqual:@""]) {
+                file.filename = [NSString stringWithFormat:@"%@md", file.filename];
+            }
+        }
+        else {
+            file.filename = [NSString stringWithFormat:@"%@.md", file.filename];
+        }
+        
+        NSDictionary *fileDictionary = [NSDictionary dictionaryWithObjectsAndKeys:gist.file.content, @"content", gist.file.filename, @"filename", nil];
+        [filesDictionary setObject:fileDictionary forKey:(file.oldFilename ? file.oldFilename : file.filename)];
     }
-    else {
-        gist.name = [NSString stringWithFormat:@"%@.md", gist.name];
-        extension = @"md";
-    }
+    
+    NSMutableDictionary *jsonDictionary = [NSMutableDictionary dictionaryWithObject:filesDictionary forKey:@"files"];
     
 	NSString *urlString;
-	NSMutableDictionary *postDictionary;
+    NSString *verb = @"POST";
 	
 	if (gist.gistID) {
-		// gist already exists: update with a faked form post
-		urlString = [NSString stringWithFormat:@"https://gist.github.com/gists/%@", gist.gistID];
-		
-		postDictionary = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-							@"put", @"_method",
-							gist.body, [NSString stringWithFormat:@"file_contents[%@]", gist.name],
-							extension, [NSString stringWithFormat:@"file_ext[%@]", oldName],
-							gist.name, [NSString stringWithFormat:@"file_name[%@]", oldName],
-							nil];
+        verb = @"PATCH";
+		urlString = [NSString stringWithFormat:@"https://api.github.com/gists/%@", gist.gistID];
 	}
 	else {
-		// new gist: use the API
-		urlString = @"https://gist.github.com/api/v1/json/new";
-		postDictionary = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-							gist.body, [NSString stringWithFormat:@"files[%@]", gist.name],
-							nil];
-		
+        verb = @"POST";
+		urlString = [NSString stringWithFormat:@"https://api.github.com/gists"];
 		if (self.anonymous) {
-			[postDictionary setValue:[NSNumber numberWithBool:YES] forKey:@"private"];
+			[jsonDictionary setValue:[NSNumber numberWithBool:NO] forKey:@"public"];
             
             NSString *desc = [NSString stringWithFormat:@"via Drift for iPad - %@", [[UIDevice currentDevice] obfuscatedUniqueIdentifier]];
-            [postDictionary setValue:desc forKey:@"description"];
+            [jsonDictionary setValue:desc forKey:@"description"];
 		}
 	}
-	
-	ASIFormDataRequest *req = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:urlString]];
-	for (NSString *key in [postDictionary allKeys]) {
-		[req setPostValue:[postDictionary objectForKey:key] forKey:key];
-	}
     
+    NSData *jsonData = [[CJSONSerializer serializer] serializeDictionary:jsonDictionary error:nil];
+    NSMutableData *postData = [[jsonData mutableCopy] autorelease];
+    
+	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
+    [req setRequestMethod:verb];
     [req addBasicAuthenticationHeaderWithUsername:self.username andPassword:self.password];
-    
+    [req setPostBody:postData];
 	req.shouldContinueWhenAppEntersBackground = YES;
 	
 	// avoid losing the managed object while the request goes through: crasher
@@ -276,16 +278,12 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 			return;
 		
 		NSError *err = nil;
-		NSArray *gists = [[[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] error:&err] objectForKey:@"gists"];
-		if (gists && [gists count] > 0) {
-			NSDictionary *attributes = [gists objectAtIndex:0];
-			[gist updateWithAttributes:attributes];
-		}
-		else {
-			// JSON parse failure is okay: for updates we get a web page back, because there is no API yet.
-		}
+        NSDictionary *attributes = [[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] error:&err];
+        [gist updateWithAttributes:attributes];
 		gist.dirty = NO;
 		
+        NSLog(@"Posted %@, got %@", jsonDictionary, attributes);
+        
 		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistSucceeded object:self userInfo:userInfo];
 	}];
