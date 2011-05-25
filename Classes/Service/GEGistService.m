@@ -279,6 +279,16 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		
 		NSError *err = nil;
         NSDictionary *attributes = [[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] error:&err];
+        if (!attributes) {
+            NSLog(@"Failed: %@", [err localizedDescription]);
+            return;
+        }
+        
+        if ([attributes valueForKey:@"errors"]) {
+            NSLog(@"Failure: %@ %@", [attributes valueForKey:@"message"], [attributes valueForKey:@"errors"]);
+            return;
+        }
+        
         [gist updateWithAttributes:attributes];
 		gist.dirty = NO;
         
