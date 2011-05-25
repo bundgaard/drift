@@ -110,6 +110,7 @@
 	newGist.user = [GEGistService sharedService].username;
     
     GEFile *newFile = [NSEntityDescription insertNewObjectForEntityForName:[GEFile entityName] inManagedObjectContext:[GEGistStore sharedStore].managedObjectContext];
+    newFile.filename = @"";
     newFile.content = @"";
     [newGist.files addObject:newFile];
     
