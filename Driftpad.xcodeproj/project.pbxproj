@@ -12,6 +12,7 @@
 		0305550811730992000D3AF2 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0305550711730992000D3AF2 /* MainWindow.xib */; };
 		03055515117309B6000D3AF2 /* Driftpad.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 03055513117309B6000D3AF2 /* Driftpad.xcdatamodeld */; };
 		030555FF11731F66000D3AF2 /* Inconsolata.otf in Resources */ = {isa = PBXBuildFile; fileRef = 030555FE11731F66000D3AF2 /* Inconsolata.otf */; };
+		030E12A6138C9199009817FD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 030E12A5138C9199009817FD /* QuartzCore.framework */; };
 		0354494213263F2100D1F2F1 /* Octocat.png in Resources */ = {isa = PBXBuildFile; fileRef = 0354494113263F2100D1F2F1 /* Octocat.png */; };
 		0354494513263F9300D1F2F1 /* DriftLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0354494413263F9300D1F2F1 /* DriftLogo.png */; };
 		03544955132648F500D1F2F1 /* GEGistCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03544954132648F500D1F2F1 /* GEGistCell.m */; };
@@ -86,6 +87,7 @@
 		03055514117309B6000D3AF2 /* Driftpad.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Driftpad.xcdatamodel; sourceTree = "<group>"; };
 		03055516117309BF000D3AF2 /* Driftpad-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Driftpad-Info.plist"; sourceTree = SOURCE_ROOT; };
 		030555FE11731F66000D3AF2 /* Inconsolata.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inconsolata.otf; sourceTree = "<group>"; };
+		030E12A5138C9199009817FD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0354494113263F2100D1F2F1 /* Octocat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Octocat.png; sourceTree = "<group>"; };
 		0354494413263F9300D1F2F1 /* DriftLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DriftLogo.png; sourceTree = "<group>"; };
 		03544953132648F500D1F2F1 /* GEGistCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEGistCell.h; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				030E12A6138C9199009817FD /* QuartzCore.framework in Frameworks */,
 				03C759BC131CEB8800C7BDF8 /* Security.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
@@ -498,7 +501,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				03C759BB131CEB8800C7BDF8 /* Security.framework */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				03C172CD1172827100B975D1 /* Externals */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -543,6 +545,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				030E12A5138C9199009817FD /* QuartzCore.framework */,
+				03C759BB131CEB8800C7BDF8 /* Security.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */,

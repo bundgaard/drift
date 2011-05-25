@@ -17,6 +17,11 @@
 	IBOutlet UIButton *cancelButton;
 }
 
+@property (nonatomic, retain) IBOutlet UIView *containerView;
+@property (nonatomic, retain) IBOutlet UIView *splashView;
+@property (nonatomic, retain) IBOutlet UIView *signInView;
+@property (nonatomic, retain) IBOutlet UIView *headerView;
+
 @property (nonatomic, retain) IBOutlet UITextField *loginField;
 @property (nonatomic, retain) IBOutlet UITextField *tokenField;
 @property (nonatomic, retain) IBOutlet UIView *overlayView;
@@ -25,6 +30,8 @@
 @property (nonatomic, retain) IBOutlet UILabel *aboutLabel;
 
 - (IBAction)useAnonymouslyAction:(id)sender;
+- (IBAction)showSignInAction:(id)sender;
+- (IBAction)showSplashAction:(id)sender;
 - (IBAction)signInAction:(id)sender;
 - (IBAction)signUpAction:(id)sender;
 - (IBAction)accountPageAction:(id)sender;

@@ -8,9 +8,16 @@
 
 #import "GELoginViewController.h"
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "GEGistService.h"
 
 @implementation GELoginViewController
+
+@synthesize containerView;
+@synthesize splashView;
+@synthesize signInView;
+@synthesize headerView;
 
 @synthesize loginField;
 @synthesize tokenField;
@@ -23,6 +30,11 @@
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
+    [containerView release], containerView = nil;
+    [splashView release], splashView = nil;
+    [signInView release], signInView = nil;
+    [headerView release], headerView = nil;
+    
 	[loginField release], loginField = nil;
 	[tokenField release], tokenField = nil;
 	[overlayView release], overlayView = nil;
@@ -48,6 +60,9 @@
 	
 	NSString *version = [[[NSBundle mainBundle] infoDictionary] valueForKey:(id)kCFBundleVersionKey];
 	aboutLabel.text = [NSString stringWithFormat:@"Drift %@ in Permanent Maintenance since 2010", version];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewDidUnload;
@@ -67,10 +82,51 @@
 	[[GEGistService sharedService] loginAnonymously];
 }
 
+- (IBAction)showSignInAction:(id)sender;
+{
+    CGRect frame = self.containerView.bounds;
+    frame.origin.x = frame.size.width;
+    self.signInView.frame = frame;
+    
+    [self.containerView addSubview:self.signInView];
+    
+    [UIView beginAnimations:nil context:nil];
+    
+    frame.origin.x = -frame.size.width;
+    self.splashView.frame = frame;
+    
+    frame.origin.x = 0;
+    self.signInView.frame = frame;
+    
+    [UIView commitAnimations];
+}
+
+- (IBAction)showSplashAction:(id)sender;
+{
+    [self.loginField resignFirstResponder];
+    [self.tokenField resignFirstResponder];
+    
+    CGRect frame = self.containerView.bounds;
+    frame.origin.x = -frame.size.width;
+    self.signInView.frame = frame;
+    
+    [self.containerView addSubview:self.splashView];
+    
+    [UIView beginAnimations:nil context:nil];
+    
+    frame.origin.x = 0;
+    self.splashView.frame = frame;
+    
+    frame.origin.x = frame.size.width;
+    self.signInView.frame = frame;
+    
+    [UIView commitAnimations];
+}
+
 - (IBAction)signInAction:(id)sender;
 {
-	[loginField resignFirstResponder];
-	[tokenField resignFirstResponder];
+    [self.loginField resignFirstResponder];
+    [self.tokenField resignFirstResponder];
 
 	self.overlayView.alpha = 0.0;
 	self.overlayView.frame = self.view.bounds;
@@ -140,6 +196,58 @@
 		[self signInAction:self];
 	}
 	return NO;
+}
+
+#pragma mark - Keyboard
+
+- (void)keyboardShow:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    int curve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
+    CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect myRect = [self.containerView convertRect:keyboardRect fromView:self.view.window];
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationCurve:curve];
+    [UIView setAnimationDuration:duration];
+    
+    if (myRect.origin.y <= self.containerView.frame.size.height) {
+        CGFloat delta = self.containerView.frame.size.height - myRect.origin.y;
+        
+        CGRect frame = self.headerView.frame;
+        frame.size.height -= delta;
+        self.headerView.frame = frame;
+        
+        frame = self.containerView.frame;
+        frame.origin.y -= delta;
+        self.containerView.frame = frame;
+    }
+    
+    [UIView commitAnimations];
+}
+
+- (void)keyboardHide:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    int curve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationCurve:curve];
+    [UIView setAnimationDuration:duration];
+    
+    CGRect frame = self.headerView.frame;
+    frame.size.height = 299;
+    self.headerView.frame = frame;
+    
+    frame = self.containerView.frame;
+    frame.origin.y = 299;
+    self.containerView.frame = frame;
+    
+    [UIView commitAnimations];
 }
 
 @end
