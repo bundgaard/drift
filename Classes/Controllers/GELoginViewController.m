@@ -70,11 +70,6 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)viewWillAppear:(BOOL)animated;
-{
-	[loginField becomeFirstResponder];
-}
-
 #pragma mark Interface actions
 
 - (IBAction)useAnonymouslyAction:(id)sender;
@@ -99,12 +94,14 @@
     self.signInView.frame = frame;
     
     [UIView commitAnimations];
+    
+    [self.loginField becomeFirstResponder];
 }
 
 - (IBAction)showSplashAction:(id)sender;
 {
-    [self.loginField resignFirstResponder];
-    [self.tokenField resignFirstResponder];
+    [loginField resignFirstResponder];
+    [tokenField resignFirstResponder];
     
     CGRect frame = self.containerView.bounds;
     frame.origin.x = -frame.size.width;
@@ -125,8 +122,8 @@
 
 - (IBAction)signInAction:(id)sender;
 {
-    [self.loginField resignFirstResponder];
-    [self.tokenField resignFirstResponder];
+    [loginField resignFirstResponder];
+    [tokenField resignFirstResponder];
 
 	self.overlayView.alpha = 0.0;
 	self.overlayView.frame = self.view.bounds;
@@ -196,6 +193,11 @@
 		[self signInAction:self];
 	}
 	return NO;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    NSLog(@"End editing: %@", textField);
 }
 
 #pragma mark - Keyboard
