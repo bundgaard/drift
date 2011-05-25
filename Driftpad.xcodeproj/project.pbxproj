@@ -14,6 +14,10 @@
 		030555FF11731F66000D3AF2 /* Inconsolata.otf in Resources */ = {isa = PBXBuildFile; fileRef = 030555FE11731F66000D3AF2 /* Inconsolata.otf */; };
 		030E12A6138C9199009817FD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 030E12A5138C9199009817FD /* QuartzCore.framework */; };
 		030E12A9138CB89D009817FD /* GEFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 030E12A8138CB89D009817FD /* GEFile.m */; };
+		030E12B4138CCC14009817FD /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 030E12AD138CCC14009817FD /* ISO8601DateFormatter.m */; };
+		030E12B5138CCC14009817FD /* NSDate_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 030E12AF138CCC14009817FD /* NSDate_Extensions.m */; };
+		030E12B6138CCC14009817FD /* NSDate_InternetDateExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 030E12B1138CCC14009817FD /* NSDate_InternetDateExtensions.m */; };
+		030E12B7138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 030E12B3138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.m */; };
 		0354494213263F2100D1F2F1 /* Octocat.png in Resources */ = {isa = PBXBuildFile; fileRef = 0354494113263F2100D1F2F1 /* Octocat.png */; };
 		0354494513263F9300D1F2F1 /* DriftLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0354494413263F9300D1F2F1 /* DriftLogo.png */; };
 		03544955132648F500D1F2F1 /* GEGistCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03544954132648F500D1F2F1 /* GEGistCell.m */; };
@@ -89,6 +93,14 @@
 		030E12A5138C9199009817FD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		030E12A7138CB89D009817FD /* GEFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEFile.h; sourceTree = "<group>"; };
 		030E12A8138CB89D009817FD /* GEFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GEFile.m; sourceTree = "<group>"; };
+		030E12AC138CCC14009817FD /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISO8601DateFormatter.h; sourceTree = "<group>"; };
+		030E12AD138CCC14009817FD /* ISO8601DateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISO8601DateFormatter.m; sourceTree = "<group>"; };
+		030E12AE138CCC14009817FD /* NSDate_Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDate_Extensions.h; sourceTree = "<group>"; };
+		030E12AF138CCC14009817FD /* NSDate_Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDate_Extensions.m; sourceTree = "<group>"; };
+		030E12B0138CCC14009817FD /* NSDate_InternetDateExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDate_InternetDateExtensions.h; sourceTree = "<group>"; };
+		030E12B1138CCC14009817FD /* NSDate_InternetDateExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDate_InternetDateExtensions.m; sourceTree = "<group>"; };
+		030E12B2138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDateFormatter_InternetDateExtensions.h; sourceTree = "<group>"; };
+		030E12B3138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateFormatter_InternetDateExtensions.m; sourceTree = "<group>"; };
 		0354494113263F2100D1F2F1 /* Octocat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Octocat.png; sourceTree = "<group>"; };
 		0354494413263F9300D1F2F1 /* DriftLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DriftLogo.png; sourceTree = "<group>"; };
 		03544953132648F500D1F2F1 /* GEGistCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEGistCell.h; sourceTree = "<group>"; };
@@ -221,6 +233,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		030E12AA138CCC14009817FD /* Dates */ = {
+			isa = PBXGroup;
+			children = (
+				030E12AB138CCC14009817FD /* ISO-8601-parser-0.5 */,
+				030E12AE138CCC14009817FD /* NSDate_Extensions.h */,
+				030E12AF138CCC14009817FD /* NSDate_Extensions.m */,
+				030E12B0138CCC14009817FD /* NSDate_InternetDateExtensions.h */,
+				030E12B1138CCC14009817FD /* NSDate_InternetDateExtensions.m */,
+				030E12B2138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.h */,
+				030E12B3138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.m */,
+			);
+			path = Dates;
+			sourceTree = "<group>";
+		};
+		030E12AB138CCC14009817FD /* ISO-8601-parser-0.5 */ = {
+			isa = PBXGroup;
+			children = (
+				030E12AC138CCC14009817FD /* ISO8601DateFormatter.h */,
+				030E12AD138CCC14009817FD /* ISO8601DateFormatter.m */,
+			);
+			path = "ISO-8601-parser-0.5";
+			sourceTree = "<group>";
+		};
 		03A662D112EB497000080F7F /* TouchFoundation */ = {
 			isa = PBXGroup;
 			children = (
@@ -334,6 +369,7 @@
 		03A6637F12EB4BB600080F7F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				030E12AA138CCC14009817FD /* Dates */,
 				03C7599A131CCF0800C7BDF8 /* NSError_Extensions.h */,
 				03C7599B131CCF0800C7BDF8 /* NSError_Extensions.m */,
 				03C759B1131CCFC700C7BDF8 /* NSData_DigestExtensions.h */,
@@ -673,6 +709,10 @@
 				03C759BA131CE7A100C7BDF8 /* CKeychain.m in Sources */,
 				03544955132648F500D1F2F1 /* GEGistCell.m in Sources */,
 				030E12A9138CB89D009817FD /* GEFile.m in Sources */,
+				030E12B4138CCC14009817FD /* ISO8601DateFormatter.m in Sources */,
+				030E12B5138CCC14009817FD /* NSDate_Extensions.m in Sources */,
+				030E12B6138CCC14009817FD /* NSDate_InternetDateExtensions.m in Sources */,
+				030E12B7138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

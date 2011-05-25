@@ -195,11 +195,6 @@
 	return NO;
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    NSLog(@"End editing: %@", textField);
-}
-
 #pragma mark - Keyboard
 
 - (void)keyboardShow:(NSNotification *)notification;

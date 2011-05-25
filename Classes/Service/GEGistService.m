@@ -178,12 +178,12 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 	
 	[req setCompletionBlock:^{
 		NSError *err = nil;
-		NSDictionary *res = [[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] error:&err];
-		if (!res) {
+		NSArray *gists = [[CJSONDeserializer deserializer] deserializeAsArray:[req responseData] error:&err];
+		if (!gists) {
 			NSLog(@"Error parsing gists: %@", [err localizedDescription]);
 			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistsFailed object:self];
 		} else {
-			for (NSDictionary *gist in [res valueForKey:@"gists"]) {
+			for (NSDictionary *gist in gists) {
 				[GEGist insertOrUpdateGistWithAttributes:gist];
 			}
 			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistsSucceeded object:self];
@@ -281,8 +281,6 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
         NSDictionary *attributes = [[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] error:&err];
         [gist updateWithAttributes:attributes];
 		gist.dirty = NO;
-		
-        NSLog(@"Posted %@, got %@", jsonDictionary, attributes);
         
 		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
 		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistSucceeded object:self userInfo:userInfo];

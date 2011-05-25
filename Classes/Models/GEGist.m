@@ -15,7 +15,7 @@
 
 #import "NSManagedObjectContext_Extensions.h"
 #import "NSObject_FUNSNull.h"
-#import "NSDateFormatter_GithubDateFormatting.h"
+#import "NSDate_InternetDateExtensions.h"
 
 #pragma mark begin emogenerator forward declarations
 #import "GEFile.h"
@@ -194,7 +194,7 @@
 {
 	self.gistID = [attributes valueForKey:@"id"];
 	self.desc = [[attributes valueForKey:@"description"] objectOrNil];
-	self.createdAt = [[NSDateFormatter githubDateFormatter] dateFromString:[attributes valueForKey:@"created_at"]];
+	self.createdAt = [NSDate dateWithISO8601String:[attributes valueForKey:@"created_at"]];
     
     NSMutableDictionary *filesByFilename = self.filesByFilename;
     [self.files removeAllObjects];
