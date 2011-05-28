@@ -175,6 +175,11 @@
 
 + (NSFetchRequest *)fetchRequestForCurrentUserGists;
 {
+    return [self fetchRequestForUserGists:[GEGistService sharedService].username];
+}
+
++ (NSFetchRequest *)fetchRequestForUserGists:(NSString *)username;
+{
 	NSManagedObjectContext *ctx = [GEGistStore sharedStore].managedObjectContext;
 	
 	NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
@@ -183,7 +188,7 @@
 	[fetchRequest setEntity:entity];
 	[fetchRequest setFetchBatchSize:20];
 	
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@", [GEGistService sharedService].username];
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user == %@", username];
 	[fetchRequest setPredicate:predicate];
 	
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"createdAt" ascending:NO];
@@ -198,16 +203,16 @@
 	self.desc = [[attributes valueForKey:@"description"] objectOrNil];
 	self.createdAt = [NSDate dateWithISO8601String:[attributes valueForKey:@"created_at"]];
     
-    NSMutableDictionary *filesByFilename = self.filesByFilename;
+    NSMutableDictionary *files = [NSMutableDictionary dictionaryWithDictionary:self.filesByFilename];
     [self.files removeAllObjects];
     for (NSString *filename in [[attributes valueForKey:@"files"] allKeys]) {
-        GEFile *file = [filesByFilename objectForKey:filename];
+        GEFile *file = [files objectForKey:filename];
         if (!file) file = [GEFile blankFile];
         [file updateWithAttributes:[[attributes valueForKey:@"files"] valueForKey:filename]];
         [self.files addObject:file];
     }
     
-    NSString *owner = [attributes valueForKey:@"user.login"];
+    NSString *owner = [attributes valueForKeyPath:@"user.login"];
     if (owner) self.user = owner;
 }
 

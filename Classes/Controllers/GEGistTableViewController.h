@@ -10,15 +10,26 @@
 
 #import "CFetchedResultsTableViewController.h"
 
+typedef enum _GistTableContext {
+    kGistTableContextLocal,
+    kGistTableContextRemote
+} GistTableContext;
+
 @class GEGistViewController, GEGist;
 
-@interface GEGistTableViewController : CFetchedResultsTableViewController {
+@interface GEGistTableViewController : CFetchedResultsTableViewController <UISearchBarDelegate> {
 	IBOutlet GEGistViewController *gistViewController;
 }
 
 @property (nonatomic, retain) IBOutlet GEGistViewController *gistViewController;
 @property (nonatomic, retain) IBOutlet UIView *anonymousHeaderView;
+@property (nonatomic, retain) IBOutlet UISegmentedControl *contextSwitcher;
+
+@property (nonatomic, retain) NSString *otherUsername;
+
+@property (nonatomic, assign) GistTableContext context;
 
 - (IBAction)loginAction:(id)sender;
+- (IBAction)contextAction:(id)sender;
 
 @end

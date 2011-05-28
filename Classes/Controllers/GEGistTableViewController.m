@@ -25,11 +25,19 @@
 
 @synthesize gistViewController;
 @synthesize anonymousHeaderView;
+@synthesize contextSwitcher;
+
+@synthesize otherUsername;
+
+@synthesize context;
 
 - (void)dealloc;
 {
 	[gistViewController release], gistViewController = nil;
 	[anonymousHeaderView release], anonymousHeaderView = nil;
+    [contextSwitcher release], contextSwitcher = nil;
+    
+    [otherUsername release], otherUsername = nil;
 	
     [super dealloc];
 }
@@ -40,6 +48,41 @@
 - (IBAction)loginAction:(id)sender;
 {
 	[(DriftpadAppDelegate *)[UIApplication sharedApplication].delegate switchUserAction:sender];
+}
+
+- (IBAction)contextAction:(id)sender;
+{
+    self.context = [sender selectedSegmentIndex];
+}
+
+- (void)setContext:(GistTableContext)newContext;
+{
+    context = newContext;
+    
+    if (self.context == kGistTableContextRemote) {
+        UISearchBar *searchBar = [[[UISearchBar alloc] initWithFrame:(CGRect){.size = {.width = 320, .height = 44}}] autorelease];
+        searchBar.text = self.otherUsername;
+        searchBar.delegate = self;
+        self.tableView.tableHeaderView = searchBar;
+        if (searchBar.text.length < 1) [searchBar becomeFirstResponder];
+        
+        [[GEGistService sharedService] listGistsForUser:self.otherUsername];
+    }
+    else {
+        self.tableView.tableHeaderView = [GEGistService sharedService].anonymous ? self.anonymousHeaderView : nil;
+        
+        [[GEGistService sharedService] listGistsForCurrentUser];
+    }
+    
+    self.fetchRequest = nil;
+    self.fetchedResultsController = nil;
+    [self.fetchedResultsController performFetch:nil];
+    [self.tableView reloadData];
+    
+    // TODO: better selection logic
+	int selectedIndex = [self.fetchedResultsController.fetchedObjects indexOfObject:gistViewController.gist];
+	if (selectedIndex != NSNotFound)
+        [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
 }
 
 #pragma mark -
@@ -56,6 +99,9 @@
 	
 	self.tableView.layer.backgroundColor = [UIColor colorWithWhite:0.92 alpha:1.0].CGColor;
 	self.tableView.separatorColor = [UIColor colorWithWhite:0.85 alpha:1.0];
+    
+    self.navigationItem.titleView = self.contextSwitcher;
+    self.otherUsername = [[NSUserDefaults standardUserDefaults] objectForKey:@"OtherUsername"];
 }
 
 #pragma mark -
@@ -69,7 +115,15 @@
 - (NSFetchRequest *)fetchRequest;
 {
 	if (!fetchRequest) {
-		fetchRequest = [[GEGist fetchRequestForCurrentUserGists] retain];
+        switch (self.context) {
+            case kGistTableContextLocal:
+                fetchRequest = [[GEGist fetchRequestForCurrentUserGists] retain];
+                break;
+            case kGistTableContextRemote:
+                fetchRequest = [[GEGist fetchRequestForUserGists:self.otherUsername] retain];
+                break;
+        }
+		
 	}
 	return fetchRequest;
 }
@@ -111,21 +165,31 @@
 	return 60.0;
 }
 
+#pragma mark - Search bar delegate
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar;
+{
+    [searchBar resignFirstResponder];
+    
+    self.otherUsername = searchBar.text;
+    [[NSUserDefaults standardUserDefaults] setObject:self.otherUsername forKey:@"OtherUsername"];
+    [[GEGistService sharedService] listGistsForUser:self.otherUsername];
+
+    self.fetchRequest = nil;
+    self.fetchedResultsController = nil;
+    [self.fetchedResultsController performFetch:nil];
+    [self.tableView reloadData];
+}
+
 #pragma mark -
 #pragma mark View lifecycle
 
 - (void)viewWillAppear:(BOOL)animated;
 {
 	[super viewWillAppear:animated];
-	
-	self.navigationItem.title = [GEGistService sharedService].anonymous ? @"(anonymous)" : [GEGistService sharedService].username;
-	self.tableView.tableHeaderView = [GEGistService sharedService].anonymous ? self.anonymousHeaderView : nil;
-	
-	// TODO: better selection logic
-	int selectedIndex = [self.fetchedResultsController.fetchedObjects indexOfObject:gistViewController.gist];
-	if (selectedIndex == NSNotFound)
-		selectedIndex = 0;
-	[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+    
+    GistTableContext ctx = [gistViewController.gist.user isEqual:[GEGistService sharedService].username] ? kGistTableContextLocal : kGistTableContextRemote;
+    self.contextSwitcher.selectedSegmentIndex = ctx;
 }
 
 @end

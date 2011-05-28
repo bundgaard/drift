@@ -32,6 +32,7 @@
 + (void)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
 
 + (NSFetchRequest *)fetchRequestForCurrentUserGists;
++ (NSFetchRequest *)fetchRequestForUserGists:(NSString *)username;
 
 - (void)updateWithAttributes:(NSDictionary *)attributes;
 

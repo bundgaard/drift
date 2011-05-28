@@ -16,6 +16,7 @@
 @interface GEFile : NSManagedObject {
 }
 
++ (id)blankFile;
 + (id)fileWithAttributes:(NSDictionary *)attributes;
 - (void)updateWithAttributes:(NSDictionary *)attributes;
 

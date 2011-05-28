@@ -170,8 +170,13 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistsSucceeded object:self];
 		return;
 	}
-	
-	NSString *urlString = [NSString stringWithFormat:@"https://api.github.com/users/%@/gists", self.username];
+    
+    return [self listGistsForUser:self.username];
+}
+
+- (void)listGistsForUser:(NSString *)githubUsername;
+{
+	NSString *urlString = [NSString stringWithFormat:@"https://api.github.com/users/%@/gists", githubUsername];
 	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	
 	req.userInfo = [NSDictionary dictionaryWithObject:kDriftNotificationUpdateGistsFailed forKey:kFailureNotificationNameKey];

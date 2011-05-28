@@ -39,6 +39,7 @@ extern NSString *kDriftNotificationLoginFailed;
 - (void)loginAnonymously;
 
 - (void)listGistsForCurrentUser;
+- (void)listGistsForUser:(NSString *)githubUsername;
 
 - (void)fetchGist:(GEGist *)gist;
 - (void)pushGist:(GEGist *)gist;

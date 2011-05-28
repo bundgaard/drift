@@ -139,15 +139,24 @@
 	
 	if (isEditing) [textView becomeFirstResponder];
 	
-	// check for undownloaded gist
-	if (!self.gist.file.content && gist.gistID) {
-		[self.textView resignFirstResponder];
-		self.textView.editable = NO;
-		[self.activitySpinner startAnimating];
+    BOOL canEdit = ([self.gist.user isEqual: [GEGistService sharedService].username]);
+    canEdit = canEdit && (self.gist.file.content || !gist.gistID); // de morgan's law? this should exclude undownloaded gists
+    
+	if (canEdit) {
+        self.textView.backgroundColor = [UIColor colorWithWhite:0.92 alpha:1.0];
+        self.textView.textColor = [UIColor colorWithWhite:0.07 alpha:1.0];
+		self.textView.editable = YES;
+        self.titleButton.enabled = YES;
+        self.editTitleTextField.enabled = YES;
+		[self.activitySpinner stopAnimating];
 	}
 	else {
-		self.textView.editable = YES;
-		[self.activitySpinner stopAnimating];
+		[self.textView resignFirstResponder];
+        self.textView.backgroundColor = [UIColor colorWithWhite:0.88 alpha:1.0];
+        self.textView.textColor = [UIColor colorWithWhite:0.35 alpha:1.0];
+		self.textView.editable = NO;
+        self.titleButton.enabled = NO;
+        self.editTitleTextField.enabled = NO;
 	}
 	
 	self.interactionDisabled = NO;
