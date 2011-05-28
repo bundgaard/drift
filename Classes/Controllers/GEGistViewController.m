@@ -152,7 +152,7 @@
 	}
 	else {
 		[self.textView resignFirstResponder];
-        self.textView.backgroundColor = [UIColor colorWithWhite:0.88 alpha:1.0];
+        self.textView.backgroundColor = [UIColor colorWithWhite:0.85 alpha:1.0];
         self.textView.textColor = [UIColor colorWithWhite:0.35 alpha:1.0];
 		self.textView.editable = NO;
         self.titleButton.enabled = NO;

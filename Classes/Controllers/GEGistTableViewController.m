@@ -25,6 +25,8 @@
 
 @synthesize gistViewController;
 @synthesize anonymousHeaderView;
+@synthesize signedInHeaderView;
+@synthesize usernameButton;
 @synthesize contextSwitcher;
 
 @synthesize otherUsername;
@@ -35,6 +37,8 @@
 {
 	[gistViewController release], gistViewController = nil;
 	[anonymousHeaderView release], anonymousHeaderView = nil;
+    [signedInHeaderView release], signedInHeaderView = nil;
+    [usernameButton release], usernameButton = nil;
     [contextSwitcher release], contextSwitcher = nil;
     
     [otherUsername release], otherUsername = nil;
@@ -57,8 +61,16 @@
 
 - (void)setContext:(GistTableContext)newContext;
 {
+    if (context == newContext)
+        return;
+    
     context = newContext;
     
+    [self updateDisplay];
+}
+
+- (void)updateDisplay;
+{
     if (self.context == kGistTableContextRemote) {
         UISearchBar *searchBar = [[[UISearchBar alloc] initWithFrame:(CGRect){.size = {.width = 320, .height = 44}}] autorelease];
         searchBar.text = self.otherUsername;
@@ -69,7 +81,7 @@
         [[GEGistService sharedService] listGistsForUser:self.otherUsername];
     }
     else {
-        self.tableView.tableHeaderView = [GEGistService sharedService].anonymous ? self.anonymousHeaderView : nil;
+        self.tableView.tableHeaderView = [GEGistService sharedService].anonymous ? self.anonymousHeaderView : self.signedInHeaderView;
         
         [[GEGistService sharedService] listGistsForCurrentUser];
     }
@@ -102,6 +114,8 @@
     
     self.navigationItem.titleView = self.contextSwitcher;
     self.otherUsername = [[NSUserDefaults standardUserDefaults] objectForKey:@"OtherUsername"];
+    
+    self.contextSwitcher.selectedSegmentIndex = -1;
 }
 
 #pragma mark -
@@ -188,8 +202,11 @@
 {
 	[super viewWillAppear:animated];
     
+    [self.usernameButton setTitle:[GEGistService sharedService].username forState:UIControlStateNormal];
+    
     GistTableContext ctx = [gistViewController.gist.user isEqual:[GEGistService sharedService].username] ? kGistTableContextLocal : kGistTableContextRemote;
     self.contextSwitcher.selectedSegmentIndex = ctx;
+    [self updateDisplay];
 }
 
 @end

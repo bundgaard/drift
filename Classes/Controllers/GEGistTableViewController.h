@@ -23,11 +23,15 @@ typedef enum _GistTableContext {
 
 @property (nonatomic, retain) IBOutlet GEGistViewController *gistViewController;
 @property (nonatomic, retain) IBOutlet UIView *anonymousHeaderView;
+@property (nonatomic, retain) IBOutlet UIView *signedInHeaderView;
+@property (nonatomic, retain) IBOutlet UIButton *usernameButton;
 @property (nonatomic, retain) IBOutlet UISegmentedControl *contextSwitcher;
 
 @property (nonatomic, retain) NSString *otherUsername;
 
 @property (nonatomic, assign) GistTableContext context;
+
+- (void)updateDisplay;
 
 - (IBAction)loginAction:(id)sender;
 - (IBAction)contextAction:(id)sender;
