@@ -127,7 +127,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 		NSString *notificationName = [request.userInfo objectForKey:kFailureNotificationNameKey];
 		if (notificationName) [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
 	}];
-	[request start];
+	[request startAsynchronous];
 }
 
 - (void)loginUserWithUsername:(NSString *)username password:(NSString *)password;
@@ -189,9 +189,9 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 			NSLog(@"Error parsing gists: %@", [err localizedDescription]);
 			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistsFailed object:self];
 		} else {
-			for (NSDictionary *gist in gists) {
+			for (NSDictionary *gist in gists)
 				[GEGist insertOrUpdateGistWithAttributes:gist];
-			}
+            [[GEGistStore sharedStore] save];
 			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistsSucceeded object:self];
 		}
 	}];
@@ -229,6 +229,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
                 return;
             }
             [GEGist insertOrUpdateGistWithAttributes:result];
+            [[GEGistStore sharedStore] save];
 			NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
 			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistSucceeded object:self userInfo:userInfo];
         }];
@@ -258,6 +259,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
             }
             GEGist *fork = [GEGist insertOrUpdateGistWithAttributes:result];
             fork.forkOf = gist;
+            [[GEGistStore sharedStore] save];
             doneBlock(fork);
         }];
     }];

@@ -171,8 +171,6 @@
 	
 	GEGist *gist = [ctx fetchObjectOfEntityForName:[self entityName] predicate:predicate createIfNotFound:YES wasCreated:nil error:nil];
 	[gist updateWithAttributes:attributes];
-	
-	[[GEGistStore sharedStore] save];
     
     return gist;
 }
