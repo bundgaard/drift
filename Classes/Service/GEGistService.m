@@ -201,6 +201,9 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 
 - (void)fetchGist:(GEGist *)gist;
 {
+    if (!gist.gistID)
+        return;
+    
     // fetch gist content
     NSString *urlString = [NSString stringWithFormat:@"https://gist.github.com/raw/%@/%@", gist.gistID, gist.file.filename];
     urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -223,6 +226,11 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
     req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	req.userInfo = [NSDictionary dictionaryWithObject:kDriftNotificationUpdateGistFailed forKey:kFailureNotificationNameKey];
     [req setCompletionBlock:^{
+        if (req.responseStatusCode != 200) {
+            NSLog(@"Error: %d %@", req.responseStatusCode, [req responseString]);
+			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistFailed object:self userInfo:nil];
+            return;
+        }
         [[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] completionBlock:^(NSDictionary *result, NSError *err) {
             if (!result) {
                 NSLog(@"Error! %@", [err localizedDescription]);
