@@ -9,6 +9,7 @@
 #import "GEGistService.h"
 
 #import "CJSONDeserializer.h"
+#import "CJSONDeserializer_BlocksExtensions.h"
 #import "CJSONSerializer.h"
 #import "GEGist.h"
 #import "GEFile.h"
@@ -200,12 +201,11 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 
 - (void)fetchGist:(GEGist *)gist;
 {
+    // fetch gist content
     NSString *urlString = [NSString stringWithFormat:@"https://gist.github.com/raw/%@/%@", gist.gistID, gist.file.filename];
     urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
-	
 	req.userInfo = [NSDictionary dictionaryWithObject:kDriftNotificationUpdateGistFailed forKey:kFailureNotificationNameKey];
-	
 	[req setCompletionBlock:^{
 		if (!gist.dirty) {
 			// only update undirtied gists
@@ -216,8 +216,24 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistSucceeded object:self userInfo:userInfo];
 		}
 	}];
-	
 	[self startRequest:req];
+    
+    // fetch gist metadata
+    urlString = [NSString stringWithFormat:@"https://api.github.com/gists/%@", gist.gistID];
+    req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
+	req.userInfo = [NSDictionary dictionaryWithObject:kDriftNotificationUpdateGistFailed forKey:kFailureNotificationNameKey];
+    [req setCompletionBlock:^(void) {
+        [[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] completionBlock:^(NSDictionary *result, NSError *err) {
+            if (!result) {
+                NSLog(@"Error! %@", [err localizedDescription]);
+                return;
+            }
+            [GEGist insertOrUpdateGistWithAttributes:result];
+			NSDictionary *userInfo = [NSDictionary dictionaryWithObject:gist forKey:@"gist"];
+			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistSucceeded object:self userInfo:userInfo];
+        }];
+    }];
+    [req start];
 }
 
 - (void)pushGist:(GEGist *)gist;

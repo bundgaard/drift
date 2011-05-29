@@ -22,6 +22,7 @@
 		0354494513263F9300D1F2F1 /* DriftLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0354494413263F9300D1F2F1 /* DriftLogo.png */; };
 		03544955132648F500D1F2F1 /* GEGistCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03544954132648F500D1F2F1 /* GEGistCell.m */; };
 		037A9C0612F6F9BB0083840F /* AnonymousUser.plist in Resources */ = {isa = PBXBuildFile; fileRef = 037A9C0512F6F9BB0083840F /* AnonymousUser.plist */; };
+		03A0AA2C1392B37200BEF098 /* CJSONDeserializer_BlocksExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A0AA261392B37200BEF098 /* CJSONDeserializer_BlocksExtensions.m */; };
 		03A6633512EB4B0100080F7F /* CFetchedResultsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A6632212EB4B0100080F7F /* CFetchedResultsTableViewController.m */; };
 		03A6633612EB4B0100080F7F /* CTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A6632412EB4B0100080F7F /* CTableViewController.m */; };
 		03A6634F12EB4B3C00080F7F /* CCompletionTicket.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A6634812EB4B3C00080F7F /* CCompletionTicket.m */; };
@@ -106,6 +107,8 @@
 		03544953132648F500D1F2F1 /* GEGistCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEGistCell.h; sourceTree = "<group>"; };
 		03544954132648F500D1F2F1 /* GEGistCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GEGistCell.m; sourceTree = "<group>"; };
 		037A9C0512F6F9BB0083840F /* AnonymousUser.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AnonymousUser.plist; sourceTree = "<group>"; };
+		03A0AA251392B37200BEF098 /* CJSONDeserializer_BlocksExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CJSONDeserializer_BlocksExtensions.h; sourceTree = "<group>"; };
+		03A0AA261392B37200BEF098 /* CJSONDeserializer_BlocksExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CJSONDeserializer_BlocksExtensions.m; sourceTree = "<group>"; };
 		03A6632112EB4B0100080F7F /* CFetchedResultsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFetchedResultsTableViewController.h; sourceTree = "<group>"; };
 		03A6632212EB4B0100080F7F /* CFetchedResultsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFetchedResultsTableViewController.m; sourceTree = "<group>"; };
 		03A6632312EB4B0100080F7F /* CTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTableViewController.h; sourceTree = "<group>"; };
@@ -256,6 +259,15 @@
 			path = "ISO-8601-parser-0.5";
 			sourceTree = "<group>";
 		};
+		03A0AA221392B37200BEF098 /* Experimental */ = {
+			isa = PBXGroup;
+			children = (
+				03A0AA251392B37200BEF098 /* CJSONDeserializer_BlocksExtensions.h */,
+				03A0AA261392B37200BEF098 /* CJSONDeserializer_BlocksExtensions.m */,
+			);
+			path = Experimental;
+			sourceTree = "<group>";
+		};
 		03A662D112EB497000080F7F /* TouchFoundation */ = {
 			isa = PBXGroup;
 			children = (
@@ -274,6 +286,7 @@
 			children = (
 				03A6635812EB4B7F00080F7F /* CDataScanner.h */,
 				03A6635912EB4B7F00080F7F /* CDataScanner.m */,
+				03A0AA221392B37200BEF098 /* Experimental */,
 				03A6636112EB4B7F00080F7F /* Extensions */,
 				03A6636A12EB4B7F00080F7F /* JSON */,
 			);
@@ -713,6 +726,7 @@
 				030E12B5138CCC14009817FD /* NSDate_Extensions.m in Sources */,
 				030E12B6138CCC14009817FD /* NSDate_InternetDateExtensions.m in Sources */,
 				030E12B7138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.m in Sources */,
+				03A0AA2C1392B37200BEF098 /* CJSONDeserializer_BlocksExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

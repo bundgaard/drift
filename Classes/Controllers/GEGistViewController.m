@@ -37,6 +37,13 @@
 @synthesize titleButton;
 @synthesize editTitleTextField;
 
+@synthesize forkHeaderView;
+@synthesize forkHeaderLabel;
+@synthesize forkedHeaderView;
+@synthesize forkedHeaderLabel;
+@synthesize forkOfHeaderView;
+@synthesize forkOfHeaderLabel;
+
 @synthesize gist;
 
 @synthesize actionSheet;
@@ -57,6 +64,12 @@
 	[titleView release], titleView = nil;
 	[titleButton release], titleButton = nil;
 	[editTitleTextField release], editTitleTextField = nil;
+    
+    [forkHeaderView release], forkHeaderView = nil;
+    [forkHeaderLabel release], forkHeaderLabel = nil;
+    [forkedHeaderView release], forkedHeaderView = nil;
+    [forkedHeaderLabel release], forkedHeaderLabel = nil;
+    [forkOfHeaderLabel release], forkOfHeaderLabel = nil;
 	
 	[gist release], gist = nil;
 	
@@ -139,10 +152,10 @@
 	
 	if (isEditing) [textView becomeFirstResponder];
 	
-    BOOL canEdit = ([self.gist.user isEqual: [GEGistService sharedService].username]);
-    canEdit = canEdit && (self.gist.file.content || !gist.gistID); // de morgan's law? this should exclude undownloaded gists
+    BOOL myGist = ([self.gist.user isEqual: [GEGistService sharedService].username]);
+    BOOL isLoaded = (self.gist.file.content || !gist.gistID); // de morgan's law? this should exclude undownloaded gists
     
-	if (canEdit) {
+	if (myGist && isLoaded) {
         self.textView.backgroundColor = [UIColor colorWithWhite:0.92 alpha:1.0];
         self.textView.textColor = [UIColor colorWithWhite:0.07 alpha:1.0];
 		self.textView.editable = YES;
@@ -158,8 +171,52 @@
         self.titleButton.enabled = NO;
         self.editTitleTextField.enabled = NO;
 	}
+    
+    // fork headers
+    [self.forkHeaderView removeFromSuperview];
+    [self.forkedHeaderView removeFromSuperview];
+    [self.forkOfHeaderView removeFromSuperview];
+    
+    NSLog(@"Fork of: %@", self.gist.forkOf);
+    NSLog(@"Forks: %@", self.gist.forks);
+    
+    UIView *headerView = nil;
+    if (!myGist) {
+        if (self.gist.forks.count > 0) {
+            headerView = self.forkedHeaderView;
+            self.forkedHeaderLabel.text = [NSString stringWithFormat:@"This gist belongs to %@. You have", self.gist.user];
+        }
+        else {
+            headerView = self.forkHeaderView;
+            self.forkHeaderLabel.text = [NSString stringWithFormat:@"This is %@'s gist. To edit your own copy,", self.gist.user];
+        }
+    }
+    else if (self.gist.forkOf) {
+        headerView = self.forkOfHeaderView;
+        self.forkOfHeaderLabel.text = [NSString stringWithFormat:@"You forked this gist from %@.", self.gist.forkOf.user];
+    }
+    
+    if (headerView) {
+        CGRect frame = headerView.frame;
+        frame.origin.y = -frame.size.height;
+        frame.size.width = self.textView.frame.size.width;
+        headerView.frame = frame;
+        [self.textView addSubview:headerView];
+        
+        self.textView.contentInset = UIEdgeInsetsMake(frame.size.height, 0, 0, 0);
+        self.textView.contentOffset = CGPointMake(0, -frame.size.height);
+    }
+    else {
+        self.textView.contentInset = UIEdgeInsetsZero;
+        self.textView.contentOffset = CGPointZero;
+    }
 	
 	self.interactionDisabled = NO;
+}
+
+- (void)scrollToContent;
+{
+    [self.textView setContentOffset:CGPointMake(0, 0) animated:YES];
 }
 
 - (void)fillDefaultTitle;
@@ -356,6 +413,25 @@
 	
 	// save every time we put away the keyboard
 	[self save];
+}
+
+- (IBAction)forkAction:(id)sender;
+{
+    // perform fork
+    // show mine when done
+}
+
+- (IBAction)forkedAction:(id)sender;
+{
+    // should already have the child loaded...
+    // TODO: this won't work when we load other people's forks as well
+    self.gist = [self.gist.forks anyObject];
+}
+
+- (IBAction)forkOfAction:(id)sender;
+{
+    // should already have the parent loaded...
+    self.gist = self.gist.forkOf;
 }
 
 @end

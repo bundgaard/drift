@@ -18,6 +18,8 @@
 #import "NSDate_InternetDateExtensions.h"
 
 #pragma mark begin emogenerator forward declarations
+#import "GEGist.h"
+#import "GEGist.h"
 #import "GEFile.h"
 #pragma mark end emogenerator forward declarations
 
@@ -160,7 +162,7 @@
 	return [ctx countOfObjectsOfEntityForName:[self entityName] predicate:[NSPredicate predicateWithFormat:@"user == %@", [GEGistService sharedService].username] error:nil];
 }
 
-+ (void)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
++ (GEGist *)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
 {
 	NSString *gistID = [attributes valueForKey:@"id"];
 	
@@ -171,6 +173,8 @@
 	[gist updateWithAttributes:attributes];
 	
 	[[GEGistStore sharedStore] save];
+    
+    return gist;
 }
 
 + (NSFetchRequest *)fetchRequestForCurrentUserGists;
@@ -214,6 +218,10 @@
     
     NSString *owner = [attributes valueForKeyPath:@"user.login"];
     if (owner) self.user = owner;
+    
+    NSDictionary *forkDictionary = [attributes valueForKey:@"fork_of"];
+    if (forkDictionary)
+        self.forkOf = [GEGist insertOrUpdateGistWithAttributes:forkDictionary];
 }
 
 #pragma mark begin emogenerator accessors
@@ -226,6 +234,30 @@ return(@"Gist");
 @dynamic revision;
 
 @dynamic gistID;
+
+@dynamic forkOf;
+
+- (GEGist *)forkOf
+{
+[self willAccessValueForKey:@"forkOf"];
+GEGist *theResult = [self primitiveValueForKey:@"forkOf"];
+[self didAccessValueForKey:@"forkOf"];
+return(theResult);
+}
+
+- (void)setForkOf:(GEGist *)inForkOf
+{
+[self willChangeValueForKey:@"forkOf"];
+[self setPrimitiveValue:inForkOf forKey:@"forkOf"];
+[self didChangeValueForKey:@"forkOf"];
+}
+
+@dynamic forks;
+
+- (NSMutableSet *)forks
+{
+return([self mutableSetValueForKey:@"forks"]);
+}
 
 @dynamic files;
 

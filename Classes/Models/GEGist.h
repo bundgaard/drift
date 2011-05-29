@@ -9,6 +9,8 @@
 #import <CoreData/CoreData.h>
 
 #pragma mark begin emogenerator forward declarations
+@class GEGist;
+@class GEGist;
 @class GEFile;
 #pragma mark end emogenerator forward declarations
 
@@ -29,7 +31,7 @@
 
 + (NSInteger)count;
 
-+ (void)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
++ (GEGist *)insertOrUpdateGistWithAttributes:(NSDictionary *)attributes;
 
 + (NSFetchRequest *)fetchRequestForCurrentUserGists;
 + (NSFetchRequest *)fetchRequestForUserGists:(NSString *)username;
@@ -55,6 +57,11 @@
 @property (readwrite, retain) NSString *user;
 
 // Relationships
+@property (readwrite, retain) GEGist *forkOf;
+- (GEGist *)forkOf;
+- (void)setForkOf:(GEGist *)inForkOf;
+@property (readonly, retain) NSMutableSet *forks;
+- (NSMutableSet *)forks;
 @property (readonly, retain) NSMutableSet *files;
 - (NSMutableSet *)files;
 
