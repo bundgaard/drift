@@ -222,7 +222,7 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
     urlString = [NSString stringWithFormat:@"https://api.github.com/gists/%@", gist.gistID];
     req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
 	req.userInfo = [NSDictionary dictionaryWithObject:kDriftNotificationUpdateGistFailed forKey:kFailureNotificationNameKey];
-    [req setCompletionBlock:^(void) {
+    [req setCompletionBlock:^{
         [[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] completionBlock:^(NSDictionary *result, NSError *err) {
             if (!result) {
                 NSLog(@"Error! %@", [err localizedDescription]);
@@ -233,7 +233,38 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistSucceeded object:self userInfo:userInfo];
         }];
     }];
-    [req start];
+    [self startRequest:req];
+}
+
+- (void)forkGist:(GEGist *)gist whenDone:(void(^)(GEGist *))doneBlock failBlock:(void(^)(NSError *))failBlock;
+{
+    if ([gist.user isEqual:self.username])
+        return;
+    
+    NSString *urlString = [NSString stringWithFormat:@"https://api.github.com/gists/%@/fork", gist.gistID];
+    ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlString]];
+    req.requestMethod = @"POST";
+    [req addBasicAuthenticationHeaderWithUsername:self.username andPassword:self.password];
+    [req setCompletionBlock:^{
+        if (req.responseStatusCode != 201) { // 201 is 'created'. way to be semantic, github!
+            NSLog(@"Error! %d %@", req.responseStatusCode, [req responseString]);
+            failBlock(nil);
+            return;
+        }
+        [[CJSONDeserializer deserializer] deserializeAsDictionary:[req responseData] completionBlock:^(NSDictionary *result, NSError *err) {
+            if (!result) {
+                failBlock(err);
+                return;
+            }
+            GEGist *fork = [GEGist insertOrUpdateGistWithAttributes:result];
+            fork.forkOf = gist;
+            doneBlock(fork);
+        }];
+    }];
+    [req setFailedBlock:^(void) {
+        failBlock(req.error);
+    }];
+    [req startAsynchronous];
 }
 
 - (void)pushGist:(GEGist *)gist;

@@ -43,5 +43,6 @@ extern NSString *kDriftNotificationLoginFailed;
 
 - (void)fetchGist:(GEGist *)gist;
 - (void)pushGist:(GEGist *)gist;
+- (void)forkGist:(GEGist *)gist whenDone:(void(^)(GEGist *))doneBlock failBlock:(void(^)(NSError *))failBlock;
 
 @end

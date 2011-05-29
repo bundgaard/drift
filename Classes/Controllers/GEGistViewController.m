@@ -39,6 +39,8 @@
 
 @synthesize forkHeaderView;
 @synthesize forkHeaderLabel;
+@synthesize forkButton;
+@synthesize forkSpinner;
 @synthesize forkedHeaderView;
 @synthesize forkedHeaderLabel;
 @synthesize forkOfHeaderView;
@@ -67,6 +69,8 @@
     
     [forkHeaderView release], forkHeaderView = nil;
     [forkHeaderLabel release], forkHeaderLabel = nil;
+    [forkButton release], forkButton = nil;
+    [forkSpinner release], forkSpinner = nil;
     [forkedHeaderView release], forkedHeaderView = nil;
     [forkedHeaderLabel release], forkedHeaderLabel = nil;
     [forkOfHeaderLabel release], forkOfHeaderLabel = nil;
@@ -176,9 +180,6 @@
     [self.forkHeaderView removeFromSuperview];
     [self.forkedHeaderView removeFromSuperview];
     [self.forkOfHeaderView removeFromSuperview];
-    
-    NSLog(@"Fork of: %@", self.gist.forkOf);
-    NSLog(@"Forks: %@", self.gist.forks);
     
     UIView *headerView = nil;
     if (!myGist) {
@@ -417,8 +418,18 @@
 
 - (IBAction)forkAction:(id)sender;
 {
-    // perform fork
-    // show mine when done
+    self.forkButton.enabled = NO;
+    [self.forkSpinner startAnimating];
+    [[GEGistService sharedService] forkGist:self.gist whenDone:^(GEGist *fork) {
+        self.forkButton.enabled = YES;
+        [self.forkSpinner stopAnimating];
+        self.gist = fork;
+    } failBlock:^(NSError *err) {
+        UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Fork Error" message:@"Couldn't fork that gist!\nTry again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+        [alert show];
+        self.forkButton.enabled = YES;
+        [self.forkSpinner stopAnimating];
+    }];
 }
 
 - (IBAction)forkedAction:(id)sender;

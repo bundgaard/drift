@@ -26,6 +26,8 @@
 
 @property (nonatomic, retain) IBOutlet UIView *forkHeaderView;
 @property (nonatomic, retain) IBOutlet UILabel *forkHeaderLabel;
+@property (nonatomic, retain) IBOutlet UIButton *forkButton;
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *forkSpinner;
 @property (nonatomic, retain) IBOutlet UIView *forkedHeaderView;
 @property (nonatomic, retain) IBOutlet UILabel *forkedHeaderLabel;
 @property (nonatomic, retain) IBOutlet UIView *forkOfHeaderView;
