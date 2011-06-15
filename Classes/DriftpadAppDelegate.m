@@ -244,10 +244,12 @@
 	NSArray *anonymousGists = [ctx fetchObjectsOfEntityForName:[GEGist entityName] predicate:[NSPredicate predicateWithFormat:@"user == %@", anonymousUser] error:nil];
 	
 	for (GEGist *gist in anonymousGists) {
-		gist.user = [GEGistService sharedService].username;
-		gist.gistID = nil;
-		gist.dirty = YES;
-		[[GEGistService sharedService] pushGist:gist];
+        [[GEGistService sharedService] forkGist:gist whenDone:^(GEGist *newGist) {
+            NSLog(@"Forked %@: deleting local copy", gist.forkOf.url);
+            [[GEGistStore sharedStore].managedObjectContext deleteObject:newGist.forkOf];
+        } failBlock:^(NSError *err) {
+            NSLog(@"Error forking gist: %@", [err localizedDescription]);
+        }];
 	}
 }
 

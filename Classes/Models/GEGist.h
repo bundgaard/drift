@@ -10,8 +10,8 @@
 
 #pragma mark begin emogenerator forward declarations
 @class GEGist;
-@class GEGist;
 @class GEFile;
+@class GEGist;
 #pragma mark end emogenerator forward declarations
 
 /** Gist */
@@ -46,24 +46,26 @@
 + (NSString *)entityName;
 
 // Attributes
-@property (readwrite, retain) NSString *revision;
-@property (readwrite, retain) NSString *gistID;
-@property (readwrite, retain) NSString *url;
 @property (readwrite, retain) NSDate *updatedAt;
+@property (readwrite, retain) NSString *gistID;
 @property (readwrite, assign) BOOL dirty;
 @property (readwrite, retain) NSNumber *dirtyValue;
-@property (readwrite, retain) NSDate *createdAt;
+@property (readwrite, retain) NSString *revision;
+@property (readwrite, retain) NSString *url;
 @property (readwrite, retain) NSString *desc;
 @property (readwrite, retain) NSString *user;
+@property (readwrite, assign) BOOL public;
+@property (readwrite, retain) NSNumber *publicValue;
+@property (readwrite, retain) NSDate *createdAt;
 
 // Relationships
 @property (readwrite, retain) GEGist *forkOf;
 - (GEGist *)forkOf;
 - (void)setForkOf:(GEGist *)inForkOf;
-@property (readonly, retain) NSMutableSet *forks;
-- (NSMutableSet *)forks;
 @property (readonly, retain) NSMutableSet *files;
 - (NSMutableSet *)files;
+@property (readonly, retain) NSMutableSet *forks;
+- (NSMutableSet *)forks;
 
 #pragma mark end emogenerator accessors
 

@@ -19,8 +19,8 @@
 
 #pragma mark begin emogenerator forward declarations
 #import "GEGist.h"
-#import "GEGist.h"
 #import "GEFile.h"
+#import "GEGist.h"
 #pragma mark end emogenerator forward declarations
 
 
@@ -204,6 +204,7 @@
 	self.gistID = [attributes valueForKey:@"id"];
 	self.desc = [[attributes valueForKey:@"description"] objectOrNil];
 	self.createdAt = [NSDate dateWithISO8601String:[attributes valueForKey:@"created_at"]];
+    self.public = [[[attributes valueForKey:@"public"] objectOrNil] boolValue];
     
     NSMutableDictionary *files = [NSMutableDictionary dictionaryWithDictionary:self.filesByFilename];
     [self.files removeAllObjects];
@@ -229,7 +230,7 @@
 return(@"Gist");
 }
 
-@dynamic revision;
+@dynamic updatedAt;
 
 @dynamic gistID;
 
@@ -249,24 +250,6 @@ return(theResult);
 [self setPrimitiveValue:inForkOf forKey:@"forkOf"];
 [self didChangeValueForKey:@"forkOf"];
 }
-
-@dynamic forks;
-
-- (NSMutableSet *)forks
-{
-return([self mutableSetValueForKey:@"forks"]);
-}
-
-@dynamic files;
-
-- (NSMutableSet *)files
-{
-return([self mutableSetValueForKey:@"files"]);
-}
-
-@dynamic url;
-
-@dynamic updatedAt;
 
 @dynamic dirty;
 - (BOOL)dirty
@@ -296,11 +279,57 @@ return(theResult);
 [self didChangeValueForKey:@"dirty"];
 }
 
-@dynamic createdAt;
+@dynamic revision;
+
+@dynamic url;
 
 @dynamic desc;
 
+@dynamic files;
+
+- (NSMutableSet *)files
+{
+return([self mutableSetValueForKey:@"files"]);
+}
+
+@dynamic forks;
+
+- (NSMutableSet *)forks
+{
+return([self mutableSetValueForKey:@"forks"]);
+}
+
 @dynamic user;
+
+@dynamic public;
+- (BOOL)public
+{
+return([[self publicValue] boolValue]);
+}
+
+- (void)setPublic:(BOOL)inPublic
+{
+[self setPublicValue:[NSNumber numberWithBool:inPublic]];
+}
+
+@dynamic publicValue;
+
+- (NSNumber *)publicValue
+{
+[self willAccessValueForKey:@"public"];
+NSNumber *theResult = [self primitiveValueForKey:@"public"];
+[self didAccessValueForKey:@"public"];
+return(theResult);
+}
+
+- (void)setPublicValue:(NSNumber *)inPublic
+{
+[self willChangeValueForKey:@"public"];
+[self setPrimitiveValue:inPublic forKey:@"public"];
+[self didChangeValueForKey:@"public"];
+}
+
+@dynamic createdAt;
 
 #pragma mark end emogenerator accessors
 

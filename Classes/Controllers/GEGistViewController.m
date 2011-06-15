@@ -193,8 +193,12 @@
         }
     }
     else if (self.gist.forkOf) {
-        headerView = self.forkOfHeaderView;
-        self.forkOfHeaderLabel.text = [NSString stringWithFormat:@"You forked this gist from %@.", self.gist.forkOf.user];
+        NSString *anonymousUsername = [[GEGistService sharedService].anonymousUser objectForKey:@"Username"];
+        BOOL wasForkedFromAnonymousMode = [self.gist.forkOf.user isEqual:anonymousUsername] && !self.gist.forkOf.public;
+        if (!wasForkedFromAnonymousMode) {
+            headerView = self.forkOfHeaderView;
+            self.forkOfHeaderLabel.text = [NSString stringWithFormat:@"You forked this gist from %@.", self.gist.forkOf.user];
+        }
     }
     
     if (headerView) {
