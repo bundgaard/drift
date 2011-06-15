@@ -326,7 +326,7 @@ ciBoaXN0b3J5Lg</string>
 								<string key="NSFrame">{{111, 40}, {243, 258}}</string>
 								<reference key="NSSuperview" ref="989299500"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="994209170"/>
+								<reference key="NSNextKeyView" ref="581853080"/>
 								<int key="IBUIContentMode">4</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -335,13 +335,13 @@ ciBoaXN0b3J5Lg</string>
 									<string key="NSResourceName">Head.png</string>
 								</object>
 							</object>
-							<object class="IBUIImageView" id="994209170">
+							<object class="IBUIImageView" id="581853080">
 								<reference key="NSNextResponder" ref="989299500"/>
 								<int key="NSvFlags">317</int>
 								<string key="NSFrame">{{111, 40}, {243, 258}}</string>
 								<reference key="NSSuperview" ref="989299500"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="504362015"/>
+								<reference key="NSNextKeyView" ref="338449567"/>
 								<int key="IBUIContentMode">4</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -350,13 +350,13 @@ ciBoaXN0b3J5Lg</string>
 									<string key="NSResourceName">Tail1.png</string>
 								</object>
 							</object>
-							<object class="IBUIImageView" id="504362015">
+							<object class="IBUIImageView" id="338449567">
 								<reference key="NSNextResponder" ref="989299500"/>
 								<int key="NSvFlags">317</int>
 								<string key="NSFrame">{{111, 40}, {243, 258}}</string>
 								<reference key="NSSuperview" ref="989299500"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="205668432"/>
+								<reference key="NSNextKeyView" ref="169518619"/>
 								<int key="IBUIContentMode">4</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -365,7 +365,7 @@ ciBoaXN0b3J5Lg</string>
 									<string key="NSResourceName">Tail2.png</string>
 								</object>
 							</object>
-							<object class="IBUIImageView" id="205668432">
+							<object class="IBUIImageView" id="169518619">
 								<reference key="NSNextResponder" ref="989299500"/>
 								<int key="NSvFlags">317</int>
 								<string key="NSFrame">{{111, 40}, {243, 258}}</string>
@@ -956,7 +956,7 @@ ciBoaXN0b3J5Lg</string>
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">tail1</string>
 						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="994209170"/>
+						<reference key="destination" ref="581853080"/>
 					</object>
 					<int key="connectionID">131</int>
 				</object>
@@ -964,7 +964,7 @@ ciBoaXN0b3J5Lg</string>
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">tail2</string>
 						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="504362015"/>
+						<reference key="destination" ref="338449567"/>
 					</object>
 					<int key="connectionID">132</int>
 				</object>
@@ -972,9 +972,17 @@ ciBoaXN0b3J5Lg</string>
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">tail3</string>
 						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="205668432"/>
+						<reference key="destination" ref="169518619"/>
 					</object>
 					<int key="connectionID">133</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">octocatButton</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="733364308"/>
+					</object>
+					<int key="connectionID">134</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1168,9 +1176,9 @@ ciBoaXN0b3J5Lg</string>
 							<reference ref="987164073"/>
 							<reference ref="256241771"/>
 							<reference ref="992425879"/>
-							<reference ref="994209170"/>
-							<reference ref="504362015"/>
-							<reference ref="205668432"/>
+							<reference ref="581853080"/>
+							<reference ref="338449567"/>
+							<reference ref="169518619"/>
 						</object>
 						<reference key="parent" ref="766721923"/>
 						<string key="objectName">Header</string>
@@ -1207,17 +1215,17 @@ ciBoaXN0b3J5Lg</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">128</int>
-						<reference key="object" ref="994209170"/>
+						<reference key="object" ref="581853080"/>
 						<reference key="parent" ref="989299500"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">129</int>
-						<reference key="object" ref="504362015"/>
+						<reference key="object" ref="338449567"/>
 						<reference key="parent" ref="989299500"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">130</int>
-						<reference key="object" ref="205668432"/>
+						<reference key="object" ref="169518619"/>
 						<reference key="parent" ref="989299500"/>
 					</object>
 				</object>
@@ -1369,7 +1377,7 @@ ciBoaXN0b3J5Lg</string>
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">133</int>
+			<int key="maxID">134</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1453,6 +1461,7 @@ ciBoaXN0b3J5Lg</string>
 							<string>containerView</string>
 							<string>headerView</string>
 							<string>loginField</string>
+							<string>octocatButton</string>
 							<string>overlayView</string>
 							<string>signInButton</string>
 							<string>signInView</string>
@@ -1469,6 +1478,7 @@ ciBoaXN0b3J5Lg</string>
 							<string>UIView</string>
 							<string>UIView</string>
 							<string>UITextField</string>
+							<string>UIButton</string>
 							<string>UIView</string>
 							<string>UIButton</string>
 							<string>UIView</string>
@@ -1488,6 +1498,7 @@ ciBoaXN0b3J5Lg</string>
 							<string>containerView</string>
 							<string>headerView</string>
 							<string>loginField</string>
+							<string>octocatButton</string>
 							<string>overlayView</string>
 							<string>signInButton</string>
 							<string>signInView</string>
@@ -1518,6 +1529,10 @@ ciBoaXN0b3J5Lg</string>
 							<object class="IBToOneOutletInfo">
 								<string key="name">loginField</string>
 								<string key="candidateClassName">UITextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">octocatButton</string>
+								<string key="candidateClassName">UIButton</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">overlayView</string>

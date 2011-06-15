@@ -14,8 +14,7 @@
 
 
 @interface GELoginViewController ()
-
-
+@property (nonatomic, retain) NSTimer *blinkTimer;
 @end
 
 
@@ -33,9 +32,12 @@
 @synthesize cancelButton;
 @synthesize aboutLabel;
 
+@synthesize octocatButton;
 @synthesize tail1;
 @synthesize tail2;
 @synthesize tail3;
+
+@synthesize blinkTimer;
 
 - (void)dealloc;
 {
@@ -53,9 +55,13 @@
 	[cancelButton release], cancelButton = nil;
 	[aboutLabel release], aboutLabel = nil;
     
+    [octocatButton release], octocatButton = nil;
     [tail1 release], tail1 = nil;
     [tail2 release], tail2 = nil;
     [tail3 release], tail3 = nil;
+    
+    [blinkTimer invalidate];
+    [blinkTimer release], blinkTimer = nil;
 	
     [super dealloc];
 }
@@ -90,6 +96,21 @@
     [UIView animateWithDuration:2.3f delay:0.0f options:(UIViewAnimationOptionAutoreverse | UIViewAnimationOptionRepeat | UIViewAnimationOptionAllowUserInteraction) animations:^{
         self.tail3.layer.opacity = 0.25;
     } completion:nil];
+    
+    self.blinkTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(blinkDown) userInfo:nil repeats:NO];
+}
+
+- (void)blinkDown;
+{
+    [self.octocatButton setImage:[UIImage imageNamed:@"Octocat-Blink.png"] forState:UIControlStateNormal];
+    self.blinkTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(blinkUp) userInfo:nil repeats:NO];
+}
+
+- (void)blinkUp;
+{
+    [self.octocatButton setImage:[UIImage imageNamed:@"Octocat.png"] forState:UIControlStateNormal];
+    NSTimeInterval delay = powf((float)random() / INT_MAX, 2) * 5;
+    self.blinkTimer = [NSTimer scheduledTimerWithTimeInterval:delay target:self selector:@selector(blinkDown) userInfo:nil repeats:NO];
 }
 
 - (void)viewDidUnload;
