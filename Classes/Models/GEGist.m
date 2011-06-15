@@ -52,8 +52,10 @@
     }];
     
     NSMutableDictionary *filesByFilename = [NSMutableDictionary dictionary];
-    for (GEFile *file in sortedFiles)
+    for (GEFile *file in sortedFiles) {
+        if (!file.filename) continue;
         [filesByFilename setObject:file forKey:file.filename];
+    }
     
     return filesByFilename;
 }
@@ -166,6 +168,9 @@
 {
 	NSString *gistID = [attributes valueForKey:@"id"];
 	
+    NSDictionary *files = [attributes valueForKey:@"files"];
+    if (files.count < 1) return nil;
+    
 	NSManagedObjectContext *ctx = [GEGistStore sharedStore].managedObjectContext;
 	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"gistID = %@", gistID];
 	
@@ -206,10 +211,10 @@
 	self.createdAt = [NSDate dateWithISO8601String:[attributes valueForKey:@"created_at"]];
     self.public = [[[attributes valueForKey:@"public"] objectOrNil] boolValue];
     
-    NSMutableDictionary *files = [NSMutableDictionary dictionaryWithDictionary:self.filesByFilename];
+    NSMutableDictionary *theFiles = [NSMutableDictionary dictionaryWithDictionary:self.filesByFilename];
     [self.files removeAllObjects];
     for (NSString *filename in [[attributes valueForKey:@"files"] allKeys]) {
-        GEFile *file = [files objectForKey:filename];
+        GEFile *file = [theFiles objectForKey:filename];
         if (!file) file = [GEFile blankFile];
         [file updateWithAttributes:[[attributes valueForKey:@"files"] valueForKey:filename]];
         [self.files addObject:file];
