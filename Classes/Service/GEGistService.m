@@ -195,6 +195,9 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
 			[[NSNotificationCenter defaultCenter] postNotificationName:kDriftNotificationUpdateGistsSucceeded object:self];
 		}
 	}];
+    
+    if (!self.anonymous)
+        [req addBasicAuthenticationHeaderWithUsername:self.username andPassword:self.password];
 	
 	[self startRequest:req];
 }
