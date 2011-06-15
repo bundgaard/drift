@@ -55,7 +55,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [window makeKeyAndVisible];
-	detailViewController.view.alpha = 0.0;
 	[window addSubview:detailViewController.view];
 	
 	if ([[GEGistService sharedService] hasCredentials]) {
@@ -63,7 +62,7 @@
 	}
 	else {
 		firstLaunch = YES;
-		[self beginLogin];
+		[self performSelector:@selector(beginLogin) withObject:nil afterDelay:0];
 	}
 	return YES;
 }
@@ -91,11 +90,6 @@
 	
 	// never show the list if there's fewer than two gists
 	shouldShowGistList = shouldShowGistList && ([GEGist count] > 1);
-	
-	// show drift UI
-	[UIView beginAnimations:nil context:nil];
-	detailViewController.view.alpha = 1.0;
-	[UIView commitAnimations];
 	
 	// fetch current gists
 	[[GEGistService sharedService] listGistsForCurrentUser];
