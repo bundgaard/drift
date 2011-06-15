@@ -74,6 +74,8 @@
     if (self.context == kGistTableContextRemote) {
         UISearchBar *searchBar = [[[UISearchBar alloc] initWithFrame:(CGRect){.size = {.width = 320, .height = 44}}] autorelease];
         searchBar.text = self.otherUsername;
+        searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
+        searchBar.autocapitalizationType = UITextAutocapitalizationTypeNone;
         searchBar.delegate = self;
         self.tableView.tableHeaderView = searchBar;
         if (searchBar.text.length < 1) [searchBar becomeFirstResponder];
