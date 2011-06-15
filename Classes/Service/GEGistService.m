@@ -321,6 +321,9 @@ NSString *kDriftNotificationLoginFailed = @"kDriftNotificationLoginFailed";
             NSString *desc = [NSString stringWithFormat:@"via Drift for iPad - %@", [[UIDevice currentDevice] obfuscatedUniqueIdentifier]];
             [jsonDictionary setValue:desc forKey:@"description"];
 		}
+        else {
+            [jsonDictionary setValue:[NSNumber numberWithBool:YES] forKey:@"public"];
+        }
 	}
     
     NSData *jsonData = [[CJSONSerializer serializer] serializeDictionary:jsonDictionary error:nil];
