@@ -122,7 +122,7 @@
 										</object>
 										<bool key="IBUIShowsTouchWhenHighlighted">YES</bool>
 										<string key="IBUITitleShadowOffset">{0, 1}</string>
-										<string key="IBUINormalTitle">Drift</string>
+										<string key="IBUINormalTitle">Item</string>
 										<object class="NSColor" key="IBUIHighlightedTitleColor">
 											<int key="NSColorSpace">2</int>
 											<bytes key="NSRGB">MC40NDMxMzcyODgxIDAuNDcwNTg4MjY2OCAwLjUwMTk2MDgxNAA</bytes>

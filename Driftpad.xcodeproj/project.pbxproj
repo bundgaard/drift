@@ -52,6 +52,8 @@
 		03B621C513A84D27002185CF /* Tail2.png in Resources */ = {isa = PBXBuildFile; fileRef = 03B621C113A84D27002185CF /* Tail2.png */; };
 		03B621C613A84D27002185CF /* Tail3.png in Resources */ = {isa = PBXBuildFile; fileRef = 03B621C213A84D27002185CF /* Tail3.png */; };
 		03B621C813A851E5002185CF /* Octocat-Blink.png in Resources */ = {isa = PBXBuildFile; fileRef = 03B621C713A851E5002185CF /* Octocat-Blink.png */; };
+		03B621CF13A85D0A002185CF /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = 03B621CD13A85D0A002185CF /* Default-Landscape.png */; };
+		03B621D013A85D0A002185CF /* Default-Portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = 03B621CE13A85D0A002185CF /* Default-Portrait.png */; };
 		03BEEE8C12F8843000D58899 /* drift_72.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BEEE8A12F8843000D58899 /* drift_72.png */; };
 		03BEEE9812F8871B00D58899 /* login_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BEEE9712F8871B00D58899 /* login_bg.png */; };
 		03C18EDA11728DB500B975D1 /* DriftpadAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DriftpadAppDelegate.m */; };
@@ -168,6 +170,8 @@
 		03B621C113A84D27002185CF /* Tail2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tail2.png; sourceTree = "<group>"; };
 		03B621C213A84D27002185CF /* Tail3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tail3.png; sourceTree = "<group>"; };
 		03B621C713A851E5002185CF /* Octocat-Blink.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Octocat-Blink.png"; sourceTree = "<group>"; };
+		03B621CD13A85D0A002185CF /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape.png"; sourceTree = "<group>"; };
+		03B621CE13A85D0A002185CF /* Default-Portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait.png"; sourceTree = "<group>"; };
 		03BEEE8A12F8843000D58899 /* drift_72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drift_72.png; sourceTree = "<group>"; };
 		03BEEE8B12F8843000D58899 /* drift_512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drift_512.png; sourceTree = "<group>"; };
 		03BEEE9712F8871B00D58899 /* login_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_bg.png; sourceTree = "<group>"; };
@@ -589,6 +593,8 @@
 				03BEEE9712F8871B00D58899 /* login_bg.png */,
 				03BEEE8A12F8843000D58899 /* drift_72.png */,
 				03BEEE8B12F8843000D58899 /* drift_512.png */,
+				03B621CD13A85D0A002185CF /* Default-Landscape.png */,
+				03B621CE13A85D0A002185CF /* Default-Portrait.png */,
 				0305550711730992000D3AF2 /* MainWindow.xib */,
 				03055513117309B6000D3AF2 /* Driftpad.xcdatamodeld */,
 				03055516117309BF000D3AF2 /* Driftpad-Info.plist */,
@@ -682,6 +688,8 @@
 				03B621C513A84D27002185CF /* Tail2.png in Resources */,
 				03B621C613A84D27002185CF /* Tail3.png in Resources */,
 				03B621C813A851E5002185CF /* Octocat-Blink.png in Resources */,
+				03B621CF13A85D0A002185CF /* Default-Landscape.png in Resources */,
+				03B621D013A85D0A002185CF /* Default-Portrait.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
