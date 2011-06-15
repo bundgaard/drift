@@ -12,6 +12,13 @@
 
 #import "GEGistService.h"
 
+
+@interface GELoginViewController ()
+
+
+@end
+
+
 @implementation GELoginViewController
 
 @synthesize containerView;
@@ -25,6 +32,10 @@
 @synthesize signInButton;
 @synthesize cancelButton;
 @synthesize aboutLabel;
+
+@synthesize tail1;
+@synthesize tail2;
+@synthesize tail3;
 
 - (void)dealloc;
 {
@@ -41,6 +52,10 @@
 	[signInButton release], signInButton = nil;
 	[cancelButton release], cancelButton = nil;
 	[aboutLabel release], aboutLabel = nil;
+    
+    [tail1 release], tail1 = nil;
+    [tail2 release], tail2 = nil;
+    [tail3 release], tail3 = nil;
 	
     [super dealloc];
 }
@@ -63,6 +78,18 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+    [UIView animateWithDuration:3.1f delay:0.0f options:(UIViewAnimationOptionAutoreverse | UIViewAnimationOptionRepeat | UIViewAnimationOptionAllowUserInteraction) animations:^{
+        self.tail1.layer.opacity = 0.25;
+    } completion:nil];
+    
+    [UIView animateWithDuration:5.3f delay:0.0f options:(UIViewAnimationOptionAutoreverse | UIViewAnimationOptionRepeat | UIViewAnimationOptionAllowUserInteraction) animations:^{
+        self.tail2.layer.opacity = 0.25;
+    } completion:nil];
+    
+    [UIView animateWithDuration:2.3f delay:0.0f options:(UIViewAnimationOptionAutoreverse | UIViewAnimationOptionRepeat | UIViewAnimationOptionAllowUserInteraction) animations:^{
+        self.tail3.layer.opacity = 0.25;
+    } completion:nil];
 }
 
 - (void)viewDidUnload;

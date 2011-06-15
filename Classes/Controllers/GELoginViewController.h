@@ -29,6 +29,10 @@
 @property (nonatomic, retain) IBOutlet UIButton *cancelButton;
 @property (nonatomic, retain) IBOutlet UILabel *aboutLabel;
 
+@property (nonatomic, retain) IBOutlet UIImageView *tail1;
+@property (nonatomic, retain) IBOutlet UIImageView *tail2;
+@property (nonatomic, retain) IBOutlet UIImageView *tail3;
+
 - (IBAction)useAnonymouslyAction:(id)sender;
 - (IBAction)showSignInAction:(id)sender;
 - (IBAction)showSplashAction:(id)sender;

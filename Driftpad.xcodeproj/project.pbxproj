@@ -19,7 +19,6 @@
 		030E12B6138CCC14009817FD /* NSDate_InternetDateExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 030E12B1138CCC14009817FD /* NSDate_InternetDateExtensions.m */; };
 		030E12B7138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 030E12B3138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.m */; };
 		0354494213263F2100D1F2F1 /* Octocat.png in Resources */ = {isa = PBXBuildFile; fileRef = 0354494113263F2100D1F2F1 /* Octocat.png */; };
-		0354494513263F9300D1F2F1 /* DriftLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0354494413263F9300D1F2F1 /* DriftLogo.png */; };
 		03544955132648F500D1F2F1 /* GEGistCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03544954132648F500D1F2F1 /* GEGistCell.m */; };
 		037A9C0612F6F9BB0083840F /* AnonymousUser.plist in Resources */ = {isa = PBXBuildFile; fileRef = 037A9C0512F6F9BB0083840F /* AnonymousUser.plist */; };
 		03A0AA2C1392B37200BEF098 /* CJSONDeserializer_BlocksExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A0AA261392B37200BEF098 /* CJSONDeserializer_BlocksExtensions.m */; };
@@ -48,8 +47,11 @@
 		03A664D412EB833600080F7F /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A664D312EB833600080F7F /* CFNetwork.framework */; };
 		03A664D812EB834400080F7F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A664D712EB834400080F7F /* SystemConfiguration.framework */; };
 		03A664DC12EB835C00080F7F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A664DB12EB835C00080F7F /* MobileCoreServices.framework */; };
+		03B621C313A84D27002185CF /* Head.png in Resources */ = {isa = PBXBuildFile; fileRef = 03B621BF13A84D27002185CF /* Head.png */; };
+		03B621C413A84D27002185CF /* Tail1.png in Resources */ = {isa = PBXBuildFile; fileRef = 03B621C013A84D27002185CF /* Tail1.png */; };
+		03B621C513A84D27002185CF /* Tail2.png in Resources */ = {isa = PBXBuildFile; fileRef = 03B621C113A84D27002185CF /* Tail2.png */; };
+		03B621C613A84D27002185CF /* Tail3.png in Resources */ = {isa = PBXBuildFile; fileRef = 03B621C213A84D27002185CF /* Tail3.png */; };
 		03BEEE8C12F8843000D58899 /* drift_72.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BEEE8A12F8843000D58899 /* drift_72.png */; };
-		03BEEE8D12F8843000D58899 /* drift_512.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BEEE8B12F8843000D58899 /* drift_512.png */; };
 		03BEEE9812F8871B00D58899 /* login_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 03BEEE9712F8871B00D58899 /* login_bg.png */; };
 		03C18EDA11728DB500B975D1 /* DriftpadAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* DriftpadAppDelegate.m */; };
 		03C18EDD11728DB800B975D1 /* GEGist.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C172CA1172823100B975D1 /* GEGist.m */; };
@@ -160,6 +162,10 @@
 		03A664D312EB833600080F7F /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		03A664D712EB834400080F7F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		03A664DB12EB835C00080F7F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		03B621BF13A84D27002185CF /* Head.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Head.png; sourceTree = "<group>"; };
+		03B621C013A84D27002185CF /* Tail1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tail1.png; sourceTree = "<group>"; };
+		03B621C113A84D27002185CF /* Tail2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tail2.png; sourceTree = "<group>"; };
+		03B621C213A84D27002185CF /* Tail3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tail3.png; sourceTree = "<group>"; };
 		03BEEE8A12F8843000D58899 /* drift_72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drift_72.png; sourceTree = "<group>"; };
 		03BEEE8B12F8843000D58899 /* drift_512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drift_512.png; sourceTree = "<group>"; };
 		03BEEE9712F8871B00D58899 /* login_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_bg.png; sourceTree = "<group>"; };
@@ -571,6 +577,10 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				03B621BF13A84D27002185CF /* Head.png */,
+				03B621C013A84D27002185CF /* Tail1.png */,
+				03B621C113A84D27002185CF /* Tail2.png */,
+				03B621C213A84D27002185CF /* Tail3.png */,
 				0354494413263F9300D1F2F1 /* DriftLogo.png */,
 				0354494113263F2100D1F2F1 /* Octocat.png */,
 				03BEEE9712F8871B00D58899 /* login_bg.png */,
@@ -662,10 +672,12 @@
 				030555FF11731F66000D3AF2 /* Inconsolata.otf in Resources */,
 				037A9C0612F6F9BB0083840F /* AnonymousUser.plist in Resources */,
 				03BEEE8C12F8843000D58899 /* drift_72.png in Resources */,
-				03BEEE8D12F8843000D58899 /* drift_512.png in Resources */,
 				03BEEE9812F8871B00D58899 /* login_bg.png in Resources */,
 				0354494213263F2100D1F2F1 /* Octocat.png in Resources */,
-				0354494513263F9300D1F2F1 /* DriftLogo.png in Resources */,
+				03B621C313A84D27002185CF /* Head.png in Resources */,
+				03B621C413A84D27002185CF /* Tail1.png in Resources */,
+				03B621C513A84D27002185CF /* Tail2.png in Resources */,
+				03B621C613A84D27002185CF /* Tail3.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
