@@ -768,6 +768,7 @@
 				GCC_PREFIX_HEADER = Driftpad_Prefix.pch;
 				INFOPLIST_FILE = "Driftpad-Info.plist";
 				PRODUCT_NAME = Driftpad;
+				SDKROOT = iphoneos4.3;
 			};
 			name = Debug;
 		};
@@ -782,6 +783,7 @@
 				INFOPLIST_FILE = "Driftpad-Info.plist";
 				PRODUCT_NAME = Driftpad;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7017B1F2-86E6-484C-AA5F-3CBD15386126";
+				SDKROOT = iphoneos4.3;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Deployment;
