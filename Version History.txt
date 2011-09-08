@@ -1,0 +1,2 @@
+- Remove all signup links for now
+- Tweak layout of login form
