@@ -79,8 +79,9 @@
 	if (!([[GEGistService sharedService] hasCredentials] || [GEGistService sharedService].anonymous))
 		[cancelButton removeFromSuperview];
 	
-	NSString *version = [[[NSBundle mainBundle] infoDictionary] valueForKey:(id)kCFBundleVersionKey];
-	aboutLabel.text = [NSString stringWithFormat:@"Drift %@ in Permanent Maintenance since 2010", version];
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"];
+	NSString *build = [[[NSBundle mainBundle] infoDictionary] valueForKey:(id)kCFBundleVersionKey];
+	aboutLabel.text = [NSString stringWithFormat:@"Drift %@ (%@) in Permanent Maintenance since 2010", version, build];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHide:) name:UIKeyboardWillHideNotification object:nil];

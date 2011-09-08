@@ -1,4 +1,5 @@
 - Fix truncated Sign In text
+- Show full version and build number on splash screen
 
 Build 001 - 2011-09-08T19:21:46Z
 - Remove all signup links for now
