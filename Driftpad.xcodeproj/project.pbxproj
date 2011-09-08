@@ -18,6 +18,7 @@
 		030E12B5138CCC14009817FD /* NSDate_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 030E12AF138CCC14009817FD /* NSDate_Extensions.m */; };
 		030E12B6138CCC14009817FD /* NSDate_InternetDateExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 030E12B1138CCC14009817FD /* NSDate_InternetDateExtensions.m */; };
 		030E12B7138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 030E12B3138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.m */; };
+		03479E0414194DF1007542C4 /* Version History.txt in Resources */ = {isa = PBXBuildFile; fileRef = 03479E0314194DF1007542C4 /* Version History.txt */; };
 		0354494213263F2100D1F2F1 /* Octocat.png in Resources */ = {isa = PBXBuildFile; fileRef = 0354494113263F2100D1F2F1 /* Octocat.png */; };
 		03544955132648F500D1F2F1 /* GEGistCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03544954132648F500D1F2F1 /* GEGistCell.m */; };
 		037A9C0612F6F9BB0083840F /* AnonymousUser.plist in Resources */ = {isa = PBXBuildFile; fileRef = 037A9C0512F6F9BB0083840F /* AnonymousUser.plist */; };
@@ -107,6 +108,7 @@
 		030E12B1138CCC14009817FD /* NSDate_InternetDateExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDate_InternetDateExtensions.m; sourceTree = "<group>"; };
 		030E12B2138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDateFormatter_InternetDateExtensions.h; sourceTree = "<group>"; };
 		030E12B3138CCC14009817FD /* NSDateFormatter_InternetDateExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDateFormatter_InternetDateExtensions.m; sourceTree = "<group>"; };
+		03479E0314194DF1007542C4 /* Version History.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Version History.txt"; sourceTree = "<group>"; };
 		0354494113263F2100D1F2F1 /* Octocat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Octocat.png; sourceTree = "<group>"; };
 		0354494413263F9300D1F2F1 /* DriftLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DriftLogo.png; sourceTree = "<group>"; };
 		03544953132648F500D1F2F1 /* GEGistCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GEGistCell.h; sourceTree = "<group>"; };
@@ -557,6 +559,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				03479E0314194DF1007542C4 /* Version History.txt */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				03C172CD1172827100B975D1 /* Externals */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -690,6 +693,7 @@
 				03B621C813A851E5002185CF /* Octocat-Blink.png in Resources */,
 				03B621CF13A85D0A002185CF /* Default-Landscape.png in Resources */,
 				03B621D013A85D0A002185CF /* Default-Portrait.png in Resources */,
+				03479E0414194DF1007542C4 /* Version History.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
