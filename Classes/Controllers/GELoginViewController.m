@@ -189,13 +189,13 @@
 
 - (IBAction)signUpAction:(id)sender;
 {
-	NSURL *url = [NSURL URLWithString:@"http://github.com/plans"];
+	NSURL *url = [NSURL URLWithString:@"https://github.com/signup/free"];
 	[[UIApplication sharedApplication] openURL:url];
 }
 
 - (IBAction)accountPageAction:(id)sender;
 {
-	NSURL *url = [NSURL URLWithString:@"http://github.com/account"];
+	NSURL *url = [NSURL URLWithString:@"https://github.com/account"];
 	[[UIApplication sharedApplication] openURL:url];
 }
 
