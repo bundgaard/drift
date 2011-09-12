@@ -621,7 +621,7 @@ ciBoaXN0b3J5Lg</string>
 						<string key="NSFrame">{{135, 130}, {171, 16}}</string>
 						<reference key="NSSuperview" ref="744713071"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="530275647"/>
+						<reference key="NSNextKeyView"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MC40MiAwAA</bytes>
@@ -727,33 +727,6 @@ ciBoaXN0b3J5Lg</string>
 							<double key="NSSize">17</double>
 							<int key="NSfFlags">16</int>
 						</object>
-					</object>
-					<object class="IBUIButton" id="530275647">
-						<reference key="NSNextResponder" ref="744713071"/>
-						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{204, 130}, {147, 32}}</string>
-						<reference key="NSSuperview" ref="744713071"/>
-						<reference key="NSWindow"/>
-						<object class="NSColor" key="IBUIBackgroundColor">
-							<int key="NSColorSpace">2</int>
-							<bytes key="NSRGB">MC42NDc4IDAuNzEzODEgMC44MiAwAA</bytes>
-						</object>
-						<bool key="IBUIOpaque">NO</bool>
-						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<int key="IBUIContentHorizontalAlignment">0</int>
-						<string key="IBUITitleShadowOffset">{0, -1}</string>
-						<string key="IBUINormalTitle">(I forgot my password!)</string>
-						<reference key="IBUIHighlightedTitleColor" ref="330472605"/>
-						<object class="NSColor" key="IBUINormalTitleColor">
-							<int key="NSColorSpace">2</int>
-							<bytes key="NSRGB">MC42NDc4IDAuNzEzODEgMC44MgA</bytes>
-						</object>
-						<object class="NSColor" key="IBUINormalTitleShadowColor">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MCAwIDAgMC41AA</bytes>
-						</object>
-						<reference key="IBUIFontDescription" ref="708958253"/>
-						<reference key="IBUIFont" ref="179843413"/>
 					</object>
 					<object class="IBUIButton" id="266912823">
 						<reference key="NSNextResponder" ref="744713071"/>
@@ -999,15 +972,6 @@ ciBoaXN0b3J5Lg</string>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">accountPageAction:</string>
-						<reference key="source" ref="530275647"/>
-						<reference key="destination" ref="841351856"/>
-						<int key="IBEventType">7</int>
-					</object>
-					<int key="connectionID">135</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">showSplashAction:</string>
 						<reference key="source" ref="266912823"/>
 						<reference key="destination" ref="841351856"/>
@@ -1083,7 +1047,6 @@ ciBoaXN0b3J5Lg</string>
 							<reference ref="210570532"/>
 							<reference ref="539618092"/>
 							<reference ref="807838832"/>
-							<reference ref="530275647"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -1185,11 +1148,6 @@ ciBoaXN0b3J5Lg</string>
 						<reference key="parent" ref="744713071"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">108</int>
-						<reference key="object" ref="530275647"/>
-						<reference key="parent" ref="744713071"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">116</int>
 						<reference key="object" ref="266912823"/>
 						<reference key="parent" ref="744713071"/>
@@ -1269,7 +1227,6 @@ ciBoaXN0b3J5Lg</string>
 					<string>103.IBPluginDependency</string>
 					<string>104.IBPluginDependency</string>
 					<string>105.IBPluginDependency</string>
-					<string>108.IBPluginDependency</string>
 					<string>116.IBPluginDependency</string>
 					<string>125.IBPluginDependency</string>
 					<string>127.IBPluginDependency</string>
@@ -1305,7 +1262,6 @@ ciBoaXN0b3J5Lg</string>
 					<string>GELoginViewController</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>UIResponder</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
