@@ -1,3 +1,5 @@
+- Switch external links to "raw" version, to avoid user acquisition AT ANY COST
+
 Build 003 - 2011-09-12T22:04:14Z
 - Eliminate 'forgot password' link, as per 9/12 conversation with Apple
 - Minor XIB tweaks

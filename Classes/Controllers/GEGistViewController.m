@@ -312,7 +312,7 @@
 	
 	NSString *title = [theActionSheet buttonTitleAtIndex:buttonIndex];
 	
-	NSString *urlString = [NSString stringWithFormat:@"http://gist.github.com/%@", self.gist.gistID];
+	NSString *urlString = [NSString stringWithFormat:@"https://raw.github.com/gist/%@", self.gist.gistID];
 	if ([title isEqual:@"View in Safari"]) {
 		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
 	}
